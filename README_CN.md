@@ -1,0 +1,143 @@
+# mooc2handout — MOOC 讲义自动化流水线
+
+一站式 MOOC → 讲义流水线：下载字幕 → AI 推断关键帧 → 提取画面 → 生成结构化讲义。
+
+## 功能
+
+| 阶段 | 工具 | 说明 |
+|------|------|------|
+| 1. 下载字幕 + 视频 + 补充材料 | `skill/mooc.js` + `adapters/` | 多平台支持（Coursera/edX/...），自动检测平台，字幕+720p视频+PDF补充材料 |
+| 2. AI 推断关键帧 | `scripts/vtt_keyframes.py` | 从 VTT 字幕语义分析，推断最佳课件截图时间戳 |
+| 3. 提取关键帧 | `scripts/extract_frames.py` | ffmpeg 按时间戳从视频中截取画面 |
+| 4. 生成讲义 | `scripts/scaffold_handout.py` + AI | 字幕 + 关键帧 → LaTeX/Markdown 结构化讲义 |
+
+## 目录结构
+
+```
+mooc2handout-skill/
+├── docs/
+│   ├── index.html              ← GitHub Pages 落地页
+│   └── demo/                   ← 示例 PDF 讲义
+│       └── mathematical-thinking-module1.pdf
+├── skill/
+│   ├── SKILL.md                ← AI agent skill（全流程自动配置）
+│   ├── mooc.js                 ← 通用入口（自动检测平台，分发到对应 adapter）
+│   └── adapters/
+│       └── coursera.js         ← Coursera adapter（字幕/视频/补充材料）
+│       └── (edx.js)            ← edX adapter（planned）
+├── scripts/
+│   ├── vtt_keyframes.py        ← AI 从 VTT 推断关键帧时间戳
+│   ├── extract_frames.py       ← ffmpeg 按时间戳提取画面
+│   └── scaffold_handout.py     ← 从 manifest 生成 LaTeX 讲义骨架
+└── references/
+    ├── handout-guidelines.md   ← 讲义排版规则
+    ├── research-inserts.md     ← 前沿研究插入建议
+    ├── ai-embodied-intelligence.md ← AI/具身智能桥接段
+    └── illustrations.md        ← 插图建议
+```
+
+## 快速开始
+
+### 方式一：让 AI 自动配置（推荐）
+
+把下面这段提示词发给你的 AI agent（Gemini / Claude / 任何支持工具调用的 agent）：
+
+```
+Clone https://github.com/dull-bird/mooc2handout-skill
+and follow the "Quick Start" and "Usage" sections
+in README.md to set up everything from scratch:
+install opencli, install the platform adapter,
+bind Chrome, then download the course at
+<PASTE_URL> with --video --resources,
+infer keyframes, extract frames, and scaffold
+a handout. Do not skip any prerequisite step.
+```
+
+AI 会自动完成：安装依赖 → 配置 adapter → 绑定 Chrome → 下载字幕/视频/补充材料 → 推断关键帧 → 提取画面 → 生成讲义。
+
+### 方式二：手动安装
+
+```bash
+# 1. 安装 opencli
+npm install -g @jackwener/opencli
+
+# 2. 安装 adapter（按需安装对应平台）
+mkdir -p ~/.opencli/clis/coursera
+cp skill/adapters/coursera.js ~/.opencli/clis/coursera/download.js
+
+# 3. 验证
+opencli coursera download --help
+```
+
+## 使用流程
+
+```bash
+# ① 绑定 Chrome（需已登录 coursera.org）
+opencli browser coursera bind
+
+# ② 下载字幕 + 视频 + 补充材料（通用入口，自动检测平台）
+node skill/mooc.js "https://www.coursera.org/learn/COURSE" \
+  --out ./notes --video --resources --locale en
+
+# 或直接调用平台 adapter：
+opencli coursera download "URL" --out ./notes --video --resources
+
+# ③ AI 推断关键帧时间戳
+python3 scripts/vtt_keyframes.py \
+  --vtt-dir ./notes/module-1 \
+  --output ./notes/module-1/keyframes.json
+
+# ④ 从视频中提取关键帧
+python3 scripts/extract_frames.py \
+  --video-dir ./notes/module-1 \
+  --keyframes ./notes/module-1/keyframes.json \
+  --output ./notes/module-1/frames/
+
+# ⑤ 生成讲义骨架
+python3 scripts/scaffold_handout.py \
+  --subtitle-dir ./notes/module-1 \
+  --course-title "课程名" \
+  --unit-title "单元名" \
+  --output ./handout.tex
+```
+
+## 多平台支持
+
+| 平台 | 状态 | Adapter |
+|------|------|---------|
+| Coursera | ✅ 完整支持 | `adapters/coursera.js` |
+| edX | 📋 计划中 | `adapters/edx.js` |
+| FutureLearn | 📋 计划中 | `adapters/futurelearn.js` |
+
+扩展新平台只需两步：
+1. 在 `skill/adapters/` 下新建 `<platform>.js`
+2. 在 `mooc.js` 的 `PLATFORMS` 数组中加一条记录
+
+## 关键帧推断原理
+
+`vtt_keyframes.py` 分析 VTT 字幕文本，基于以下规则推断关键帧：
+
+1. **概念转折** — "但是"、"然而"、"接下来" 等转折/过渡词
+2. **定义出现** — "所谓"、"是指"、"定义为" 等定义性表述
+3. **示例切换** — "举个例子"、"比如" 等示例引入
+4. **总结回顾** — "总结一下"、"回顾" 等总结性表述
+5. **均匀分布** — 无明显语义转折时，按固定间隔补充关键帧
+
+每个候选时间戳标注原因（concept_shift / definition / example / summary / interval）。
+
+## 示例讲义
+
+**[数学思维 第一单元](demo/mathematical-thinking-module1.pdf)** — 包含 24 张关键帧截图、逻辑连接词详解、练习题和参考答案。
+
+## 依赖
+
+- Node.js ≥ 18
+- opencli
+- Python ≥ 3.8
+- ffmpeg（关键帧提取）
+- xelatex（LaTeX 编译，可选）
+- Chrome / Chromium（字幕下载）
+
+## License
+
+MIT
