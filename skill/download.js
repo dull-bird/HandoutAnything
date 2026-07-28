@@ -116,7 +116,7 @@ async function discoverModules(page, courseUrl, locale, delay) {
 
 // ─── per-module subtitle + video download ─────────────────────────────────────
 
-async function downloadModule(page, { moduleUrl, outDir, langList, downloadAll, locale, video, delay, results }) {
+async function downloadModule(page, { moduleUrl, outDir, langList, downloadAll, locale, video, resources, delay, results }) {
   const localeUrl = withLocale(moduleUrl, locale);
   console.error(`[coursera-dl] Module: ${localeUrl}`);
 
@@ -263,6 +263,44 @@ async function downloadModule(page, { moduleUrl, outDir, langList, downloadAll, 
 
     if (!downloaded)
       results.push({ lecture: text.slice(0, 35), type: 'video', lang: '720p', file: '—', status: '✗ no video source' });
+
+    // ── Supplementary resources (PDFs, slides, background reading) ─────────
+    if (resources) {
+      const resLinks = await page.evaluate(() =>
+        Array.from(document.querySelectorAll('a[href]'))
+          .map(a => {
+            const href = a.href;
+            const txt = a.textContent.trim();
+            const isCDN = href.includes('cloudfront.net') || href.includes('coursera.org/asset');
+            const isPDF = href.includes('.pdf') || txt.toLowerCase().startsWith('pdf');
+            const isDoc = /\.(doc|pptx?|xlsx?|zip)$/i.test(href) || txt.toLowerCase().startsWith('doc');
+            const isVideo = href.includes('.mp4') || href.includes('.m3u8') || txt.toLowerCase().startsWith('mp4');
+            const isSub = href.includes('.vtt') || href.includes('.srt');
+            if (isCDN && (isPDF || isDoc) && !isVideo && !isSub) {
+              const urlMatch = href.match(/[^/]+$/);
+              const rawName = urlMatch ? urlMatch[0].split('?')[0] : txt;
+              const cleanName = rawName.replace(/^_[a-f0-9]+_/, '').replace(/^[a-f0-9]{20,}_/, '');
+              return { text: txt, href, filename: cleanName || rawName };
+            }
+            return null;
+          })
+          .filter(Boolean)
+      );
+
+      const seen = new Set();
+      for (const res of resLinks) {
+        if (seen.has(res.href)) continue;
+        seen.add(res.href);
+        const resFilename = `${slug}_${res.filename}`;
+        const resPath = path.join(outDir, resFilename);
+        try {
+          const bytes = await downloadUrl(res.href, resPath);
+          results.push({ lecture: text.slice(0, 35), type: 'resource', lang: '—', file: resFilename, status: `✓ ${humanSize(bytes)}` });
+        } catch (e) {
+          results.push({ lecture: text.slice(0, 35), type: 'resource', lang: '—', file: resFilename, status: `✗ ${String(e.message).slice(0, 40)}` });
+        }
+      }
+    }
   }
 }
 
@@ -272,7 +310,7 @@ cli({
   site: 'coursera',
   name: 'download',
   description:
-    'Download subtitles (default: en › zh-CN › zh-TW) and optional 720p video. ' +
+    'Download subtitles (default: en › zh-CN › zh-TW), optional 720p video, and supplementary resources (PDFs, slides). ' +
     'Accepts a course home URL (auto-discovers all modules) or a single module URL. ' +
     'Locale-independent. Requires a Chrome session logged in to coursera.org.',
   access: 'read',
@@ -297,13 +335,14 @@ cli({
       name: 'locale', type: 'string', default: '',
       help: 'Force Coursera UI language via ?hl= (e.g. "en"). Subtitle content is locale-independent.',
     },
-    { name: 'video',  type: 'bool',   default: false, help: 'Also download 720p video' },
+    { name: 'video',     type: 'bool',   default: false, help: 'Also download 720p video' },
+    { name: 'resources', type: 'bool',   default: false, help: 'Download supplementary resources (PDFs, slides, background reading)' },
     { name: 'delay',  type: 'int',    default: 4000,  help: 'Page load wait in ms (increase on slow connections)' },
   ],
   columns: ['module', 'lecture', 'type', 'lang', 'file', 'status'],
 
   func: async (page, kwargs) => {
-    const { url, out, langs, locale, video, delay } = kwargs;
+    const { url, out, langs, locale, video, resources, delay } = kwargs;
 
     const downloadAll = langs.trim().toLowerCase() === 'all';
     const langList = downloadAll ? [] : langs.split(',').map((l) => l.trim()).filter(Boolean);
@@ -344,6 +383,7 @@ cli({
         downloadAll,
         locale,
         video,
+        resources,
         delay,
         results: moduleResults,
       });

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>mooc2handout — MOOC to Handout Pipeline</title>
+<style>
+  :root { --bg: #0d1117; --card: #161b22; --border: #30363d; --text: #e6edf3; --muted: #8b949e; --accent: #58a6ff; --green: #3fb950; --orange: #d29922; --purple: #bc8cff; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+  /* Hero */
+  .hero { padding: 80px 0 60px; text-align: center; border-bottom: 1px solid var(--border); }
+  .hero h1 { font-size: 2.8em; font-weight: 700; margin-bottom: 16px; }
+  .hero h1 span { background: linear-gradient(135deg, var(--accent), var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .hero p { font-size: 1.2em; color: var(--muted); max-width: 600px; margin: 0 auto 32px; }
+  .hero .badges { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  .badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 20px; font-size: 0.85em; font-weight: 500; border: 1px solid var(--border); background: var(--card); }
+  .badge.coursera { border-color: #0056d2; color: #58a6ff; }
+  .badge.edx { border-color: #02262c; color: #00bce3; }
+  .badge.future { border-color: #493a6e; color: var(--purple); }
+  .badge.more { border-color: var(--border); color: var(--muted); }
+
+  /* Pipeline */
+  .pipeline { padding: 60px 0; }
+  .pipeline h2 { text-align: center; font-size: 1.8em; margin-bottom: 40px; }
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .step { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; text-align: center; position: relative; }
+  .step .num { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--accent); color: var(--bg); width: 28px; height: 28px; border-radius: 50%; font-weight: 700; font-size: 0.85em; display: flex; align-items: center; justify-content: center; }
+  .step .icon { font-size: 2em; margin-bottom: 12px; }
+  .step h3 { font-size: 1em; margin-bottom: 8px; }
+  .step p { font-size: 0.85em; color: var(--muted); }
+  .step code { font-size: 0.75em; background: var(--bg); padding: 2px 6px; border-radius: 4px; color: var(--green); }
+
+  /* Features */
+  .features { padding: 60px 0; border-top: 1px solid var(--border); }
+  .features h2 { text-align: center; font-size: 1.8em; margin-bottom: 40px; }
+  .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .feature { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; }
+  .feature .icon { font-size: 1.5em; margin-bottom: 12px; }
+  .feature h3 { font-size: 1em; margin-bottom: 8px; }
+  .feature p { font-size: 0.9em; color: var(--muted); }
+
+  /* Install */
+  .install { padding: 60px 0; border-top: 1px solid var(--border); }
+  .install h2 { text-align: center; font-size: 1.8em; margin-bottom: 40px; }
+  .install-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .install-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; }
+  .install-card h3 { font-size: 1.1em; margin-bottom: 12px; }
+  .install-card .tag { display: inline-block; font-size: 0.75em; padding: 2px 8px; border-radius: 10px; margin-bottom: 12px; }
+  .install-card .tag.auto { background: #1a3a2a; color: var(--green); }
+  .install-card .tag.manual { background: #2a2a1a; color: var(--orange); }
+  pre { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 16px; overflow-x: auto; font-size: 0.85em; line-height: 1.5; }
+  code { color: var(--text); }
+
+  /* Footer */
+  footer { padding: 40px 0; border-top: 1px solid var(--border); text-align: center; color: var(--muted); font-size: 0.9em; }
+  footer a { color: var(--accent); text-decoration: none; }
+
+  @media (max-width: 768px) {
+    .steps { grid-template-columns: 1fr 1fr; }
+    .feature-grid { grid-template-columns: 1fr; }
+    .install-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 2em; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Hero -->
+  <section class="hero">
+    <h1><span>mooc2handout</span></h1>
+    <p>One-click pipeline: download MOOC subtitles &amp; videos, AI-infers keyframes, extracts frames, and scaffolds structured handouts.</p>
+    <div class="badges">
+      <span class="badge coursera">Coursera</span>
+      <span class="badge edx">edX (planned)</span>
+      <span class="badge future">FutureLearn (planned)</span>
+      <span class="badge more">more coming...</span>
+    </div>
+  </section>
+
+  <!-- Pipeline -->
+  <section class="pipeline">
+    <h2>How It Works</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="num">1</div>
+        <div class="icon">&#x1F4E5;</div>
+        <h3>Download</h3>
+        <p>Subtitles (VTT) + 720p video + supplementary PDFs via <code>opencli</code></p>
+      </div>
+      <div class="step">
+        <div class="num">2</div>
+        <div class="icon">&#x1F9E0;</div>
+        <h3>AI Keyframes</h3>
+        <p>Semantic analysis of VTT text detects concept shifts, definitions, examples</p>
+      </div>
+      <div class="step">
+        <div class="num">3</div>
+        <div class="icon">&#x1F4F7;</div>
+        <h3>Extract Frames</h3>
+        <p><code>ffmpeg</code> cuts screenshots at predicted timestamps</p>
+      </div>
+      <div class="step">
+        <div class="num">4</div>
+        <div class="icon">&#x1F4D6;</div>
+        <h3>Handout</h3>
+        <p>LaTeX scaffold with keyframe images, structured notes, exercises</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features">
+    <h2>Features</h2>
+    <div class="feature-grid">
+      <div class="feature">
+        <div class="icon">&#x1F310;</div>
+        <h3>Multi-Platform</h3>
+        <p>Currently supports Coursera with full auto-discovery. edX and FutureLearn adapters planned.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">&#x1F512;</div>
+        <h3>Lock Detection</h3>
+        <p>Automatically detects locked lectures and skips them gracefully.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">&#x1F4C4;</div>
+        <h3>Supplementary Materials</h3>
+        <p>Downloads background reading PDFs, slide decks, and other resources attached to lectures.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">&#x1F916;</div>
+        <h3>AI Keyframe Inference</h3>
+        <p>Bilingual (CN/EN) semantic analysis: concept shifts, definitions, examples, summaries.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">&#x1F3AC;</div>
+        <h3>Video Integration</h3>
+        <p>720p download via yt-dlp, DOM src, or network intercept with HLS fallback.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">&#x26A1;</div>
+        <h3>Zero Password</h3>
+        <p>Uses your logged-in Chrome session. No credentials stored or transmitted.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Install -->
+  <section class="install">
+    <h2>Get Started</h2>
+    <div class="install-grid">
+      <div class="install-card">
+        <h3>AI Auto-Configure</h3>
+        <span class="tag auto">Recommended</span>
+        <p>Put <code>SKILL.md</code> in your AI agent's skill directory. It handles everything automatically.</p>
+        <pre><code># Gemini
+cp skill/SKILL.md ~/.gemini/skills/mooc2handout/SKILL.md
+
+# Then just ask your AI:
+# "Download Coursera course X and make a handout"</code></pre>
+      </div>
+      <div class="install-card">
+        <h3>Manual Install</h3>
+        <span class="tag manual">CLI</span>
+        <pre><code># 1. Install opencli
+npm install -g @jackwener/opencli
+
+# 2. Install adapter
+mkdir -p ~/.opencli/clis/coursera
+cp skill/download.js ~/.opencli/clis/coursera/
+
+# 3. Download with resources
+opencli coursera download "URL" \
+  --video --resources --locale en
+
+# 4. Infer keyframes
+python3 scripts/vtt_keyframes.py \
+  --vtt-dir ./notes/module-1 \
+  --output keyframes.json
+
+# 5. Extract frames
+python3 scripts/extract_frames.py \
+  --video-dir ./notes/module-1 \
+  --keyframes keyframes.json \
+  --output ./frames/</code></pre>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <div class="container">
+    <p><a href="https://github.com/dull-bird/mooc2handout-skill">GitHub</a> &middot; MIT License</p>
+  </div>
+</footer>
+
+</body>
+</html>

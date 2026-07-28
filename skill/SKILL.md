@@ -37,11 +37,11 @@ opencli browser coursera bind
 ```bash
 # Full course with video (needed for keyframe extraction)
 opencli coursera download "https://www.coursera.org/learn/COURSE" \
-  --out ./notes --video --langs "en,zh-CN" --locale en
+  --out ./notes --video --resources --langs "en,zh-CN" --locale en
 
 # Single module
 opencli coursera download "https://www.coursera.org/learn/COURSE/home/module/1" \
-  --out ./notes/module-1 --video --locale en
+  --out ./notes/module-1 --video --resources --locale en
 ```
 
 Output per module:
@@ -49,10 +49,16 @@ Output per module:
 module-N/
 ├── 01_lecture.en.vtt
 ├── 01_lecture.mp4
+├── 01_lecture_Background_Reading.pdf   ← supplementary resource
+├── 01_lecture_Supplement__Set_Theory_.pdf
 ├── 02_lecture.en.vtt
 ├── 02_lecture.mp4
 └── manifest.json   (if available)
 ```
+
+**Flags:**
+- `--video` — also download 720p video (needed for keyframe extraction)
+- `--resources` — download supplementary materials (PDFs, slides, background reading)
 
 ---
 
@@ -174,3 +180,4 @@ brew install ffmpeg
 | ffmpeg not found | Install ffmpeg |
 | Keyframes JSON empty | Check VTT files exist and are non-empty |
 | Frame extraction fails | Verify video files are valid MP4 |
+| No resources downloaded | Some lectures have no supplementary materials; this is normal |
