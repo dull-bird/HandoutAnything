@@ -82,7 +82,6 @@ PREAMBLE = r"""\documentclass[UTF8,a4paper,11pt]{ctexart}
 \usepackage{titlesec}
 \usepackage{fancyhdr}
 \usepackage{lastpage}
-\usepackage{pifont}
 \usepackage{amssymb}
 
 % ── Header/Footer ──
@@ -120,7 +119,7 @@ PREAMBLE = r"""\documentclass[UTF8,a4paper,11pt]{ctexart}
 
 % ── Video link command ──
 \newcommand{\videolink}[2]{%
-  \href{#1}{\textcolor{videoblue}{\ding{23}~\textbf{#2}}}%
+  \href{#1}{\textcolor{videoblue}{\textbf{#2}}}%
 }
 
 % ── Keyframe figure command ──
@@ -296,7 +295,12 @@ def generate_handout(
         video_url = item.get("page_url", "https://www.coursera.org/learn/mathematical-thinking")
         
         tex.append(f"\\subsection{{{tex_escape(lecture_title)}}}")
-        tex.append(f"\\videolink{{{video_url}}}{{观看视频：{tex_escape(lecture_title)}}}")
+        duration = item.get("duration", "")
+        dur_str = f"（{duration}）" if duration else ""
+        if lang == "en":
+            tex.append(f"\\videolink{{{video_url}}}{{Watch: {tex_escape(lecture_title)}}}{dur_str}")
+        else:
+            tex.append(f"\\videolink{{{video_url}}}{{观看视频：{tex_escape(lecture_title)}}}{dur_str}")
         tex.append("")
         
 
