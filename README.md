@@ -1,0 +1,104 @@
+# mooc2handout-skill
+
+一站式 MOOC → 讲义流水线：下载字幕 → AI 推断关键帧 → 提取画面 → 生成结构化讲义。
+
+## 功能
+
+| 阶段 | 工具 | 说明 |
+|------|------|------|
+| 1. 下载字幕 + 视频 | `skill/download.js` (opencli adapter) | 全课程自动发现、多语言字幕、720p 视频 |
+| 2. AI 推断关键帧 | `scripts/vtt_keyframes.py` | 从 VTT 字幕语义分析，推断最佳课件截图时间戳 |
+| 3. 提取关键帧 | `scripts/extract_frames.py` | ffmpeg 按时间戳从视频中截取画面 |
+| 4. 生成讲义 | `scripts/scaffold_handout.py` + AI | 字幕 + 关键帧 → LaTeX/Markdown 结构化讲义 |
+
+## 目录结构
+
+```
+mooc2handout-skill/
+├── README.md
+├── skill/
+│   ├── SKILL.md              ← AI agent skill（全流程自动配置）
+│   └── download.js           ← opencli adapter（Coursera 字幕/视频下载）
+├── scripts/
+│   ├── vtt_keyframes.py      ← AI 从 VTT 推断关键帧时间戳
+│   ├── extract_frames.py     ← ffmpeg 按时间戳提取画面
+│   └── scaffold_handout.py   ← 从字幕 manifest 生成 LaTeX 讲义骨架
+└── references/
+    ├── handout-guidelines.md
+    ├── research-inserts.md
+    ├── ai-embodied-intelligence.md
+    └── illustrations.md
+```
+
+## 快速开始
+
+### 方式一：手动安装
+
+```bash
+# 1. 安装 opencli
+npm install -g @jackwener/opencli
+
+# 2. 安装 adapter
+mkdir -p ~/.opencli/clis/coursera
+cp skill/download.js ~/.opencli/clis/coursera/download.js
+
+# 3. 验证
+opencli coursera download --help
+```
+
+### 方式二：让 AI 自动配置（推荐）
+
+把 `skill/SKILL.md` 放到 `~/.gemini/skills/mooc2handout/SKILL.md`，AI agent 就能读取 skill 并全自动完成：安装、配置、绑定 Chrome、下载字幕、推断关键帧、提取画面、生成讲义。
+
+## 使用流程
+
+```bash
+# ① 绑定 Chrome（需已登录 coursera.org）
+opencli browser coursera bind
+
+# ② 下载字幕 + 视频
+opencli coursera download "https://www.coursera.org/learn/COURSE" \
+  --out ./notes --video --locale en
+
+# ③ AI 推断关键帧时间戳
+python3 scripts/vtt_keyframes.py \
+  --vtt-dir ./notes/module-1 \
+  --output ./notes/module-1/keyframes.json
+
+# ④ 从视频中提取关键帧
+python3 scripts/extract_frames.py \
+  --video-dir ./notes/module-1 \
+  --keyframes ./notes/module-1/keyframes.json \
+  --output ./notes/module-1/frames/
+
+# ⑤ 生成讲义骨架
+python3 scripts/scaffold_handout.py \
+  --subtitle-dir ./notes/module-1 \
+  --course-title "课程名" \
+  --unit-title "单元名" \
+  --output ./handout.tex
+```
+
+## 关键帧推断原理
+
+`vtt_keyframes.py` 分析 VTT 字幕文本，基于以下规则推断关键帧：
+
+1. **概念转折** — "但是"、"然而"、"接下来" 等转折/过渡词
+2. **定义出现** — "所谓"、"是指"、"定义为" 等定义性表述
+3. **示例切换** — "举个例子"、"比如" 等示例引入
+4. **总结回顾** — "总结一下"、"回顾" 等总结性表述
+5. **均匀分布** — 无明显语义转折时，按固定间隔补充关键帧
+
+每个候选时间戳标注原因（concept_shift / definition / example / summary / interval）。
+
+## 依赖
+
+- Node.js ≥ 18
+- opencli
+- Python ≥ 3.8
+- ffmpeg（关键帧提取）
+- Chrome / Chromium（字幕下载）
+
+## License
+
+MIT
