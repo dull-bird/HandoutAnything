@@ -6,7 +6,7 @@
 
 | 阶段 | 工具 | 说明 |
 |------|------|------|
-| 1. 下载字幕 + 视频 | `skill/download.js` (opencli adapter) | 全课程自动发现、多语言字幕、720p 视频 |
+| 1. 下载字幕 + 视频 | `skill/mooc.js` + `adapters/` | 多平台支持（Coursera/edX/...），自动检测，补充材料 |
 | 2. AI 推断关键帧 | `scripts/vtt_keyframes.py` | 从 VTT 字幕语义分析，推断最佳课件截图时间戳 |
 | 3. 提取关键帧 | `scripts/extract_frames.py` | ffmpeg 按时间戳从视频中截取画面 |
 | 4. 生成讲义 | `scripts/scaffold_handout.py` + AI | 字幕 + 关键帧 → LaTeX/Markdown 结构化讲义 |
@@ -18,7 +18,10 @@ mooc2handout-skill/
 ├── README.md
 ├── skill/
 │   ├── SKILL.md              ← AI agent skill（全流程自动配置）
-│   └── download.js           ← opencli adapter（Coursera 字幕/视频下载）
+│   ├── mooc.js               ← 通用入口（自动检测平台，分发到对应 adapter）
+│   └── adapters/
+│       └── coursera.js       ← Coursera adapter（字幕/视频/补充材料下载）
+│       └── (edx.js)          ← edX adapter（planned）
 ├── scripts/
 │   ├── vtt_keyframes.py      ← AI 从 VTT 推断关键帧时间戳
 │   ├── extract_frames.py     ← ffmpeg 按时间戳提取画面
@@ -38,9 +41,9 @@ mooc2handout-skill/
 # 1. 安装 opencli
 npm install -g @jackwener/opencli
 
-# 2. 安装 adapter
+# 2. 安装 adapter（按需安装对应平台）
 mkdir -p ~/.opencli/clis/coursera
-cp skill/download.js ~/.opencli/clis/coursera/download.js
+cp skill/adapters/coursera.js ~/.opencli/clis/coursera/download.js
 
 # 3. 验证
 opencli coursera download --help
@@ -56,9 +59,11 @@ opencli coursera download --help
 # ① 绑定 Chrome（需已登录 coursera.org）
 opencli browser coursera bind
 
-# ② 下载字幕 + 视频
-opencli coursera download "https://www.coursera.org/learn/COURSE" \
-  --out ./notes --video --locale en
+# ② 下载字幕 + 视频（通用入口，自动检测平台）
+node skill/mooc.js "https://www.coursera.org/learn/COURSE" \
+  --out ./notes --video --resources --locale en
+# 或直接调用平台 adapter：
+opencli coursera download "URL" --out ./notes --video --resources
 
 # ③ AI 推断关键帧时间戳
 python3 scripts/vtt_keyframes.py \

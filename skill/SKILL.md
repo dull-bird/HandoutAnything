@@ -1,6 +1,6 @@
 ---
 name: mooc2handout
-description: "End-to-end MOOC → handout pipeline. Downloads Coursera subtitles + video, uses AI to infer keyframe timestamps from VTT, extracts frames with ffmpeg, and scaffolds a LaTeX/Markdown handout. Handles full setup (opencli, adapter, ffmpeg) for first-time users."
+description: "End-to-end MOOC → handout pipeline. Supports multiple platforms (Coursera full, edX/FutureLearn planned). Downloads subtitles + video + supplementary resources, uses AI to infer keyframe timestamps from VTT, extracts frames with ffmpeg, and scaffolds a LaTeX/Markdown handout. Auto-detects platform from URL."
 allowed-tools: Bash, Read, Write, Edit
 ---
 
@@ -14,6 +14,8 @@ Full pipeline: Coursera subtitles → AI keyframe detection → frame extraction
 
 ### Phase 1 — Download subtitles & video
 
+The dispatcher `skill/mooc.js` auto-detects the platform from the URL and calls the right adapter.
+
 #### 1a. Check prerequisites
 
 ```bash
@@ -23,19 +25,25 @@ ffmpeg -version 2>/dev/null | head -1 || echo "MISSING"
 ```
 
 If opencli missing → install: `npm install -g @jackwener/opencli`
-If adapter missing → write `skill/download.js` to `~/.opencli/clis/coursera/download.js`
+If adapter missing → copy from `skill/adapters/<platform>.js` to `~/.opencli/clis/<platform>/download.js`
 If ffmpeg missing → `sudo apt install ffmpeg` or `brew install ffmpeg`
 
 #### 1b. Bind Chrome
 
 ```bash
-opencli browser coursera bind
+# Bind to the platform domain
+opencli browser coursera bind    # for Coursera
+# opencli browser edx bind       # for edX (when available)
 ```
 
 #### 1c. Download
 
 ```bash
-# Full course with video (needed for keyframe extraction)
+# Universal dispatcher — auto-detects platform from URL
+node skill/mooc.js "https://www.coursera.org/learn/COURSE" \
+  --out ./notes --video --resources --langs "en,zh-CN" --locale en
+
+# Or call the platform adapter directly:
 opencli coursera download "https://www.coursera.org/learn/COURSE" \
   --out ./notes --video --resources --langs "en,zh-CN" --locale en
 
@@ -43,6 +51,14 @@ opencli coursera download "https://www.coursera.org/learn/COURSE" \
 opencli coursera download "https://www.coursera.org/learn/COURSE/home/module/1" \
   --out ./notes/module-1 --video --resources --locale en
 ```
+
+**Supported platforms:**
+
+| Platform | Status | Adapter |
+|----------|--------|---------|
+| Coursera | Full support | `adapters/coursera.js` |
+| edX | Planned | `adapters/edx.js` |
+| FutureLearn | Planned | `adapters/futurelearn.js` |
 
 Output per module:
 ```
@@ -153,7 +169,15 @@ google-chrome --remote-debugging-port=9222 &
 
 ## INSTALL: adapter
 
-Write `skill/download.js` (from this repo) to `~/.opencli/clis/coursera/download.js`.
+```bash
+# Coursera
+mkdir -p ~/.opencli/clis/coursera
+cp skill/adapters/coursera.js ~/.opencli/clis/coursera/download.js
+
+# Future: edX
+# mkdir -p ~/.opencli/clis/edx
+# cp skill/adapters/edx.js ~/.opencli/clis/edx/download.js
+```
 
 Verify:
 ```bash

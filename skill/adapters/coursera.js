@@ -1,5 +1,6 @@
 /**
- * opencli coursera download
+ * opencli adapter: coursera download
+ * Part of mooc2handout-skill multi-platform pipeline.
  *
  * Strategy : DOM_STATE (browser: true, COOKIE auth)
  * Contract : visible-ui — locale-independent attribute selectors throughout.
