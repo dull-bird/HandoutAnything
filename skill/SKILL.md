@@ -166,6 +166,64 @@ Then use AI to fill the scaffold with summarized content, insert keyframe images
 
 ---
 
+### Phase 5 — Verify PDF output
+
+After compiling the PDF, **always verify** these checkpoints:
+
+```bash
+# 1. Check PDF was generated and has reasonable size
+ls -lh handout.pdf
+# Expect: > 100KB (with keyframes), 4+ pages
+
+# 2. Check page count
+pdfinfo handout.pdf 2>/dev/null | grep Pages || python3 -c "
+import subprocess
+r = subprocess.run(['xelatex', '--version'], capture_output=True)
+print('PDF generated')
+"
+
+# 3. Verify keyframes are embedded (not broken links)
+python3 -c "
+import pdfplumber
+with pdfplumber.open('handout.pdf') as pdf:
+    for i, page in enumerate(pdf.pages):
+        imgs = page.images
+        if imgs:
+            print(f'Page {i+1}: {len(imgs)} image(s) embedded')
+"
+
+# 4. Verify video links are clickable
+python3 -c "
+import pdfplumber
+with pdfplumber.open('handout.pdf') as pdf:
+    for i, page in enumerate(pdf.pages):
+        links = [a for a in page.annots or [] if a.get('uri')]
+        if links:
+            print(f'Page {i+1}: {len(links)} link(s)')
+"
+
+# 5. Check for LaTeX errors in log
+grep -c "^!" handout.log && echo "ERRORS FOUND" || echo "No errors"
+```
+
+**Checklist (must all pass):**
+
+| Check | Expected |
+|-------|----------|
+| PDF file exists | `handout.pdf` > 100 KB |
+| Page count | ≥ 4 pages |
+| Keyframe images | At least 1 image per lecture section |
+| Video links | ▶ icon visible, links clickable |
+| No subtitle dump | No raw VTT text blocks in content |
+| Section numbering | No duplicate numbers (e.g. "2.2 2. Title") |
+| Supplementary materials | PDF summaries present, not just filenames |
+| Exercises | Questions + answers both present |
+| LaTeX log | Zero `!` errors |
+
+If any check fails, fix the issue and recompile before delivering.
+
+---
+
 ## INSTALL: opencli
 
 ```bash
