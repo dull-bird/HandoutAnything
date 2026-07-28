@@ -334,11 +334,17 @@ def generate_handout(
             for pdf_name in item["resources"]:
                 if pdf_name in supplements_data:
                     info = supplements_data[pdf_name]
-                    tex.append(f"\\begin{{supplement}}{{{info['title']}}}")
+                    # Title outside the box
+                    tex.append(f"\\textbf{{📎 {info['title']}}}")
+                    escaped_name = tex_escape(pdf_name)
+                    tex.append(f"\\hfill{{\\small\\texttt{{{escaped_name}}}}}")
+                    tex.append("")
+                    # Content inside the box with bullets
+                    tex.append(r"\begin{supplement}{内容摘要}")
+                    tex.append(r"\begin{itemize}")
                     for para in info.get("summary", []):
-                        # Summary text already contains LaTeX markup, don't escape
-                        tex.append(f"  {para}")
-                        tex.append("")
+                        tex.append(f"  \\item {para}")
+                    tex.append(r"\end{itemize}")
                     tex.append(r"\end{supplement}")
                     tex.append("")
                 else:
