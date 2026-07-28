@@ -49,7 +49,7 @@ PREAMBLE = r"""\documentclass[UTF8,a4paper,11pt]{ctexart}
 
 % ── Graphics ──
 \usepackage{graphicx}
-\graphicspath{{frames/}}
+\graphicspath{{mathematical-thinking/frames/}}
 
 % ── Colors ──
 \usepackage{xcolor}
@@ -81,7 +81,7 @@ PREAMBLE = r"""\documentclass[UTF8,a4paper,11pt]{ctexart}
 \usepackage{tcolorbox}
 \usepackage{titlesec}
 \usepackage{fancyhdr}
-\usepackage{lastpage}
+\usepackage{lastpage}\n\usepackage{pifont}
 
 % ── Header/Footer ──
 \pagestyle{fancy}
@@ -118,7 +118,7 @@ PREAMBLE = r"""\documentclass[UTF8,a4paper,11pt]{ctexart}
 
 % ── Video link command ──
 \newcommand{\videolink}[2]{%
-  \href{#1}{\textcolor{videoblue}{\textbf{▶}~#2}}%
+  \href{#1}{\textcolor{videoblue}{\ding{23}~\textbf{#2}}}%
 }
 
 % ── Keyframe figure command ──
@@ -270,25 +270,21 @@ def generate_handout(
         # Video link
         video_url = item.get("page_url", "https://www.coursera.org/learn/mathematical-thinking")
         
-        tex.append(f"\\subsection{{{lecture_num}. {tex_escape(lecture_title)}}}")
+        tex.append(f"\\subsection{{{tex_escape(lecture_title)}}}")
         tex.append(f"\\videolink{{{video_url}}}{{观看视频：{tex_escape(lecture_title)}}}")
         tex.append("")
         
-        # Extract subtitle content
-        vtt_path = data_dir / item["en_vtt"]
-        if vtt_path.exists():
-            text = extract_vtt_text(vtt_path)
-            # Create a summary (first 500 chars as intro)
-            summary = text[:500]
-            tex.append(f"\\textbf{{内容摘要}}：{tex_escape(summary)}...")
-            tex.append("")
+
         
         # Keyframes for this lecture
         lecture_frames = [kf for kf in keyframes if item["en_vtt"].replace(".en.vtt", "") in kf.get("vtt", "")]
         if lecture_frames:
             tex.append(r"\textbf{关键帧截图}：")
             for kf in lecture_frames[:2]:  # Max 2 per lecture
-                frame_file = f"{item['en_vtt'].replace('.en.vtt', '')}_{int(kf['time']):04d}s_{kf['reason']}.png"
+                # Build frame filename matching extract_frames.py output
+                vtt_stem = item['en_vtt'].replace('.en.vtt', '')
+                time_label = f"{int(kf['time']):04d}s" if kf['time'] < 60 else f"{int(kf['time'])//60:02d}m{int(kf['time'])%60:02d}s"
+                frame_file = f"{vtt_stem}_{time_label}_{kf['reason']}.png"
                 # Check if frame exists
                 frame_path = data_dir / "frames" / frame_file
                 if frame_path.exists():
