@@ -212,6 +212,7 @@ def generate_handout(
     course_title_en: str = "",
     unit_title_en: str = "",
     lang: str = "zh",
+    insert_keyframes: bool = False,
 ):
     """Generate a complete LaTeX handout."""
     
@@ -312,9 +313,11 @@ def generate_handout(
         
         # Keyframes for this lecture
         # Match keyframes by video filename stem (language-agnostic)
-        video_stem = item.get("video", "").replace(".mp4", "") if item.get("video") else ""
-        vtt_stem_base = re.sub(r"\.(en|zh-CN|zh-TW|ja|ko|fr|de|es|pt|ar)$", "", item["en_vtt"].replace(".vtt", ""))
-        lecture_frames = [kf for kf in keyframes if (video_stem and video_stem in kf.get("video", "")) or (vtt_stem_base and vtt_stem_base in kf.get("vtt", ""))]
+        lecture_frames = []
+        if insert_keyframes:
+            video_stem = item.get("video", "").replace(".mp4", "") if item.get("video") else ""
+            vtt_stem_base = re.sub(r"\.(en|zh-CN|zh-TW|ja|ko|fr|de|es|pt|ar)$", "", item["en_vtt"].replace(".vtt", ""))
+            lecture_frames = [kf for kf in keyframes if (video_stem and video_stem in kf.get("video", "")) or (vtt_stem_base and vtt_stem_base in kf.get("vtt", ""))]
         if lecture_frames:
             tex.append(r"\textbf{关键帧截图}：")
             for kf in lecture_frames[:2]:  # Max 2 per lecture
@@ -417,6 +420,7 @@ def main():
     parser.add_argument("--unit-title-en", default="", help="Unit title (English, shown smaller in zh mode)")
     parser.add_argument("--instructor", default="")
     parser.add_argument("--lang", default="zh", choices=["zh", "en"], help="Output language (default: zh)")
+    parser.add_argument("--keyframes", action="store_true", default=False, help="Insert keyframe screenshots (default: off)")
     parser.add_argument("--output", required=True, help="Output .tex file")
     args = parser.parse_args()
     
@@ -429,6 +433,7 @@ def main():
         course_title_en=args.course_title_en,
         unit_title_en=args.unit_title_en,
         lang=args.lang,
+        insert_keyframes=args.keyframes,
     )
 
 
