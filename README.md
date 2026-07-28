@@ -51,7 +51,20 @@ opencli coursera download --help
 
 ### 方式二：让 AI 自动配置（推荐）
 
-把 `skill/SKILL.md` 放到 `~/.gemini/skills/mooc2handout/SKILL.md`，AI agent 就能读取 skill 并全自动完成：安装、配置、绑定 Chrome、下载字幕、推断关键帧、提取画面、生成讲义。
+把下面这段提示词发给你的 AI agent（Gemini / Claude / 任何支持工具调用的 agent）：
+
+```
+Clone https://github.com/dull-bird/mooc2handout-skill
+and follow the "Quick Start" and "Usage" sections
+in README.md to set up everything from scratch:
+install opencli, install the platform adapter,
+bind Chrome, then download the course at
+<PASTE_URL> with --video --resources,
+infer keyframes, extract frames, and scaffold
+a handout. Do not skip any prerequisite step.
+```
+
+AI 会自动完成：安装依赖 → 配置 adapter → 绑定 Chrome → 下载字幕/视频/补充材料 → 推断关键帧 → 提取画面 → 生成讲义。
 
 ## 使用流程
 

@@ -157,12 +157,15 @@
       <div class="install-card">
         <h3>AI Auto-Configure</h3>
         <span class="tag auto">Recommended</span>
-        <p>Put <code>SKILL.md</code> in your AI agent's skill directory. It handles everything automatically.</p>
-        <pre><code># Gemini
-cp skill/SKILL.md ~/.gemini/skills/mooc2handout/SKILL.md
-
-# Then just ask your AI:
-# "Download Coursera course X and make a handout"</code></pre>
+        <p>Give your AI agent this prompt. It reads the repo, installs all dependencies, and runs the full pipeline for you.</p>
+        <pre><code>Clone https://github.com/dull-bird/mooc2handout-skill
+and follow the "Quick Start" and "Usage" sections
+in README.md to set up everything from scratch:
+install opencli, install the platform adapter,
+bind Chrome, then download the course at
+&lt;PASTE_URL&gt; with --video --resources,
+infer keyframes, extract frames, and scaffold
+a handout. Do not skip any prerequisite step.</code></pre>
       </div>
       <div class="install-card">
         <h3>Manual Install</h3>

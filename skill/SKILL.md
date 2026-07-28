@@ -6,7 +6,21 @@ allowed-tools: Bash, Read, Write, Edit
 
 # mooc2handout skill
 
-Full pipeline: Coursera subtitles → AI keyframe detection → frame extraction → structured handout.
+Full pipeline: MOOC subtitles → AI keyframe detection → frame extraction → structured handout.
+
+> **How to use this skill:** Give your AI agent the prompt below. It will clone the repo,
+> follow the README installation steps, and run the full pipeline automatically.
+>
+> ```
+> Clone https://github.com/dull-bird/mooc2handout-skill
+> and follow the "Quick Start" and "Usage" sections
+> in README.md to set up everything from scratch:
+> install opencli, install the platform adapter,
+> bind Chrome, then download the course at
+> <PASTE_URL> with --video --resources,
+> infer keyframes, extract frames, and scaffold
+> a handout. Do not skip any prerequisite step.
+> ```
 
 ---
 
