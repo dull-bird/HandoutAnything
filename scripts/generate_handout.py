@@ -212,6 +212,7 @@ def generate_handout(
     output: Path,
     course_title_en: str = "",
     unit_title_en: str = "",
+    lang: str = "zh",
 ):
     """Generate a complete LaTeX handout."""
     
@@ -239,10 +240,21 @@ def generate_handout(
     tex.append(preamble)
     
     # Title page
-    title = TITLE_PAGE.replace("COURSE_TITLE_CN", tex_escape(course_title))
-    title = title.replace("COURSE_TITLE_EN", tex_escape(course_title_en or course_title))
-    title = title.replace("UNIT_TITLE_CN", tex_escape(unit_title))
-    title = title.replace("UNIT_TITLE_EN", tex_escape(unit_title_en or unit_title))
+    if lang == "en":
+        # English mode: no secondary subtitle
+        title = TITLE_PAGE.replace("COURSE_TITLE_CN", tex_escape(course_title_en or course_title))
+        title = title.replace("COURSE_TITLE_EN", "")
+        title = title.replace("UNIT_TITLE_CN", tex_escape(unit_title_en or unit_title))
+        title = title.replace("UNIT_TITLE_EN", "")
+        # Remove the empty small lines
+        title = title.replace(r"{\small\textcolor{darkgray}{}}\\[0.8cm]", "")
+        title = title.replace(r"{\small\textcolor{darkgray}{}}\\[1.2cm]", "")
+    else:
+        # Chinese mode: primary CN + secondary EN
+        title = TITLE_PAGE.replace("COURSE_TITLE_CN", tex_escape(course_title))
+        title = title.replace("COURSE_TITLE_EN", tex_escape(course_title_en or course_title))
+        title = title.replace("UNIT_TITLE_CN", tex_escape(unit_title))
+        title = title.replace("UNIT_TITLE_EN", tex_escape(unit_title_en or unit_title))
     title = title.replace("INSTRUCTOR", tex_escape(instructor))
     title = title.replace("DATE", r"\today")
     tex.append(title)
@@ -251,7 +263,10 @@ def generate_handout(
     tex.append(TOC)
     
     # ── Section 1: Overview ──
-    tex.append(r"\section{单元概览}")
+    if lang == "en":
+        tex.append(r"\section{Overview}")
+    else:
+        tex.append(r"\section{单元概览}")
     tex.append(r"""
 本单元是课程的入门部分，旨在帮助学习者建立正确的数学思维模式。
 与传统的"学习公式→套用解题"不同，本课程强调\textbf{理解数学的本质}——
@@ -268,7 +283,10 @@ def generate_handout(
 """)
     
     # ── Section 2: Lectures ──
-    tex.append(r"\section{课程讲义}")
+    if lang == "en":
+        tex.append(r"\section{Lecture Notes}")
+    else:
+        tex.append(r"\section{课程讲义}")
     
     for i, item in enumerate(manifest):
         lecture_title = item["title"]
@@ -330,7 +348,10 @@ def generate_handout(
                     tex.append("")
     
     # ── Section 3: Key Concepts ──
-    tex.append(r"\section{核心概念详解}")
+    if lang == "en":
+        tex.append(r"\section{Key Concepts}")
+    else:
+        tex.append(r"\section{核心概念详解}")
     
     tex.append(r"""
 \subsection{逻辑连接词（Logical Connectives）}
@@ -379,7 +400,10 @@ def generate_handout(
 """)
     
     # ── Section 4: Exercises ──
-    tex.append(r"\section{习题讲解}")
+    if lang == "en":
+        tex.append(r"\section{Exercises}")
+    else:
+        tex.append(r"\section{习题讲解}")
     
     tex.append(r"""
 \begin{exercise}{练习题}
@@ -430,7 +454,10 @@ def generate_handout(
 """)
     
     # ── Section 5: Resources ──
-    tex.append(r"\section{补充阅读}")
+    if lang == "en":
+        tex.append(r"\section{Further Reading}")
+    else:
+        tex.append(r"\section{补充阅读}")
     tex.append(r"""
 \begin{supplement}{推荐材料}
 \begin{itemize}
@@ -459,11 +486,12 @@ def generate_handout(
 def main():
     parser = argparse.ArgumentParser(description="Generate a polished LaTeX handout.")
     parser.add_argument("--data-dir", required=True, help="Directory with VTT/PDF/frames")
-    parser.add_argument("--course-title", required=True, help="Course title (Chinese)")
-    parser.add_argument("--unit-title", required=True, help="Unit title (Chinese)")
-    parser.add_argument("--course-title-en", default="", help="Course title (English, shown smaller)")
-    parser.add_argument("--unit-title-en", default="", help="Unit title (English, shown smaller)")
+    parser.add_argument("--course-title", required=True, help="Course title (primary language)")
+    parser.add_argument("--unit-title", required=True, help="Unit title (primary language)")
+    parser.add_argument("--course-title-en", default="", help="Course title (English, shown smaller in zh mode)")
+    parser.add_argument("--unit-title-en", default="", help="Unit title (English, shown smaller in zh mode)")
     parser.add_argument("--instructor", default="")
+    parser.add_argument("--lang", default="zh", choices=["zh", "en"], help="Output language (default: zh)")
     parser.add_argument("--output", required=True, help="Output .tex file")
     args = parser.parse_args()
     
@@ -475,6 +503,7 @@ def main():
         output=Path(args.output),
         course_title_en=args.course_title_en,
         unit_title_en=args.unit_title_en,
+        lang=args.lang,
     )
 
 
