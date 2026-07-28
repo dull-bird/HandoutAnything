@@ -146,17 +146,64 @@ python3 scripts/extract_frames.py \
 
 ---
 
-### Phase 4 — Scaffold handout
+### Phase 4 — Generate handout
 
-```bash
-python3 scripts/scaffold_handout.py \
-  --subtitle-dir ./notes/module-1 \
-  --course-title "课程名" \
-  --unit-title "单元名" \
-  --output ./handout.tex
+#### 4a. Prepare supplements.json
+
+Before generating, create `supplements.json` in the data directory with AI-summarized Chinese content for each supplementary PDF:
+
+```json
+{
+  "01_lecture_Background_Reading.pdf": {
+    "title": "背景阅读：什么是数学？",
+    "summary": [
+      "第一段中文总结（可含 LaTeX 标记如 \\textbf{}）",
+      "第二段中文总结",
+      "第三段中文总结"
+    ]
+  }
+}
 ```
 
-Then use AI to fill the scaffold with summarized content, insert keyframe images via `\includegraphics`, add exercises, and compile to PDF.
+The agent should read each supplementary PDF, understand it, and write 3-4 bullet-point summaries in Chinese.
+
+#### 4b. Generate LaTeX
+
+```bash
+# Chinese output (default)
+python3 scripts/generate_handout.py \
+  --data-dir ./notes/module-1 \
+  --course-title "数学思维导论" \
+  --unit-title "第一单元：数学思维入门" \
+  --course-title-en "Mathematical Thinking" \
+  --unit-title-en "Module 1: Introduction" \
+  --instructor "Keith Devlin" \
+  --lang zh \
+  --output handout.tex
+
+# English output (no redundant subtitles)
+python3 scripts/generate_handout.py \
+  --data-dir ./notes/module-1 \
+  --course-title "Mathematical Thinking" \
+  --unit-title "Module 1: Introduction" \
+  --instructor "Keith Devlin" \
+  --lang en \
+  --output handout_en.tex
+```
+
+**What it produces:**
+- Title page: Chinese primary + English secondary (zh mode) or English only (en mode)
+- Video links with duration: `观看视频：第1讲（27:59）`
+- Keyframe screenshots with Chinese captions: `时间戳 671s — 核心定义`
+- Supplement summaries: title outside box + bullet points inside
+- Key concepts with bold formatting
+- Exercises with detailed solutions
+
+#### 4c. Compile PDF
+
+```bash
+xelatex handout.tex && xelatex handout.tex
+```
 
 **Handout guidelines** are in `references/`:
 - `handout-guidelines.md` — heading rules, list policy, merge policy
