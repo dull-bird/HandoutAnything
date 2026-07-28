@@ -307,25 +307,27 @@ def generate_handout(
                     tex.append(f"\\keyframe{{{frame_file}}}{{{caption}}}")
             tex.append("")
         
-        # Supplementary materials — organically integrated
+        # Supplementary materials — read from supplements.json (AI-summarized)
         if item.get("resources"):
+            supplements_path = data_dir / "supplements.json"
+            supplements_data = {}
+            if supplements_path.exists():
+                supplements_data = json.loads(supplements_path.read_text(encoding="utf-8"))
             for pdf_name in item["resources"]:
-                pdf_path = data_dir / pdf_name
-                if pdf_path.exists():
-                    pdf_text = extract_pdf_text(pdf_path, max_pages=4)
-                    if pdf_text:
-                        # Extract meaningful paragraphs (skip headers/short lines)
-                        paras = [p.strip() for p in pdf_text.split("\n\n") if len(p.strip()) > 80]
-                        clean_name = pdf_name.split("_", 1)[-1].replace(".pdf", "").replace("_", " ")
-                        tex.append(f"\\begin{{supplement}}{{补充阅读：{tex_escape(clean_name)}}}")
-                        # Include up to 3 meaningful paragraphs
-                        for para in paras[:3]:
-                            # Clean up and escape
-                            clean_para = para.replace("\n", " ").strip()[:400]
-                            tex.append(f"  {tex_escape(clean_para)}")
-                            tex.append("")
-                        tex.append(r"\end{supplement}")
+                if pdf_name in supplements_data:
+                    info = supplements_data[pdf_name]
+                    tex.append(f"\\begin{{supplement}}{{{info['title']}}}")
+                    for para in info.get("summary", []):
+                        # Summary text already contains LaTeX markup, don't escape
+                        tex.append(f"  {para}")
                         tex.append("")
+                    tex.append(r"\end{supplement}")
+                    tex.append("")
+                else:
+                    # Fallback: just list the filename
+                    clean_name = pdf_name.split("_", 1)[-1].replace(".pdf", "").replace("_", " ")
+                    tex.append(f"\\textbf{{补充材料}}：\\texttt{{{tex_escape(clean_name)}}}")
+                    tex.append("")
     
     # ── Section 3: Key Concepts ──
     tex.append(r"\section{核心概念详解}")
