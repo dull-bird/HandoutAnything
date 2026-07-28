@@ -265,8 +265,14 @@ def generate_handout(
     # TOC
     tex.append(TOC)
     
-    # ── Load content.json ──
-    content_json_path = data_dir / "content.json"
+    # ── Load content.json (language-aware) ──
+    # For --lang en, prefer content_en.json; fall back to content.json
+    if lang == "en":
+        content_json_path = data_dir / "content_en.json"
+        if not content_json_path.exists():
+            content_json_path = data_dir / "content.json"
+    else:
+        content_json_path = data_dir / "content.json"
     content_data = {}
     if content_json_path.exists():
         content_data = json.loads(content_json_path.read_text(encoding="utf-8"))
