@@ -386,7 +386,9 @@ def generate_handout(
         if lang == "en":
             tex.append(f"\\section*{{{takeaway_num}. Key Takeaways}}")
         else:
-            tex.append(f"\\section*{{{takeaway_num}. 本单元最该记住的五句话}}")
+            n = len(key_takeaways)
+            cn_num = {3: "三", 4: "四", 5: "五", 6: "六", 7: "七", 8: "八", 9: "九", 10: "十"}.get(n, str(n))
+            tex.append(f"\\section*{{{takeaway_num}. 本单元最该记住的{cn_num}句话}}")
         tex.append(r"\begin{enumerate}")
         for t in key_takeaways:
             tex.append(f"  \\item {t}")
