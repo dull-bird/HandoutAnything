@@ -49,7 +49,7 @@ PREAMBLE = r"""\documentclass[UTF8,a4paper,11pt]{ctexart}
 
 % ── Graphics ──
 \usepackage{graphicx}
-\graphicspath{{mathematical-thinking/frames/}}
+\graphicspath{{FRAMES_DIR/}}
 
 % ── Colors ──
 \usepackage{xcolor}
@@ -233,7 +233,10 @@ def generate_handout(
     tex = []
     
     # Preamble
-    preamble = PREAMBLE.replace("COURSE_TITLE", tex_escape(course_title))
+    # Set frames directory (relative to where xelatex runs)
+    frames_dir = data_dir / "frames"
+    preamble = PREAMBLE.replace("FRAMES_DIR", str(frames_dir))
+    preamble = preamble.replace("COURSE_TITLE", tex_escape(course_title))
     preamble = preamble.replace("UNIT_TITLE", tex_escape(unit_title))
     preamble = preamble.replace("INSTRUCTOR", tex_escape(instructor))
     tex.append(preamble)
@@ -306,12 +309,15 @@ def generate_handout(
 
         
         # Keyframes for this lecture
-        lecture_frames = [kf for kf in keyframes if item["en_vtt"].replace(".en.vtt", "") in kf.get("vtt", "")]
+        # Match keyframes by video filename stem (language-agnostic)
+        video_stem = item.get("video", "").replace(".mp4", "") if item.get("video") else ""
+        vtt_stem_base = re.sub(r"\.(en|zh-CN|zh-TW|ja|ko|fr|de|es|pt|ar)$", "", item["en_vtt"].replace(".vtt", ""))
+        lecture_frames = [kf for kf in keyframes if (video_stem and video_stem in kf.get("video", "")) or (vtt_stem_base and vtt_stem_base in kf.get("vtt", ""))]
         if lecture_frames:
             tex.append(r"\textbf{关键帧截图}：")
             for kf in lecture_frames[:2]:  # Max 2 per lecture
                 # Build frame filename matching extract_frames.py output
-                vtt_stem = item['en_vtt'].replace('.en.vtt', '')
+                vtt_stem = re.sub(r"\.(en|zh-CN|zh-TW|ja|ko|fr|de|es|pt|ar)$", "", item['en_vtt'].replace('.vtt', ''))
                 time_label = f"{int(kf['time']):04d}s" if kf['time'] < 60 else f"{int(kf['time'])//60:02d}m{int(kf['time'])%60:02d}s"
                 frame_file = f"{vtt_stem}_{time_label}_{kf['reason']}.png"
                 # Check if frame exists
