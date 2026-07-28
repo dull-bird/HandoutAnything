@@ -148,24 +148,66 @@ python3 scripts/extract_frames.py \
 
 ### Phase 4 — Generate handout
 
-#### 4a. Prepare supplements.json
+#### 4a. Prepare content.json (REQUIRED)
 
-Before generating, create `supplements.json` in the data directory with AI-summarized Chinese content for each supplementary PDF:
+**Every course MUST have a `content.json` before generating the PDF.** Read each lecture's VTT subtitle file individually and write rich, accessible summaries.
+
+```json
+{
+  "knowledge_map": [
+    {"topic": "颜色知觉", "question": "为什么颜色不只是光波？"},
+    {"topic": "知觉", "question": "我们如何把零散刺激组织成对象？"}
+  ],
+  "overview": "单元概要（含\\textbf加粗、\\begin{itemize}列表等LaTeX标记）",
+  "lectures": {
+    "01_lecture_stem": "该讲的深入浅出总结（含小节、加粗、列表、生活例子、延伸思考）",
+    "02_lecture_stem": "..."
+  },
+  "key_takeaways": [
+    "本单元最该记住的第一句话",
+    "第二句话",
+    "第三句话",
+    "第四句话",
+    "第五句话"
+  ],
+  "exercises": {
+    "choice": [
+      {"q": "题目？", "options": ["A. 选项", "B. 选项", "C. 选项", "D. 选项"]}
+    ],
+    "truefalse": ["判断题1", "判断题2"],
+    "shortanswer": ["简答题1", "简答题2"]
+  },
+  "answers": {
+    "choice": "1.B \\quad 2.A \\quad ...",
+    "truefalse": "1. 对 \\quad 2. 错 \\quad ...",
+    "shortanswer": ["要点1", "要点2"]
+  }
+}
+```
+
+**Quality standards for per-lecture summaries:**
+- Read each VTT file individually, do NOT summarize all lectures together
+- Use subsection structure (e.g. \\subsection*{1.1 生理基础})
+- Include: core concept in bold, life examples, extended thinking questions
+- Write in accessible language (深入浅出), not academic jargon
+- Each lecture summary should be 150-300 words
+
+**Exercise requirements:**
+- At least 10 multiple choice questions (4 options each)
+- At least 5 true/false questions
+- At least 2 short answer questions
+- All answers must be provided
+
+#### 4a-2. Prepare supplements.json (if course has supplementary PDFs)
 
 ```json
 {
   "01_lecture_Background_Reading.pdf": {
     "title": "背景阅读：什么是数学？",
-    "summary": [
-      "第一段中文总结（可含 LaTeX 标记如 \\textbf{}）",
-      "第二段中文总结",
-      "第三段中文总结"
-    ]
+    "summary": ["第一段中文总结", "第二段中文总结", "第三段中文总结"]
   }
 }
 ```
-
-The agent should read each supplementary PDF, understand it, and write 3-4 bullet-point summaries in Chinese.
 
 #### 4b. Generate LaTeX
 
