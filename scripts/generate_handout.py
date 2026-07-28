@@ -81,7 +81,9 @@ PREAMBLE = r"""\documentclass[UTF8,a4paper,11pt]{ctexart}
 \usepackage{tcolorbox}
 \usepackage{titlesec}
 \usepackage{fancyhdr}
-\usepackage{lastpage}\n\usepackage{pifont}
+\usepackage{lastpage}
+\usepackage{pifont}
+\usepackage{amssymb}
 
 % ── Header/Footer ──
 \pagestyle{fancy}
@@ -288,23 +290,19 @@ def generate_handout(
                 # Check if frame exists
                 frame_path = data_dir / "frames" / frame_file
                 if frame_path.exists():
-                    caption = f"时间戳 {int(kf['time'])}s — {kf['reason']}"
+                    reason_escaped = kf['reason'].replace('_', r'\_')
+                    caption = f"时间戳 {int(kf['time'])}s — {reason_escaped}"
                     tex.append(f"\\keyframe{{{frame_file}}}{{{caption}}}")
             tex.append("")
         
-        # Supplementary materials
+        # Supplementary materials (list only, no text dump)
         if item.get("resources"):
-            tex.append(r"\begin{supplement}{补充材料}")
+            tex.append(r"\textbf{补充材料}：")
+            tex.append(r"\begin{itemize}")
             for pdf_name in item["resources"]:
-                pdf_path = data_dir / pdf_name
-                if pdf_path.exists():
-                    pdf_text = extract_pdf_text(pdf_path, max_pages=2)
-                    # Extract first paragraph as summary
-                    first_para = pdf_text.split("\n\n")[0][:300] if pdf_text else ""
-                    tex.append(f"\\textbf{{{tex_escape(pdf_name)}}}")
-                    tex.append(f"\\par {tex_escape(first_para)}...")
-                    tex.append("")
-            tex.append(r"\end{supplement}")
+                clean_name = pdf_name.split("_", 1)[-1] if "_" in pdf_name else pdf_name
+                tex.append(f"  \\item \\texttt{{{tex_escape(clean_name)}}}")
+            tex.append(r"\end{itemize}")
             tex.append("")
     
     # ── Section 3: Key Concepts ──
