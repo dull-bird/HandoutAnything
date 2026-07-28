@@ -265,96 +265,89 @@ def generate_handout(
     # TOC
     tex.append(TOC)
     
-    # ── Section 1: Overview ──
-    if lang == "en":
-        tex.append(r"\section{Overview}")
-    else:
-        tex.append(r"\section{单元概览}")
-    
-    # Read overview from content.json
+    # ── Load content.json ──
     content_json_path = data_dir / "content.json"
     content_data = {}
     if content_json_path.exists():
         content_data = json.loads(content_json_path.read_text(encoding="utf-8"))
-    
+
+    # ── Knowledge Map ──
+    knowledge_map = content_data.get("knowledge_map", [])
+    if knowledge_map:
+        if lang == "en":
+            tex.append(r"\section*{Knowledge Map}")
+        else:
+            tex.append(r"\section*{本单元知识地图}")
+        tex.append(r"\begin{longtable}{p{3.1cm}p{10.2cm}}")
+        tex.append(r"\toprule")
+        if lang == "en":
+            tex.append(r"Topic & Core Question \\")
+        else:
+            tex.append(r"主题 & 核心问题 \\")
+        tex.append(r"\midrule")
+        for row in knowledge_map:
+            topic = row.get("topic", "")
+            question = row.get("question", "")
+            tex.append(f"{topic} & {question} \\\\")
+        tex.append(r"\bottomrule")
+        tex.append(r"\end{longtable}")
+        tex.append("")
+
+    # ── Section 0: Overview ──
     overview = content_data.get("overview", "")
+    if lang == "en":
+        tex.append(r"\section*{0. Overview}")
+    else:
+        tex.append(r"\section*{0. 概要}")
     if overview:
         tex.append(overview)
     else:
         if lang == "en":
-            tex.append(r"This unit covers the core concepts of the course. Key topics are summarized below with video references and keyframe screenshots.")
+            tex.append(r"This unit covers the core concepts of the course.")
         else:
-            tex.append(r"本单元涵盖课程的核心概念。以下按讲次列出要点，附带视频链接与关键帧截图。")
+            tex.append(r"本单元涵盖课程的核心概念。")
     tex.append("")
-    
-    # ── Section 2: Lectures ──
-    if lang == "en":
-        tex.append(r"\section{Lecture Notes}")
-    else:
-        tex.append(r"\section{课程讲义}")
-    
+
+    # ── Per-lecture sections ──
+    lecture_summaries = content_data.get("lectures", {})
     for i, item in enumerate(manifest):
         lecture_title = item["title"]
-        lecture_num = item["number"]
-        
-        # Video link
-        video_url = item.get("page_url", "https://www.coursera.org/learn/mathematical-thinking")
-        
-        tex.append(f"\\subsection{{{tex_escape(lecture_title)}}}")
+        section_num = i + 1
+
+        tex.append(f"\\section*{{{section_num}. {tex_escape(lecture_title)}}}")
+
+        # Video link with duration
+        video_url = item.get("page_url", "")
         duration = item.get("duration", "")
         dur_str = f"（{duration}）" if duration else ""
-        if lang == "en":
-            tex.append(f"\\videolink{{{video_url}}}{{Watch: {tex_escape(lecture_title)}}}{dur_str}")
-        else:
-            tex.append(f"\\videolink{{{video_url}}}{{观看视频：{tex_escape(lecture_title)}}}{dur_str}")
+        if video_url:
+            if lang == "en":
+                tex.append(f"\\noindent\\textbf{{Review: }}\\videolink{{{video_url}}}{{{tex_escape(lecture_title)}}}{dur_str}")
+            else:
+                tex.append(f"\\noindent\\textbf{{回看：}}\\videolink{{{video_url}}}{{{tex_escape(lecture_title)}}}{dur_str}")
         tex.append("")
-        
 
-        
-        # Keyframes for this lecture
-        # Match keyframes by video filename stem (language-agnostic)
-        lecture_frames = []
-        if insert_keyframes:
-            video_stem = item.get("video", "").replace(".mp4", "") if item.get("video") else ""
-            vtt_stem_base = re.sub(r"\.(en|zh-CN|zh-TW|ja|ko|fr|de|es|pt|ar)$", "", item["en_vtt"].replace(".vtt", ""))
-            lecture_frames = [kf for kf in keyframes if (video_stem and video_stem in kf.get("video", "")) or (vtt_stem_base and vtt_stem_base in kf.get("vtt", ""))]
-        if lecture_frames:
-            tex.append(r"\textbf{关键帧截图}：")
-            for kf in lecture_frames[:2]:  # Max 2 per lecture
-                # Build frame filename matching extract_frames.py output
-                vtt_stem = re.sub(r"\.(en|zh-CN|zh-TW|ja|ko|fr|de|es|pt|ar)$", "", item['en_vtt'].replace('.vtt', ''))
-                time_label = f"{int(kf['time']):04d}s" if kf['time'] < 60 else f"{int(kf['time'])//60:02d}m{int(kf['time'])%60:02d}s"
-                frame_file = f"{vtt_stem}_{time_label}_{kf['reason']}.png"
-                # Check if frame exists
-                frame_path = data_dir / "frames" / frame_file
-                if frame_path.exists():
-                    reason_map = {
-                        'concept_shift': '概念转折',
-                        'definition': '核心定义',
-                        'example': '示例讲解',
-                        'summary': '总结回顾',
-                        'interval': '内容节选',
-                    }
-                    reason_cn = reason_map.get(kf['reason'], kf['reason'])
-                    caption = f"时间戳 {int(kf['time'])}s — {reason_cn}"
-                    tex.append(f"\\keyframe{{{frame_file}}}{{{caption}}}")
+        # Per-lecture content from content.json
+        video_stem_key = item.get("video", "").replace(".mp4", "") if item.get("video") else ""
+        vtt_stem_key = re.sub(r"\.(en|zh-CN|zh-TW|ja|ko|fr|de|es|pt|ar)$", "", item["en_vtt"].replace(".vtt", ""))
+        lecture_content = lecture_summaries.get(video_stem_key) or lecture_summaries.get(vtt_stem_key) or ""
+        if lecture_content:
+            tex.append(lecture_content)
             tex.append("")
-        
-        # Supplementary materials — read from supplements.json (AI-summarized)
+
+        # Supplementary materials
         if item.get("resources"):
             supplements_path = data_dir / "supplements.json"
             supplements_data = {}
             if supplements_path.exists():
                 supplements_data = json.loads(supplements_path.read_text(encoding="utf-8"))
-            for pdf_name in item["resources"]:
-                if pdf_name in supplements_data:
-                    info = supplements_data[pdf_name]
-                    # Title outside the box
+            for res_name in item["resources"]:
+                if res_name in supplements_data:
+                    info = supplements_data[res_name]
                     tex.append(f"\\textbf{{📎 {info['title']}}}")
-                    escaped_name = tex_escape(pdf_name)
+                    escaped_name = tex_escape(res_name)
                     tex.append(f"\\hfill{{\\small\\texttt{{{escaped_name}}}}}")
                     tex.append("")
-                    # Content inside the box with bullets
                     tex.append(r"\begin{supplement}{内容摘要}")
                     tex.append(r"\begin{itemize}")
                     for para in info.get("summary", []):
@@ -363,41 +356,130 @@ def generate_handout(
                     tex.append(r"\end{supplement}")
                     tex.append("")
                 else:
-                    # Fallback: just list the filename
-                    clean_name = pdf_name.split("_", 1)[-1].replace(".pdf", "").replace("_", " ")
+                    clean_name = res_name.split("_", 1)[-1] if "_" in res_name else res_name
                     tex.append(f"\\textbf{{补充材料}}：\\texttt{{{tex_escape(clean_name)}}}")
                     tex.append("")
-    
-    # ── Section 3: Key Concepts ──
-    key_concepts = content_data.get("key_concepts", "")
-    if key_concepts:
+
+        # Keyframes (optional)
+        if insert_keyframes:
+            video_stem = item.get("video", "").replace(".mp4", "") if item.get("video") else ""
+            lecture_frames = [kf for kf in keyframes if (video_stem and video_stem in kf.get("video", "")) or (vtt_stem_key and vtt_stem_key in kf.get("vtt", ""))]
+            if lecture_frames:
+                reason_map = {
+                    'concept_shift': '概念转折', 'definition': '核心定义',
+                    'example': '示例讲解', 'summary': '总结回顾', 'interval': '内容节选',
+                }
+                for kf in lecture_frames[:2]:
+                    time_label = f"{int(kf['time']):04d}s" if kf['time'] < 60 else f"{int(kf['time'])//60:02d}m{int(kf['time'])%60:02d}s"
+                    frame_file = f"{vtt_stem_key}_{time_label}_{kf['reason']}.png"
+                    frame_path = data_dir / "frames" / frame_file
+                    if frame_path.exists():
+                        reason_cn = reason_map.get(kf['reason'], kf['reason'])
+                        caption = f"时间戳 {int(kf['time'])}s — {reason_cn}"
+                        tex.append(f"\\keyframe{{{frame_file}}}{{{caption}}}")
+                tex.append("")
+
+    # ── Key Takeaways ──
+    key_takeaways = content_data.get("key_takeaways", [])
+    if key_takeaways:
+        takeaway_num = len(manifest) + 1
         if lang == "en":
-            tex.append(r"\section{Key Concepts}")
+            tex.append(f"\\section*{{{takeaway_num}. Key Takeaways}}")
         else:
-            tex.append(r"\section{核心概念详解}")
-        tex.append(key_concepts)
+            tex.append(f"\\section*{{{takeaway_num}. 本单元最该记住的五句话}}")
+        tex.append(r"\begin{enumerate}")
+        for t in key_takeaways:
+            tex.append(f"  \\item {t}")
+        tex.append(r"\end{enumerate}")
         tex.append("")
-    
-    # ── Section 4: Exercises ──
-    exercises = content_data.get("exercises", "")
+
+    # ── Exercises ──
+    exercises = content_data.get("exercises", {})
+    answers = content_data.get("answers", {})
     if exercises:
+        ex_num = len(manifest) + (2 if key_takeaways else 1)
         if lang == "en":
-            tex.append(r"\section{Exercises}")
+            tex.append(f"\\section*{{{ex_num}. Exercises}}")
         else:
-            tex.append(r"\section{习题讲解}")
-        tex.append(exercises)
-        tex.append("")
-    
-    # ── Section 5: Resources ──
-    further_reading = content_data.get("further_reading", "")
-    if further_reading:
+            tex.append(f"\\section*{{{ex_num}. 练习题}}")
+
+        # A. Multiple choice
+        choice = exercises.get("choice", [])
+        if choice:
+            if lang == "en":
+                tex.append(f"\\subsection*{{A. Multiple Choice ({len(choice)} questions)}}")
+            else:
+                tex.append(f"\\subsection*{{A. 选择题（{len(choice)}题）}}")
+            tex.append(r"\begin{enumerate}")
+            for q in choice:
+                tex.append(f"  \\item {q['q']}\\\\")
+                options = " \\quad ".join(q.get("options", []))
+                tex.append(f"  {options}")
+                tex.append("")
+            tex.append(r"\end{enumerate}")
+            tex.append("")
+
+        # B. True/False
+        truefalse = exercises.get("truefalse", [])
+        if truefalse:
+            if lang == "en":
+                tex.append(f"\\subsection*{{B. True/False ({len(truefalse)} questions)}}")
+            else:
+                tex.append(f"\\subsection*{{B. 判断题（{len(truefalse)}题）}}")
+            tex.append(r"\begin{enumerate}")
+            for q in truefalse:
+                tex.append(f"  \\item {q}（\\quad）")
+            tex.append(r"\end{enumerate}")
+            tex.append("")
+
+        # C. Short answer
+        shortanswer = exercises.get("shortanswer", [])
+        if shortanswer:
+            if lang == "en":
+                tex.append(f"\\subsection*{{C. Short Answer ({len(shortanswer)} questions)}}")
+            else:
+                tex.append(f"\\subsection*{{C. 简答题（{len(shortanswer)}题）}}")
+            tex.append(r"\begin{enumerate}")
+            for q in shortanswer:
+                tex.append(f"  \\item {q}")
+            tex.append(r"\end{enumerate}")
+            tex.append("")
+
+    # ── Answers ──
+    if answers:
+        ans_num = len(manifest) + (3 if key_takeaways else 2)
         if lang == "en":
-            tex.append(r"\section{Further Reading}")
+            tex.append(f"\\section*{{{ans_num}. Answer Key}}")
         else:
-            tex.append(r"\section{补充阅读}")
-        tex.append(further_reading)
-        tex.append("")
-    
+            tex.append(f"\\section*{{{ans_num}. 参考答案}}")
+
+        if answers.get("choice"):
+            if lang == "en":
+                tex.append(r"\subsection*{Multiple Choice}")
+            else:
+                tex.append(r"\subsection*{选择题答案}")
+            tex.append(answers["choice"])
+            tex.append("")
+
+        if answers.get("truefalse"):
+            if lang == "en":
+                tex.append(r"\subsection*{True/False}")
+            else:
+                tex.append(r"\subsection*{判断题答案}")
+            tex.append(answers["truefalse"])
+            tex.append("")
+
+        if answers.get("shortanswer"):
+            if lang == "en":
+                tex.append(r"\subsection*{Short Answer Key Points}")
+            else:
+                tex.append(r"\subsection*{简答题要点}")
+            tex.append(r"\begin{enumerate}")
+            for a in answers["shortanswer"]:
+                tex.append(f"  \\item {a}")
+            tex.append(r"\end{enumerate}")
+            tex.append("")
+
     # End document
     tex.append(r"\end{document}")
     
