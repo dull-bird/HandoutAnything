@@ -269,20 +269,22 @@ def generate_handout(
         tex.append(r"\section{Overview}")
     else:
         tex.append(r"\section{单元概览}")
-    tex.append(r"""
-本单元是课程的入门部分，旨在帮助学习者建立正确的数学思维模式。
-与传统的"学习公式→套用解题"不同，本课程强调\textbf{理解数学的本质}——
-数学不仅仅是计算工具，更是一种\textbf{精确、严谨、抽象}的思维方式。
-
-\begin{keyconcept}{核心目标}
-\begin{itemize}
-  \item 从"学校数学"过渡到"大学数学"的思维模式
-  \item 理解数学是研究\textbf{模式}（patterns）的学科
-  \item 掌握精确语言（precise language）在数学中的重要性
-  \item 学会使用逻辑连接词和量词进行严格推理
-\end{itemize}
-\end{keyconcept}
-""")
+    
+    # Read overview from content.json
+    content_json_path = data_dir / "content.json"
+    content_data = {}
+    if content_json_path.exists():
+        content_data = json.loads(content_json_path.read_text(encoding="utf-8"))
+    
+    overview = content_data.get("overview", "")
+    if overview:
+        tex.append(overview)
+    else:
+        if lang == "en":
+            tex.append(r"This unit covers the core concepts of the course. Key topics are summarized below with video references and keyframe screenshots.")
+        else:
+            tex.append(r"本单元涵盖课程的核心概念。以下按讲次列出要点，附带视频链接与关键帧截图。")
+    tex.append("")
     
     # ── Section 2: Lectures ──
     if lang == "en":
@@ -364,127 +366,34 @@ def generate_handout(
                     tex.append("")
     
     # ── Section 3: Key Concepts ──
-    if lang == "en":
-        tex.append(r"\section{Key Concepts}")
-    else:
-        tex.append(r"\section{核心概念详解}")
-    
-    tex.append(r"""
-\subsection{逻辑连接词（Logical Connectives）}
-
-逻辑连接词是组合命题的基本运算，是数学推理的基石：
-
-\begin{keyconcept}{五种基本逻辑连接词}
-\begin{enumerate}
-  \item \textbf{合取（AND）}: $P \land Q$ — 当且仅当 P 和 Q 都为真时为真
-  \item \textbf{析取（OR）}: $P \lor Q$ — 当 P 或 Q 至少一个为真时为真
-  \item \textbf{否定（NOT）}: $\neg P$ — 将 P 的真值反转
-  \item \textbf{条件（IF...THEN）}: $P \Rightarrow Q$ — 仅当 P 真且 Q 假时为假
-  \item \textbf{双条件（IFF）}: $P \Leftrightarrow Q$ — P 和 Q 同真或同假时为真
-\end{enumerate}
-\end{keyconcept}
-
-\subsection{量词（Quantifiers）}
-
-量词用于表达"对所有"或"存在某个"的数学陈述：
-
-\begin{keyconcept}{两个核心量词}
-\begin{itemize}
-  \item \textbf{全称量词}: $\forall x\, P(x)$ — "对所有 x，P(x) 成立"
-  \item \textbf{存在量词}: $\exists x\, P(x)$ — "存在某个 x 使得 P(x) 成立"
-\end{itemize}
-
-\textbf{量词否定规则}（德摩根律）：
-\[
-\neg \forall x\,P(x) \equiv \exists x\,\neg P(x)
-\]
-\[
-\neg \exists x\,P(x) \equiv \forall x\,\neg P(x)
-\]
-\end{keyconcept}
-
-\subsection{集合论基础（Set Theory Basics）}
-
-根据补充材料，集合论是后续课程的数学语言基础：
-
-\begin{itemize}
-  \item \textbf{集合表示}: $\{1, 2, 3\}$ 或 $\{x \in \mathbb{N} \mid x < 4\}$
-  \item \textbf{空集}: $\emptyset$ — 不含任何元素的集合
-  \item \textbf{属于关系}: $x \in A$ 表示 x 是集合 A 的元素
-  \item \textbf{子集}: $A \subseteq B$ 表示 A 的所有元素都在 B 中
-\end{itemize}
-""")
+    key_concepts = content_data.get("key_concepts", "")
+    if key_concepts:
+        if lang == "en":
+            tex.append(r"\section{Key Concepts}")
+        else:
+            tex.append(r"\section{核心概念详解}")
+        tex.append(key_concepts)
+        tex.append("")
     
     # ── Section 4: Exercises ──
-    if lang == "en":
-        tex.append(r"\section{Exercises}")
-    else:
-        tex.append(r"\section{习题讲解}")
-    
-    tex.append(r"""
-\begin{exercise}{练习题}
-\begin{enumerate}
-  \item \textbf{量词否定}：写出 $\forall x\,(x > 0 \Rightarrow x^2 > 0)$ 的否定形式。
-        【来源：第二讲】
-  
-  \item \textbf{德摩根律}：用真值表证明 $\neg(P \land Q) \equiv \neg P \lor \neg Q$。
-        【综合：第一讲-第二讲】
-  
-  \item \textbf{形式化翻译}：将"每个正数都有平方根"翻译为形式逻辑表达式。
-        【来源：第二讲】
-  
-  \item \textbf{素数无穷}：解释欧几里得证明素数无穷的核心思路。
-        【来源：作业 1 教程】
-\end{enumerate}
-\end{exercise}
-
-\subsection*{参考答案}
-
-\begin{enumerate}
-  \item 否定形式：$\exists x\,(x > 0 \land x^2 \leq 0)$
-        \par\textbf{解析}：全称量词变存在量词，条件句 $P \Rightarrow Q$ 的否定是 $P \land \neg Q$。
-  
-  \item 构造 4 行真值表：
-        \begin{center}
-        \begin{tabular}{cc|c|c|c}
-        \toprule
-        $P$ & $Q$ & $P \land Q$ & $\neg(P \land Q)$ & $\neg P \lor \neg Q$ \\
-        \midrule
-        T & T & T & F & F \\
-        T & F & F & T & T \\
-        F & T & F & T & T \\
-        F & F & F & T & T \\
-        \bottomrule
-        \end{tabular}
-        \end{center}
-        两列结果完全一致，故等价。
-  
-  \item $\forall x\,(x > 0 \Rightarrow \exists y\,(y^2 = x))$
-        \par\textbf{注意}：量词顺序很重要，$\exists y$ 必须在 $\forall x$ 之后。
-  
-  \item 假设素数有限，设为 $p_1, p_2, \ldots, p_n$。
-        构造 $N = p_1 p_2 \cdots p_n + 1$。
-        $N$ 不能被任何 $p_i$ 整除（余数都是 1），
-        所以 $N$ 要么是新的素数，要么有新的素因子——矛盾。
-\end{enumerate}
-""")
+    exercises = content_data.get("exercises", "")
+    if exercises:
+        if lang == "en":
+            tex.append(r"\section{Exercises}")
+        else:
+            tex.append(r"\section{习题讲解}")
+        tex.append(exercises)
+        tex.append("")
     
     # ── Section 5: Resources ──
-    if lang == "en":
-        tex.append(r"\section{Further Reading}")
-    else:
-        tex.append(r"\section{补充阅读}")
-    tex.append(r"""
-\begin{supplement}{推荐材料}
-\begin{itemize}
-  \item \textbf{Background Reading} — Keith Devlin 撰写的课程背景介绍，
-        涵盖数学的历史发展、数学符号的必要性、以及数学思维的价值。
-  \item \textbf{Set Theory Supplement} — 集合论基础速查表，
-        包括集合表示法、空集、子集、并集、交集等核心概念。
-        后续课程会频繁使用这些记号。
-\end{itemize}
-\end{supplement}
-""")
+    further_reading = content_data.get("further_reading", "")
+    if further_reading:
+        if lang == "en":
+            tex.append(r"\section{Further Reading}")
+        else:
+            tex.append(r"\section{补充阅读}")
+        tex.append(further_reading)
+        tex.append("")
     
     # End document
     tex.append(r"\end{document}")
