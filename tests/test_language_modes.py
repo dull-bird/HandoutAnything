@@ -1,0 +1,238 @@
+import json
+import subprocess
+import sys
+import tempfile
+import unittest
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+def write_json(path: Path, data):
+    path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def run(cmd, cwd):
+    return subprocess.run(
+        [sys.executable, *cmd],
+        cwd=cwd,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+
+
+class LanguageModeTests(unittest.TestCase):
+    def test_generate_handout_en_uses_english_assets(self):
+        with tempfile.TemporaryDirectory() as td:
+            data_dir = Path(td)
+            (data_dir / "frames").mkdir()
+            write_json(
+                data_dir / "manifest.json",
+                [
+                    {
+                        "title": "Introduction",
+                        "lesson": "Module 1",
+                        "page_url": "https://example.com/lecture-1",
+                        "video": "lecture-1.mp4",
+                        "en_vtt": "lecture-1.en.vtt",
+                        "duration": "05:00",
+                        "resources": ["reading.pdf"],
+                    }
+                ],
+            )
+            write_json(
+                data_dir / "content.json",
+                {
+                    "overview": "中文总览",
+                    "lectures": {"lecture-1": "中文讲解"},
+                    "key_takeaways": ["中文要点"],
+                    "exercises": {"choice": [], "truefalse": ["中文判断题"], "shortanswer": []},
+                    "answers": {},
+                },
+            )
+            write_json(
+                data_dir / "content_en.json",
+                {
+                    "overview": "English overview",
+                    "lectures": {"lecture-1": "English lecture summary"},
+                    "key_takeaways": ["English takeaway"],
+                    "exercises": {"choice": [], "truefalse": ["English true/false question"], "shortanswer": []},
+                    "answers": {},
+                },
+            )
+            write_json(
+                data_dir / "supplements_en.json",
+                {
+                    "reading.pdf": {
+                        "title": "Background Reading",
+                        "summary": ["First point", "Second point"],
+                    }
+                },
+            )
+            output = data_dir / "out.tex"
+            run(
+                [
+                    "scripts/generate_handout.py",
+                    "--data-dir",
+                    str(data_dir),
+                    "--course-title",
+                    "中文课程",
+                    "--unit-title",
+                    "中文单元",
+                    "--course-title-en",
+                    "English Course",
+                    "--unit-title-en",
+                    "English Unit",
+                    "--instructor",
+                    "Instructor",
+                    "--lang",
+                    "en",
+                    "--output",
+                    str(output),
+                ],
+                cwd=ROOT,
+            )
+            tex = output.read_text(encoding="utf-8")
+            self.assertIn(r"\documentclass[a4paper,11pt]{article}", tex)
+            self.assertIn("English overview", tex)
+            self.assertIn("English lecture summary", tex)
+            self.assertIn("Background Reading", tex)
+            self.assertIn(r"\begin{supplement}{Summary}", tex)
+            self.assertIn(r"(\quad)", tex)
+            self.assertIn("Contents", tex)
+            self.assertNotIn("中文总览", tex)
+            self.assertNotIn("补充材料", tex)
+            self.assertNotIn("（\\quad）", tex)
+
+    def test_generate_handout_en_rejects_chinese_titles(self):
+        with tempfile.TemporaryDirectory() as td:
+            data_dir = Path(td)
+            (data_dir / "frames").mkdir()
+            write_json(
+                data_dir / "manifest.json",
+                [
+                    {
+                        "title": "中文标题",
+                        "lesson": "中文小节",
+                        "page_url": "https://example.com/lecture-1",
+                        "video": "lecture-1.mp4",
+                        "en_vtt": "lecture-1.en.vtt",
+                    }
+                ],
+            )
+            write_json(data_dir / "content_en.json", {"overview": "English overview"})
+            proc = subprocess.run(
+                [
+                    sys.executable,
+                    "scripts/generate_handout.py",
+                    "--data-dir",
+                    str(data_dir),
+                    "--course-title",
+                    "中文课程",
+                    "--unit-title",
+                    "中文单元",
+                    "--lang",
+                    "en",
+                    "--output",
+                    str(data_dir / "out.tex"),
+                ],
+                cwd=ROOT,
+                capture_output=True,
+                text=True,
+            )
+            self.assertNotEqual(proc.returncode, 0)
+            self.assertIn("English output requires English course and unit titles", proc.stderr)
+
+    def test_generate_handout_zh_keeps_manifest_titles(self):
+        with tempfile.TemporaryDirectory() as td:
+            data_dir = Path(td)
+            (data_dir / "frames").mkdir()
+            write_json(
+                data_dir / "manifest.json",
+                [
+                    {
+                        "title": "Introduction to Perception",
+                        "lesson": "Module 1",
+                        "page_url": "https://example.com/lecture-1",
+                        "video": "lecture-1.mp4",
+                        "en_vtt": "lecture-1.en.vtt",
+                    }
+                ],
+            )
+            write_json(
+                data_dir / "content.json",
+                {
+                    "overview": "中文总览",
+                    "lectures": {"lecture-1": "中文讲解"},
+                },
+            )
+            output = data_dir / "out.tex"
+            run(
+                [
+                    "scripts/generate_handout.py",
+                    "--data-dir",
+                    str(data_dir),
+                    "--course-title",
+                    "课程标题",
+                    "--unit-title",
+                    "单元标题",
+                    "--course-title-en",
+                    "Course Title",
+                    "--unit-title-en",
+                    "Unit Title",
+                    "--lang",
+                    "zh",
+                    "--output",
+                    str(output),
+                ],
+                cwd=ROOT,
+            )
+            tex = output.read_text(encoding="utf-8")
+            self.assertIn("中文总览", tex)
+            self.assertIn("Introduction to Perception", tex)
+            self.assertIn("授课教师：", tex)
+
+    def test_scaffold_handout_en_uses_english_labels(self):
+        with tempfile.TemporaryDirectory() as td:
+            data_dir = Path(td)
+            write_json(
+                data_dir / "manifest.json",
+                [
+                    {
+                        "title": "Introduction",
+                        "title_en": "Introduction",
+                        "lesson": "Module 1",
+                        "lesson_en": "Module 1",
+                        "page_url": "https://example.com/lecture-1",
+                    }
+                ],
+            )
+            output = data_dir / "scaffold.tex"
+            run(
+                [
+                    "scripts/scaffold_handout.py",
+                    "--subtitle-dir",
+                    str(data_dir),
+                    "--course-title",
+                    "English Course",
+                    "--unit-title",
+                    "English Unit",
+                    "--lang",
+                    "en",
+                    "--output",
+                    str(output),
+                ],
+                cwd=ROOT,
+            )
+            tex = output.read_text(encoding="utf-8")
+            self.assertIn(r"\documentclass[a4paper,12pt]{article}", tex)
+            self.assertIn("Unit Knowledge Map", tex)
+            self.assertIn("Contents", tex)
+            self.assertIn("Review Video", tex)
+            self.assertNotIn("本单元知识地图", tex)
+
+
+if __name__ == "__main__":
+    unittest.main()

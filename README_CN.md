@@ -98,8 +98,11 @@ python3 scripts/scaffold_handout.py \
   --subtitle-dir ./notes/module-1 \
   --course-title "课程名" \
   --unit-title "单元名" \
+  --lang zh \
   --output ./handout.tex
 ```
+
+如果要生成英文讲义，请准备 `content_en.json`；如果有补充材料，再准备 `supplements_en.json`。英文模式不会回退到中文内容。
 
 ## 多平台支持
 

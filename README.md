@@ -94,8 +94,11 @@ python3 scripts/scaffold_handout.py \
   --subtitle-dir ./notes/module-1 \
   --course-title "课程名" \
   --unit-title "单元名" \
+  --lang zh \
   --output ./handout.tex
 ```
+
+English handouts require `content_en.json` and, when supplementary PDFs exist, `supplements_en.json`. English mode does not fall back to Chinese content.
 
 ## 关键帧推断原理
 

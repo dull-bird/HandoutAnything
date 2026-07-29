@@ -150,7 +150,11 @@ python3 scripts/extract_frames.py \
 
 #### 4a. Prepare content.json (REQUIRED)
 
-**Every course MUST have a `content.json` before generating the PDF.** Read each lecture's VTT subtitle file individually and write rich, accessible summaries.
+**Chinese output uses `content.json`. English output uses `content_en.json`.** Read each lecture's VTT subtitle file individually and write rich, accessible summaries.
+
+- English output must be fully English: headings, summaries, exercise text, supplement titles, and table-of-contents labels.
+- Do not let English mode fall back to Chinese content.
+- For Chinese output, keep original English course titles, lecture titles, and technical terms when the course source is foreign or the official term is already standard in English.
 
 ```json
 {
@@ -200,6 +204,8 @@ python3 scripts/extract_frames.py \
 
 #### 4a-2. Prepare supplements.json (if course has supplementary PDFs)
 
+Use `supplements.json` for Chinese output and `supplements_en.json` for English output. Keep supplement titles and summaries in the same language as the target handout.
+
 ```json
 {
   "01_lecture_Background_Reading.pdf": {
@@ -232,6 +238,8 @@ python3 scripts/generate_handout.py \
   --lang en \
   --output handout_en.tex
 ```
+
+For `--lang en`, make sure `content_en.json` exists and that the manifest lecture titles are already English.
 
 **What it produces:**
 - Title page: Chinese primary + English secondary (zh mode) or English only (en mode)

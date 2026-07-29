@@ -21,6 +21,7 @@ Use bullets for:
 ## Heading style
 
 - For Chinese handouts, prefer manual, review-friendly headings like `\section*{1. 颜色知觉}` or `\section*{1. 感知如何组织世界}`.
+- For English handouts, keep all structural labels English, including `Contents`, `Overview`, `Knowledge Map`, and `Answer Key`.
 - Keep `0. 概要` as the only synthetic overview heading.
 - If a heading already carries a manual number, do not use the numbered section form.
 - Keep subsection numbering aligned with the same rule: either manual numbers everywhere or automatic numbers everywhere, not both.
@@ -38,6 +39,7 @@ Use bullets for:
 - Use the official lecture title from the course metadata as the source anchor.
 - If the course is in Chinese, you may collapse neighboring lectures into a clearer review heading when that helps the reader.
 - If the course is in English, keep the original English title unchanged unless you are placing it as the source anchor under a synthesized review heading.
+- For Chinese output on foreign courses, prefer the original English course title and technical terms over machine-translated labels whenever the official English term is standard or clearer.
 - The overview may be synthetic and may be numbered `0`.
 
 ## Exercise provenance
