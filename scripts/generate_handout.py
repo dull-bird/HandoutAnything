@@ -283,6 +283,208 @@ def extract_pdf_text(pdf_path: Path, max_pages: int = 5) -> str:
         return f"[PDF extraction failed: {e}]"
 
 
+def resolve_existing_path(data_dir: Path, candidate: str | None) -> Path | None:
+    """Resolve a manifest path against the data directory."""
+    if not candidate:
+        return None
+    raw = Path(candidate)
+    if raw.is_absolute() and raw.exists():
+        return raw
+    direct = data_dir / candidate
+    if direct.exists():
+        return direct
+    name = raw.name
+    if name:
+        matches = sorted(data_dir.rglob(name))
+        if matches:
+            return matches[0]
+    return None
+
+
+def resolve_subtitle_path(data_dir: Path, item: dict) -> Path | None:
+    """Find the local subtitle file for one manifest row."""
+    candidates = [
+        item.get("file"),
+        item.get("subtitle_file"),
+        item.get("subtitle_path"),
+        item.get("vtt"),
+        item.get("en_vtt"),
+        item.get("zh_vtt"),
+    ]
+    video_stem = Path(item.get("video", "")).stem if item.get("video") else ""
+    if video_stem:
+        candidates.extend(
+            [
+                f"{video_stem}.vtt",
+                f"{video_stem}.en.vtt",
+                f"{video_stem}.zh-CN.vtt",
+                f"{video_stem}.txt",
+                f"{video_stem}.srt",
+            ]
+        )
+    for candidate in candidates:
+        path = resolve_existing_path(data_dir, candidate)
+        if path and path.suffix.lower() in {".vtt", ".txt", ".srt"}:
+            return path
+    return None
+
+
+def parse_vtt_cues(vtt_path: Path) -> list[str]:
+    """Extract cue texts from a VTT file."""
+    content = vtt_path.read_text(encoding="utf-8", errors="replace")
+    cue_re = re.compile(
+        r"^\s*(?:\d+\s*)?(?P<start>\d{1,2}:\d{2}(?::\d{2})?\.\d{3})\s*-->\s*(?P<end>\d{1,2}:\d{2}(?::\d{2})?\.\d{3})"
+    )
+    cues = []
+    lines = content.splitlines()
+    i = 0
+    while i < len(lines):
+        match = cue_re.match(lines[i])
+        if match:
+            i += 1
+            text_lines = []
+            while i < len(lines) and lines[i].strip():
+                clean = re.sub(r"<[^>]+>", "", lines[i]).strip()
+                if clean:
+                    text_lines.append(clean)
+                i += 1
+            text = " ".join(text_lines).strip()
+            if text:
+                cues.append(text)
+        else:
+            i += 1
+    return cues
+
+
+def split_text_units(text: str, lang: str) -> list[str]:
+    """Split extracted text into digestible units."""
+    normalized = re.sub(r"\s+", " ", text).strip()
+    if not normalized:
+        return []
+    if lang == "zh":
+        parts = re.split(r"(?<=[。！？；])\s*|(?<=\n)\s*", normalized)
+    else:
+        parts = re.split(r"(?<=[.!?;])\s+", normalized)
+    units = [p.strip() for p in parts if p and p.strip()]
+    if len(units) <= 1:
+        units = [p.strip() for p in re.split(r"\s{2,}|\n+", text) if p and p.strip()]
+    return units
+
+
+def visible_text_len(text: str) -> int:
+    """Estimate how much readable text remains after LaTeX markup is stripped."""
+    stripped = re.sub(r"\\[a-zA-Z@]+(?:\[[^\]]*\])?(?:\{[^{}]*\})*", " ", text)
+    stripped = re.sub(r"[{}]", " ", stripped)
+    stripped = re.sub(r"\s+", " ", stripped)
+    return len(stripped.strip())
+
+
+LANG_SNIPPET_KEYWORDS = {
+    "zh": [
+        "定义", "核心", "关键", "重要", "例如", "比如", "因此", "注意",
+        "区别", "关系", "总结", "证明", "方法", "步骤", "结论", "本质",
+        "示例", "推导", "概念",
+    ],
+    "en": [
+        "define", "definition", "key", "important", "example", "therefore",
+        "however", "difference", "relationship", "summary", "prove", "proof",
+        "method", "step", "conclusion", "core", "concept", "note", "for instance",
+    ],
+}
+
+
+def score_snippet(snippet: str, lang: str, index: int, total: int) -> int:
+    """Heuristically score a text snippet for salience."""
+    lower = snippet.lower()
+    score = 0
+    for word in LANG_SNIPPET_KEYWORDS.get(lang, []):
+        if word in lower:
+            score += 3 if len(word) > 3 else 2
+    if len(snippet) >= 120:
+        score += 2
+    elif len(snippet) >= 60:
+        score += 1
+    if index == 0:
+        score += 1
+    if index == total - 1:
+        score += 1
+    return score
+
+
+def pick_snippets(snippets: list[str], lang: str, limit: int = 4) -> list[str]:
+    """Select the most informative snippets while keeping source order."""
+    normalized = [re.sub(r"\s+", " ", s).strip() for s in snippets if s and s.strip()]
+    normalized = [s for s in normalized if len(s) >= 20]
+    if not normalized:
+        return []
+    scored = [
+        (score_snippet(snippet, lang, index, len(normalized)), index, snippet)
+        for index, snippet in enumerate(normalized)
+    ]
+    scored.sort(key=lambda item: (-item[0], item[1]))
+    if scored and scored[0][0] == 0:
+        selected = scored[: min(limit, len(scored))]
+    else:
+        selected = scored[: min(limit, len(scored))]
+    selected.sort(key=lambda item: item[1])
+    return [snippet for _, _, snippet in selected]
+
+
+def build_auto_digest(snippets: list[str], lang: str, label: str, intro: str, limit: int = 5) -> str:
+    """Render an auto-generated digest block in LaTeX."""
+    selected = pick_snippets(snippets, lang, limit=limit)
+    if not selected:
+        return ""
+    parts = [r"\begin{keyconcept}"]
+    parts.append(rf"\textbf{{{tex_escape(label)}}}")
+    parts.append(tex_escape(intro))
+    parts.append(r"\begin{itemize}")
+    for snippet in selected:
+        parts.append(f"  \\item {tex_escape(snippet[:300])}")
+    parts.append(r"\end{itemize}")
+    parts.append(r"\end{keyconcept}")
+    return "\n".join(parts)
+
+
+def build_transcript_digest(subtitle_path: Path | None, lang: str) -> str:
+    """Create a digest from subtitle content when hand-authored content is sparse."""
+    if not subtitle_path or not subtitle_path.exists():
+        return ""
+    raw_text = subtitle_path.read_text(encoding="utf-8", errors="replace")
+    if lang == "en" and contains_cjk(raw_text):
+        raise SystemExit(f"English output requires English subtitle text: {subtitle_path.name}")
+    if subtitle_path.suffix.lower() == ".vtt":
+        snippets = parse_vtt_cues(subtitle_path)
+    else:
+        snippets = split_text_units(raw_text, lang)
+    label = "自动摘要" if lang == "zh" else "Auto-generated digest"
+    intro = (
+        "根据字幕自动扩写，这一讲再补充几条最值得记住的线索。"
+        if lang == "zh"
+        else "Expanded automatically from the transcript to add the lecture's main lines of argument."
+    )
+    return build_auto_digest(snippets, lang, label, intro)
+
+
+def build_pdf_digest(pdf_path: Path | None, lang: str) -> str:
+    """Create a digest from supplementary PDF text when no hand-authored summary exists."""
+    if not pdf_path or not pdf_path.exists():
+        return ""
+    extracted = extract_pdf_text(pdf_path, max_pages=4)
+    if not extracted or extracted.startswith("[PDF extraction failed"):
+        return ""
+    if lang == "en" and contains_cjk(extracted):
+        return ""
+    snippets = split_text_units(extracted, lang)
+    label = "自动摘要" if lang == "zh" else "Auto-generated reading digest"
+    intro = (
+        "根据补充材料自动扩写，这份阅读再补几条关键线索。"
+        if lang == "zh"
+        else "Expanded automatically from the extracted PDF text to surface the main points."
+    )
+    return build_auto_digest(snippets, lang, label, intro, limit=3)
+
+
 def tex_escape(text: str) -> str:
     """Escape special LaTeX characters."""
     return (
@@ -331,8 +533,6 @@ def generate_handout(
         sys.exit(1)
 
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    if lang == "en" and any(contains_cjk(item.get("title", "")) for item in manifest):
-        raise SystemExit("English output requires English lecture titles in manifest.json; re-download with --locale en")
 
     # Load keyframes
     keyframes_path = data_dir / "keyframes.json"
@@ -349,12 +549,11 @@ def generate_handout(
 
     # ── Load content.json (language-aware) ──
     content_json_path = data_dir / ("content_en.json" if lang == "en" else "content.json")
-    if not content_json_path.exists():
-        if lang == "en":
-            raise SystemExit(f"missing required English content file: {content_json_path}")
-        content_data = {}
-    else:
+    if content_json_path.exists():
         content_data = json.loads(content_json_path.read_text(encoding="utf-8"))
+    else:
+        content_data = {}
+    lecture_titles = content_data.get("lecture_titles", {})
 
     # ── Knowledge Map ──
     knowledge_map = content_data.get("knowledge_map", [])
@@ -388,7 +587,22 @@ def generate_handout(
     # ── Per-lecture sections ──
     lecture_summaries = content_data.get("lectures", {})
     for i, item in enumerate(manifest):
+        subtitle_path = resolve_subtitle_path(data_dir, item)
+        video_stem_key = item.get("video", "").replace(".mp4", "") if item.get("video") else ""
+        vtt_source_name = subtitle_path.stem if subtitle_path else item.get("en_vtt", item.get("vtt", "")).replace(".vtt", "")
+        vtt_stem_key = re.sub(r"\.(en|zh-CN|zh-TW|ja|ko|fr|de|es|pt|ar)$", "", vtt_source_name)
         lecture_title = item["title"]
+        if lang == "en":
+            lecture_title = (
+                lecture_titles.get(video_stem_key)
+                or lecture_titles.get(vtt_stem_key)
+                or item.get("title_en")
+                or item.get("title")
+            )
+            if contains_cjk(lecture_title):
+                raise SystemExit(
+                    "English output requires English lecture titles in manifest.json or content_en.json"
+                )
         section_num = i + 1
 
         tex.append(f"\\section*{{{section_num}. {tex_escape(lecture_title)}}}")
@@ -404,12 +618,22 @@ def generate_handout(
         tex.append("")
 
         # Per-lecture content from content.json
-        video_stem_key = item.get("video", "").replace(".mp4", "") if item.get("video") else ""
-        vtt_stem_key = re.sub(r"\.(en|zh-CN|zh-TW|ja|ko|fr|de|es|pt|ar)$", "", item["en_vtt"].replace(".vtt", ""))
         lecture_content = lecture_summaries.get(video_stem_key) or lecture_summaries.get(vtt_stem_key) or ""
+        auto_lecture_content = build_transcript_digest(subtitle_path, lang)
         if lecture_content:
             tex.append(lecture_content)
+            if visible_text_len(lecture_content) < 420 and auto_lecture_content:
+                tex.append("")
+                tex.append(auto_lecture_content)
+        elif auto_lecture_content:
+            tex.append(auto_lecture_content)
+        else:
+            if lang == "en":
+                tex.append("This lecture summary should be added to content_en.json.")
+            else:
+                tex.append("这一讲的总结尚未补齐，可先从字幕中提炼主线。")
             tex.append("")
+        tex.append("")
 
         # Supplementary materials
         if item.get("resources"):
@@ -417,9 +641,8 @@ def generate_handout(
             supplements_data = {}
             if supplements_path.exists():
                 supplements_data = json.loads(supplements_path.read_text(encoding="utf-8"))
-            elif lang == "en":
-                raise SystemExit(f"missing required English supplement file: {supplements_path}")
             for res_name in item["resources"]:
+                res_path = resolve_existing_path(data_dir, res_name)
                 if res_name in supplements_data:
                     info = supplements_data[res_name]
                     tex.append(f"\\textbf{{📎 {info['title']}}}")
@@ -431,12 +654,20 @@ def generate_handout(
                     for para in info.get("summary", []):
                         tex.append(f"  \\item {para}")
                     tex.append(r"\end{itemize}")
+                    if visible_text_len("\n".join(info.get("summary", []))) < 260:
+                        auto_supplement = build_pdf_digest(res_path, lang)
+                        if auto_supplement:
+                            tex.append("")
+                            tex.append(auto_supplement)
                     tex.append(r"\end{supplement}")
                     tex.append("")
                 else:
                     clean_name = res_name.split("_", 1)[-1] if "_" in res_name else res_name
                     sep = ":" if lang == "en" else "："
                     tex.append(f"\\textbf{{{get_text(lang, 'supplement_label')}}}{sep}\\texttt{{{tex_escape(clean_name)}}}")
+                    auto_supplement = build_pdf_digest(res_path, lang)
+                    if auto_supplement:
+                        tex.append(auto_supplement)
                     tex.append("")
 
         # Keyframes (optional)

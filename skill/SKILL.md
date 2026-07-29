@@ -148,12 +148,14 @@ python3 scripts/extract_frames.py \
 
 ### Phase 4 — Generate handout
 
-#### 4a. Prepare content.json (REQUIRED)
+#### 4a. Prepare content.json (RECOMMENDED FOR POLISHED OUTPUT)
 
-**Chinese output uses `content.json`. English output uses `content_en.json`.** Read each lecture's VTT subtitle file individually and write rich, accessible summaries.
+**Chinese output prefers `content.json`. English output prefers `content_en.json`.** Read each lecture's VTT subtitle file individually and write rich, accessible summaries.
 
 - English output must be fully English: headings, summaries, exercise text, supplement titles, and table-of-contents labels.
 - Do not let English mode fall back to Chinese content.
+- If the manifest still uses Chinese lecture titles, put an English `lecture_titles` map in `content_en.json`; the generator will use it in English mode.
+- If a content file is missing or too thin, the generator auto-synthesizes a baseline digest from subtitle/PDF text, and it can also extend short hand-authored sections with that material.
 - For Chinese output, keep original English course titles, lecture titles, and technical terms when the course source is foreign or the official term is already standard in English.
 
 ```json
@@ -204,7 +206,7 @@ python3 scripts/extract_frames.py \
 
 #### 4a-2. Prepare supplements.json (if course has supplementary PDFs)
 
-Use `supplements.json` for Chinese output and `supplements_en.json` for English output. Keep supplement titles and summaries in the same language as the target handout.
+Use `supplements.json` for Chinese output and `supplements_en.json` for English output. Keep supplement titles and summaries in the same language as the target handout. If a supplement summary is missing, the generator can fall back to extracted PDF text, but a hand-authored summary is still better.
 
 ```json
 {
@@ -239,7 +241,7 @@ python3 scripts/generate_handout.py \
   --output handout_en.tex
 ```
 
-For `--lang en`, make sure `content_en.json` exists and that the manifest lecture titles are already English.
+For `--lang en`, make sure the manifest lecture titles are already English. `content_en.json` and `supplements_en.json` are preferred, but the generator can now bootstrap or extend the handout from English subtitles and PDF text when those files are absent or too sparse.
 
 **What it produces:**
 - Title page: Chinese primary + English secondary (zh mode) or English only (en mode)

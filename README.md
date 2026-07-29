@@ -98,7 +98,8 @@ python3 scripts/scaffold_handout.py \
   --output ./handout.tex
 ```
 
-English handouts require `content_en.json` and, when supplementary PDFs exist, `supplements_en.json`. English mode does not fall back to Chinese content.
+`content_en.json` and `supplements_en.json` are preferred for polished output, but the generator can now bootstrap or extend the handout from English subtitles and extracted PDF text when those files are missing or too sparse.
+If your manifest titles are still Chinese, add `lecture_titles` to `content_en.json`; English mode will use that mapping.
 
 ## 关键帧推断原理
 

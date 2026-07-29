@@ -102,7 +102,7 @@ python3 scripts/scaffold_handout.py \
   --output ./handout.tex
 ```
 
-如果要生成英文讲义，请准备 `content_en.json`；如果有补充材料，再准备 `supplements_en.json`。英文模式不会回退到中文内容。
+如果要生成英文讲义，`content_en.json` 和 `supplements_en.json` 仍然更适合做出好看的成品；但即使没有这些文件，生成器也可以从英文字幕和 PDF 提取文本里先拼出一版基础摘要，甚至把偏短的手写内容继续扩写。若 manifest 还是中文标题，也可以在 `content_en.json` 里提供 `lecture_titles` 映射。
 
 ## 多平台支持
 
