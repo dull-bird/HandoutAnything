@@ -130,7 +130,7 @@ python3 scripts/scaffold_handout.py \
 
 ## 示例讲义
 
-**[数学思维 第一单元](demo/mathematical-thinking-module1.pdf)** — 包含 24 张关键帧截图、逻辑连接词详解、练习题和参考答案。
+**[数学思维 第一单元](demo/mathematical-thinking-module1.pdf)** — 包含结构化正文、逻辑连接词详解、练习题和参考答案。
 
 ## 依赖
 

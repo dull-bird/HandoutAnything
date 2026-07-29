@@ -102,6 +102,8 @@ class LanguageModeTests(unittest.TestCase):
             self.assertIn(r"\begin{supplement}{Summary}", tex)
             self.assertIn(r"(\quad)", tex)
             self.assertIn("Contents", tex)
+            self.assertIn(r"\addcontentsline{toc}{section}{0. Overview}", tex)
+            self.assertIn(r"\addcontentsline{toc}{section}{1. Introduction}", tex)
             self.assertNotIn("中文总览", tex)
             self.assertNotIn("补充材料", tex)
             self.assertNotIn("（\\quad）", tex)
@@ -156,6 +158,59 @@ class LanguageModeTests(unittest.TestCase):
             tex = output.read_text(encoding="utf-8")
             self.assertIn("English Lecture Title", tex)
             self.assertNotIn("中文标题", tex)
+
+    def test_generate_handout_en_hides_non_english_resource_names(self):
+        with tempfile.TemporaryDirectory() as td:
+            data_dir = Path(td)
+            (data_dir / "frames").mkdir()
+            resource = data_dir / "背景阅读.pdf"
+            resource.write_bytes(b"%PDF-1.4\n% fake\n")
+            write_json(
+                data_dir / "manifest.json",
+                [
+                    {
+                        "title": "Introduction",
+                        "lesson": "Module 1",
+                        "page_url": "https://example.com/lecture-1",
+                        "video": "lecture-1.mp4",
+                        "en_vtt": "lecture-1.en.vtt",
+                        "resources": [resource.name],
+                    }
+                ],
+            )
+            write_json(
+                data_dir / "content_en.json",
+                {
+                    "overview": "English overview",
+                    "lectures": {"lecture-1": "English lecture summary"},
+                },
+            )
+            output = data_dir / "out.tex"
+            run(
+                [
+                    "scripts/generate_handout.py",
+                    "--data-dir",
+                    str(data_dir),
+                    "--course-title",
+                    "English Course",
+                    "--unit-title",
+                    "English Unit",
+                    "--course-title-en",
+                    "English Course",
+                    "--unit-title-en",
+                    "English Unit",
+                    "--instructor",
+                    "Instructor",
+                    "--lang",
+                    "en",
+                    "--output",
+                    str(output),
+                ],
+                cwd=ROOT,
+            )
+            tex = output.read_text(encoding="utf-8")
+            self.assertIn("Supplementary material", tex)
+            self.assertNotIn("背景阅读", tex)
 
     def test_generate_handout_en_rejects_chinese_titles(self):
         with tempfile.TemporaryDirectory() as td:
@@ -252,8 +307,13 @@ class LanguageModeTests(unittest.TestCase):
             tex = output.read_text(encoding="utf-8")
             self.assertIn("Short manual summary.", tex)
             self.assertIn("Auto-generated digest", tex)
-            self.assertIn("define the problem clearly", tex)
-            self.assertIn("counterexample matters", tex)
+            self.assertIn(r"\textbf{Formal definitions}", tex)
+            self.assertIn(r"\textbf{Example}", tex)
+            self.assertIn(r"\textbf{Proof arc}", tex)
+            self.assertNotIn("Hello, I’m Keith Devlin", tex)
+            self.assertNotIn("Hello, I'm Keith Devlin", tex)
+            self.assertNotIn("define the problem clearly", tex)
+            self.assertNotIn("counterexample matters", tex)
             self.assertNotIn("content_en.json", tex)
 
     def test_generate_handout_zh_keeps_manifest_titles(self):
