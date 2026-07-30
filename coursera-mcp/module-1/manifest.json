@@ -1,0 +1,26 @@
+[
+  {
+    "title": "欢迎与课程路线图",
+    "title_en": "Welcome to the Course",
+    "lesson": "第一单元：认识 MCP",
+    "lesson_en": "Module 1: Getting Started with MCP",
+    "page_url": "https://www.coursera.org/learn/introduction-to-model-context-protocol/home/module/1",
+    "video": "01_welcome-to-the-course.mp4"
+  },
+  {
+    "title": "认识 MCP",
+    "title_en": "Introducing MCP",
+    "lesson": "第一单元：认识 MCP",
+    "lesson_en": "Module 1: Getting Started with MCP",
+    "page_url": "https://www.coursera.org/learn/introduction-to-model-context-protocol/home/module/1",
+    "video": "02_introducing-mcp.mp4"
+  },
+  {
+    "title": "MCP 客户端",
+    "title_en": "MCP Clients",
+    "lesson": "第一单元：认识 MCP",
+    "lesson_en": "Module 1: Getting Started with MCP",
+    "page_url": "https://www.coursera.org/learn/introduction-to-model-context-protocol/home/module/1",
+    "video": "03_mcp-clients.mp4"
+  }
+]

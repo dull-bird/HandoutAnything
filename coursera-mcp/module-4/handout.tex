@@ -1,0 +1,223 @@
+\documentclass[UTF8,a4paper,11pt]{ctexart}
+
+% ── Page geometry ──
+\usepackage[margin=2.2cm,top=2.5cm,bottom=2.5cm]{geometry}
+
+% ── Typography ──
+\usepackage{fontspec}
+\usepackage{setspace}
+\setstretch{1.2}
+
+% ── Graphics ──
+\usepackage{graphicx}
+\graphicspath{{/home/zhiwen/projects/mooc2handout-skill/coursera-mcp/module-4/frames/}}
+
+% ── Colors ──
+\usepackage{xcolor}
+\definecolor{accent}{HTML}{1a73e8}
+\definecolor{darkgray}{HTML}{333333}
+\definecolor{lightgray}{HTML}{f5f5f5}
+\definecolor{keyframebg}{HTML}{fafafa}
+\definecolor{videoblue}{HTML}{065fd4}
+\definecolor{notebg}{HTML}{e8f0fe}
+\definecolor{warnbg}{HTML}{fef7e0}
+
+% ── Links ──
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=accent,
+  urlcolor=videoblue,
+  citecolor=accent,
+  pdftitle={模型上下文协议导论},
+  pdfauthor={}
+}
+
+% ── Layout ──
+\usepackage{enumitem}
+\setlist[itemize]{leftmargin=1.8em,itemsep=2pt}
+\setlist[enumerate]{leftmargin=1.8em,itemsep=2pt}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{tcolorbox}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{amssymb}
+
+% ── Header/Footer ──
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{darkgray}{模型上下文协议导论}}
+\fancyhead[R]{\small\textcolor{darkgray}{第四单元：课程回顾}}
+\fancyfoot[C]{\small\textcolor{darkgray}{\thepage\ / \pageref{LastPage}}}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ── Section styling ──
+\titleformat{\section}
+  {\Large\bfseries\color{accent}}
+  {\thesection}{1em}{}
+\titleformat{\subsection}
+  {\large\bfseries\color{darkgray}}
+  {\thesubsection}{1em}{}
+
+% ── Custom environments ──
+\newtcolorbox{keyconcept}{
+  colback=notebg, colframe=accent,
+  fonttitle=\bfseries, boxrule=0.5pt,
+  left=8pt, right=8pt, top=6pt, bottom=6pt
+}
+\newtcolorbox{supplement}{
+  colback=lightgray, colframe=darkgray,
+  fonttitle=\bfseries, boxrule=0.3pt,
+  left=8pt, right=8pt, top=6pt, bottom=6pt
+}
+\newtcolorbox{exercise}{
+  colback=warnbg, colframe=orange,
+  fonttitle=\bfseries, boxrule=0.5pt,
+  left=8pt, right=8pt, top=6pt, bottom=6pt
+}
+
+% ── Video link command ──
+\newcommand{\videolink}[2]{%
+  \href{#1}{\textcolor{videoblue}{\textbf{#2}}}%
+}
+
+% ── Keyframe figure command ──
+\newcommand{\keyframe}[2]{%
+  \begin{center}
+    \fcolorbox{lightgray}{keyframebg}{%
+      \includegraphics[width=0.75\linewidth]{#1}%
+    }
+    \par\vspace{2pt}
+    {\small\textcolor{darkgray}{#2}}
+  \end{center}
+}
+
+\begin{document}
+
+\begin{center}
+  \vspace*{2cm}
+  {\Huge\bfseries\color{accent} 模型上下文协议导论}\\[0.3cm]
+  {\small\textcolor{darkgray}{Introduction to Model Context Protocol}}\\[0.8cm]
+  {\LARGE 第四单元：课程回顾}\\[0.3cm]
+  {\small\textcolor{darkgray}{Module 4: Review}}\\[1.2cm]
+  {\large 授课教师： }\\[0.5cm]
+  {\large\textcolor{darkgray}{由 mooc2handout 自动生成}}\\[0.3cm]
+  {\small\textcolor{darkgray}{\today}}
+  \vfill
+  {\small 本讲义由课程字幕、补充材料与可选的 AI 推断关键帧自动生成。}
+\end{center}
+\newpage
+
+\tableofcontents
+\newpage
+
+\section*{本单元知识地图}
+\addcontentsline{toc}{section}{本单元知识地图}
+\begin{longtable}{p{3.1cm}p{10.2cm}}
+\toprule
+主题 & 核心问题 \\
+\midrule
+控制方 & 谁决定 tool / resource / prompt 什么时候被调用？ \\
+选型规则 & 什么场景该用哪种原语？ \\
+回顾目标 & 整门课最终想建立什么判断框架？ \\
+\bottomrule
+\end{longtable}
+
+\section*{0. 概要}
+\addcontentsline{toc}{section}{0. 概要}
+最后一单元把整门课收束到一个简单但实用的判断框架：当能力应该由模型决定时用 tools，
+当能力应该由应用决定时用 resources，当能力应该由用户决定时用 prompts。
+
+\begin{itemize}
+  \item 先问“谁来触发”，再问“该用哪种原语”。
+  \item 这一套分类能直接指导应用设计。
+  \item MCP 的价值在于把能力暴露方式讲清楚。
+\end{itemize}
+
+\section*{1. MCP 回顾}
+\addcontentsline{toc}{section}{1. MCP 回顾}
+\noindent\textbf{回看：}\videolink{https://www.coursera.org/learn/introduction-to-model-context-protocol/home/module/4}{MCP 回顾}
+
+\textbf{本讲重点：} 把三类原语收束成一个选择框架。
+
+这一讲重新回顾 tools、resources、prompts 的差别，并强调一个最重要的判断方法：
+看看到底是谁在决定它什么时候被调用。
+
+如果是模型在决定，就更像 tools；如果是应用在决定，就更像 resources；
+如果是用户在决定，就更像 prompts。这个判断框架比死记术语更有用。
+
+\begin{itemize}
+  \item tools 是 model-controlled。
+  \item resources 是 app-controlled。
+  \item prompts 是 user-controlled。
+\end{itemize}
+
+\begin{keyconcept}
+\textbf{自动摘要}
+根据字幕自动扩写，这一讲再补充几条最值得记住的线索。
+\begin{itemize}
+  \item \textbf{形式定义}: 这一讲梳理 AND / OR / NOT / IF...THEN 等连接词的真值条件，并提醒不要把日常语言的直觉直接搬进数学里。
+\end{itemize}
+\end{keyconcept}
+
+\section*{2. 本单元最该记住的五句话}
+\addcontentsline{toc}{section}{2. 本单元最该记住的五句话}
+\begin{enumerate}
+  \item tools 是 model-controlled。
+  \item resources 是 app-controlled。
+  \item prompts 是 user-controlled。
+  \item 选择原语时先看触发权归谁。
+  \item MCP 的核心价值是让能力暴露方式清晰、统一、可复用。
+\end{enumerate}
+
+\section*{3. 练习题}
+\addcontentsline{toc}{section}{3. 练习题}
+\subsection*{A. 选择题（5题）}
+\begin{enumerate}
+  \item tools 属于哪种控制方式？\\
+  A. model-controlled \quad B. app-controlled \quad C. user-controlled \quad D. OS-controlled
+
+  \item resources 属于哪种控制方式？\\
+  A. model-controlled \quad B. app-controlled \quad C. user-controlled \quad D. 随机控制
+
+  \item prompts 属于哪种控制方式？\\
+  A. model-controlled \quad B. app-controlled \quad C. user-controlled \quad D. 网络控制
+
+  \item 如果你想让应用根据用户点击来触发一段固定指令模板，优先用什么？\\
+  A. tools \quad B. prompts \quad C. resources \quad D. database
+
+  \item MCP 的一个重要价值是什么？\\
+  A. 让每个应用都写一套私有协议 \quad B. 把能力暴露方式结构化 \quad C. 取消 client \quad D. 只支持一种传输
+
+\end{enumerate}
+
+\subsection*{B. 判断题（3题）}
+\begin{enumerate}
+  \item 选择原语时，先判断由谁来决定它被触发。（\quad）
+  \item resources 更适合应用主动注入上下文数据。（\quad）
+  \item prompts 的触发权通常在用户手里。（\quad）
+\end{enumerate}
+
+\subsection*{C. 简答题（2题）}
+\begin{enumerate}
+  \item 分别用一句话概括 tools、resources、prompts 的职责。
+  \item 举一个你会优先使用 resources 而不是 tools 的场景。
+\end{enumerate}
+
+\section*{4. 参考答案}
+\addcontentsline{toc}{section}{4. 参考答案}
+\subsection*{选择题答案}
+1.A \quad 2.B \quad 3.C \quad 4.B \quad 5.B
+
+\subsection*{判断题答案}
+1. 对 \quad 2. 对 \quad 3. 对
+
+\subsection*{简答题要点}
+\begin{enumerate}
+  \item tools 由模型决定何时调用；resources 由应用决定何时提供上下文；prompts 由用户决定何时触发模板。
+  \item 例如用户引用一份文档并希望自动把内容注入上下文时，更适合用 resources。
+\end{enumerate}
+
+\end{document}

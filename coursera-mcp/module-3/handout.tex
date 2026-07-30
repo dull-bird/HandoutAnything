@@ -1,0 +1,328 @@
+\documentclass[UTF8,a4paper,11pt]{ctexart}
+
+% ── Page geometry ──
+\usepackage[margin=2.2cm,top=2.5cm,bottom=2.5cm]{geometry}
+
+% ── Typography ──
+\usepackage{fontspec}
+\usepackage{setspace}
+\setstretch{1.2}
+
+% ── Graphics ──
+\usepackage{graphicx}
+\graphicspath{{/home/zhiwen/projects/mooc2handout-skill/coursera-mcp/module-3/frames/}}
+
+% ── Colors ──
+\usepackage{xcolor}
+\definecolor{accent}{HTML}{1a73e8}
+\definecolor{darkgray}{HTML}{333333}
+\definecolor{lightgray}{HTML}{f5f5f5}
+\definecolor{keyframebg}{HTML}{fafafa}
+\definecolor{videoblue}{HTML}{065fd4}
+\definecolor{notebg}{HTML}{e8f0fe}
+\definecolor{warnbg}{HTML}{fef7e0}
+
+% ── Links ──
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=accent,
+  urlcolor=videoblue,
+  citecolor=accent,
+  pdftitle={模型上下文协议导论},
+  pdfauthor={}
+}
+
+% ── Layout ──
+\usepackage{enumitem}
+\setlist[itemize]{leftmargin=1.8em,itemsep=2pt}
+\setlist[enumerate]{leftmargin=1.8em,itemsep=2pt}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{tcolorbox}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{amssymb}
+
+% ── Header/Footer ──
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{darkgray}{模型上下文协议导论}}
+\fancyhead[R]{\small\textcolor{darkgray}{第三单元：客户端、资源与提示词}}
+\fancyfoot[C]{\small\textcolor{darkgray}{\thepage\ / \pageref{LastPage}}}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ── Section styling ──
+\titleformat{\section}
+  {\Large\bfseries\color{accent}}
+  {\thesection}{1em}{}
+\titleformat{\subsection}
+  {\large\bfseries\color{darkgray}}
+  {\thesubsection}{1em}{}
+
+% ── Custom environments ──
+\newtcolorbox{keyconcept}{
+  colback=notebg, colframe=accent,
+  fonttitle=\bfseries, boxrule=0.5pt,
+  left=8pt, right=8pt, top=6pt, bottom=6pt
+}
+\newtcolorbox{supplement}{
+  colback=lightgray, colframe=darkgray,
+  fonttitle=\bfseries, boxrule=0.3pt,
+  left=8pt, right=8pt, top=6pt, bottom=6pt
+}
+\newtcolorbox{exercise}{
+  colback=warnbg, colframe=orange,
+  fonttitle=\bfseries, boxrule=0.5pt,
+  left=8pt, right=8pt, top=6pt, bottom=6pt
+}
+
+% ── Video link command ──
+\newcommand{\videolink}[2]{%
+  \href{#1}{\textcolor{videoblue}{\textbf{#2}}}%
+}
+
+% ── Keyframe figure command ──
+\newcommand{\keyframe}[2]{%
+  \begin{center}
+    \fcolorbox{lightgray}{keyframebg}{%
+      \includegraphics[width=0.75\linewidth]{#1}%
+    }
+    \par\vspace{2pt}
+    {\small\textcolor{darkgray}{#2}}
+  \end{center}
+}
+
+\begin{document}
+
+\begin{center}
+  \vspace*{2cm}
+  {\Huge\bfseries\color{accent} 模型上下文协议导论}\\[0.3cm]
+  {\small\textcolor{darkgray}{Introduction to Model Context Protocol}}\\[0.8cm]
+  {\LARGE 第三单元：客户端、资源与提示词}\\[0.3cm]
+  {\small\textcolor{darkgray}{Module 3: Client, Resources, and Prompts}}\\[1.2cm]
+  {\large 授课教师： }\\[0.5cm]
+  {\large\textcolor{darkgray}{由 mooc2handout 自动生成}}\\[0.3cm]
+  {\small\textcolor{darkgray}{\today}}
+  \vfill
+  {\small 本讲义由课程字幕、补充材料与可选的 AI 推断关键帧自动生成。}
+\end{center}
+\newpage
+
+\tableofcontents
+\newpage
+
+\section*{本单元知识地图}
+\addcontentsline{toc}{section}{本单元知识地图}
+\begin{longtable}{p{3.1cm}p{10.2cm}}
+\toprule
+主题 & 核心问题 \\
+\midrule
+Client session & 它为什么不仅仅是一个请求对象？ \\
+资源注入 & 为什么 \texttt{@} 能改善上下文输入？ \\
+Prompt 调用 & list / get prompt 分别承担什么职责？ \\
+\bottomrule
+\end{longtable}
+
+\section*{0. 概要}
+\addcontentsline{toc}{section}{0. 概要}
+这一单元把 server 侧能力接回客户端，完成 resource 和 prompt 的读取、注入与交互。
+你会看到 MCP 不只是“把模型接到工具”，更是把应用里的上下文流转做成可组合的接口。
+
+\begin{itemize}
+  \item client session 管理连接与清理。
+  \item resources 适合做应用控制的数据注入。
+  \item prompts 适合做用户控制的可复用模板。
+\end{itemize}
+
+\section*{1. 实现 MCP 客户端}
+\addcontentsline{toc}{section}{1. 实现 MCP 客户端}
+\noindent\textbf{回看：}\videolink{https://www.coursera.org/learn/introduction-to-model-context-protocol/home/module/3}{实现 MCP 客户端}
+
+\textbf{本讲重点：} 把 server 侧能力接回 client，完成真正的往返调用。
+
+这一讲开始实现 \texttt{client.py} 里的 MCP client 类。它会把 client session 包起来，
+让应用可以稳定地和 server 建立连接、发消息、收结果。
+
+讲者特别提醒：这个类还负责收尾清理，所以它不是单纯的“发请求对象”，
+而是应用和外部 server 之间的生命周期管理者。
+
+\begin{itemize}
+  \item client session 是真实连接的核心。
+  \item client 代码比 server 更像应用基础设施的一部分。
+  \item 连接管理和资源清理不能省。
+\end{itemize}
+
+\begin{keyconcept}
+\textbf{自动摘要}
+根据字幕自动扩写，这一讲再补充几条最值得记住的线索。
+\begin{itemize}
+  \item \textbf{形式定义}: 这一讲梳理 AND / OR / NOT / IF...THEN 等连接词的真值条件，并提醒不要把日常语言的直觉直接搬进数学里。
+\end{itemize}
+\end{keyconcept}
+
+\section*{2. 定义资源}
+\addcontentsline{toc}{section}{2. 定义资源}
+\noindent\textbf{回看：}\videolink{https://www.coursera.org/learn/introduction-to-model-context-protocol/home/module/3}{定义资源}
+
+\textbf{本讲重点：} resources 让应用把上下文数据主动送给模型。
+
+这一讲增加了一个很典型的交互：用户输入 \texttt{@} 时，界面显示可引用的文档；
+用户选中文档后，应用会把该文档内容自动插入到发给 Claude 的 prompt 里。
+
+这说明 resources 更像“应用控制的数据注入层”：它不是等模型自己去调用 tool，
+而是由应用先把合适的上下文准备好，再送进模型。
+
+\begin{itemize}
+  \item 资源配合 	exttt{@} 自动补全，体验会更自然。
+  \item 资源的内容会被插入 prompt，而不是让模型自己猜。
+  \item 这是 app-controlled 的典型例子。
+\end{itemize}
+
+\begin{keyconcept}
+\textbf{自动摘要}
+根据字幕自动扩写，这一讲再补充几条最值得记住的线索。
+\begin{itemize}
+  \item \textbf{形式定义}: 这一讲梳理 AND / OR / NOT / IF...THEN 等连接词的真值条件，并提醒不要把日常语言的直觉直接搬进数学里。
+\end{itemize}
+\end{keyconcept}
+
+\section*{3. 访问资源}
+\addcontentsline{toc}{section}{3. 访问资源}
+\noindent\textbf{回看：}\videolink{https://www.coursera.org/learn/introduction-to-model-context-protocol/home/module/3}{访问资源}
+
+\textbf{本讲重点：} client 需要主动向 server 取回资源内容。
+
+在定义完资源之后，client 侧就要补上读取逻辑：给定一个 resource URI，
+发出请求、拿到响应，并根据 MIME type 把数据解析成应用能继续使用的形式。
+
+这一步的意义在于把“资源”真正变成可消费的上下文，而不是只停留在 server 的名词定义上。
+
+\begin{itemize}
+  \item client 需要知道如何按 URI 拉取资源。
+  \item 不同 MIME type 需要不同的解析方式。
+  \item 资源要最终变成 prompt 的一部分，才算真正用起来。
+\end{itemize}
+
+\begin{keyconcept}
+\textbf{自动摘要}
+根据字幕自动扩写，这一讲再补充几条最值得记住的线索。
+\begin{itemize}
+  \item \textbf{定义}: 这一讲补出一个后面会反复使用的定义，并说明它为什么重要。
+  \item \textbf{形式定义}: 这一讲梳理 AND / OR / NOT / IF...THEN 等连接词的真值条件，并提醒不要把日常语言的直觉直接搬进数学里。
+\end{itemize}
+\end{keyconcept}
+
+\section*{4. 定义提示词}
+\addcontentsline{toc}{section}{4. 定义提示词}
+\noindent\textbf{回看：}\videolink{https://www.coursera.org/learn/introduction-to-model-context-protocol/home/module/3}{定义提示词}
+
+\textbf{本讲重点：} prompts 让用户用 slash command 触发可复用模板。
+
+这一讲引入 \texttt{/} 开头的命令，例如 \texttt{format}。用户一旦选择某个命令，
+应用就会把对应 prompt 当作一个可复用的操作模板来执行。
+
+和 resources 不同，prompts 更强调“用户主动选择要执行什么”，因此它更接近
+交互式 UI 里的命令面板或菜单。
+
+\begin{itemize}
+  \item slash command 是 prompts 的自然入口。
+  \item prompts 适合做模板化、可复用的动作。
+  \item 它更像用户控制的操作，而不是模型自动触发的动作。
+\end{itemize}
+
+\begin{keyconcept}
+\textbf{自动摘要}
+根据字幕自动扩写，这一讲再补充几条最值得记住的线索。
+\begin{itemize}
+  \item \textbf{形式定义}: 这一讲梳理 AND / OR / NOT / IF...THEN 等连接词的真值条件，并提醒不要把日常语言的直觉直接搬进数学里。
+\end{itemize}
+\end{keyconcept}
+
+\section*{5. 在客户端使用提示词}
+\addcontentsline{toc}{section}{5. 在客户端使用提示词}
+\noindent\textbf{回看：}\videolink{https://www.coursera.org/learn/introduction-to-model-context-protocol/home/module/3}{在客户端使用提示词}
+
+\textbf{本讲重点：} 把 prompt 的发现和调用接到 client 里。
+
+最后一个任务是实现 \texttt{list\_prompts} 和 \texttt{get\_prompt}：
+前者列出 server 提供的 prompt，后者把 prompt 名称和参数传进去，
+再把返回的 messages 交给 Claude。
+
+这样一来，client 就不只是能拉资源，也能把模板化提示词真正接到应用交互里。
+用户在终端里看到的 slash command，背后其实就是这套消息流。
+
+\begin{itemize}
+  \item \texttt{list\_prompts} 负责发现 server 提供了哪些 prompt。
+  \item \texttt{get\_prompt} 负责把参数插值进 prompt。
+  \item 返回的 messages 可以直接喂给 Claude 继续对话。
+\end{itemize}
+
+\begin{keyconcept}
+\textbf{自动摘要}
+根据字幕自动扩写，这一讲再补充几条最值得记住的线索。
+\begin{itemize}
+  \item \textbf{形式定义}: 这一讲梳理 AND / OR / NOT / IF...THEN 等连接词的真值条件，并提醒不要把日常语言的直觉直接搬进数学里。
+\end{itemize}
+\end{keyconcept}
+
+\section*{6. 本单元最该记住的五句话}
+\addcontentsline{toc}{section}{6. 本单元最该记住的五句话}
+\begin{enumerate}
+  \item client session 负责管理与 server 的真实连接。
+  \item resources 负责把上下文数据插入 prompt。
+  \item prompts 让用户通过 slash command 触发模板。
+  \item client 侧要补齐读取资源与调用 prompt 的能力。
+  \item MCP 的重点之一是把上下文流转拆成清晰的接口。
+\end{enumerate}
+
+\section*{7. 练习题}
+\addcontentsline{toc}{section}{7. 练习题}
+\subsection*{A. 选择题（5题）}
+\begin{enumerate}
+  \item MCP client 中的 client session 主要负责什么？\\
+  A. 保存 UI 主题 \quad B. 管理与 server 的连接和清理 \quad C. 生成 prompt 模板 \quad D. 存储文档正文
+
+  \item resources 的设计目标是什么？\\
+  A. 让用户输入 @ 时自动引用文档并注入上下文 \quad B. 让模型训练参数 \quad C. 让 server 自己写日志 \quad D. 让 UI 更花哨
+
+  \item \texttt{@} 触发的功能是什么？\\
+  A. 自动删除文件 \quad B. 显示可引用文档列表并插入内容 \quad C. 创建 prompt \quad D. 启动 Inspector
+
+  \item prompts 更像什么？\\
+  A. 用户控制的 slash commands \quad B. 随机种子 \quad C. 数据库 schema \quad D. 网络协议
+
+  \item \texttt{get\_prompt} 返回的通常是什么？\\
+  A. 文件路径 \quad B. 一段 HTML \quad C. 要直接喂给 Claude 的 messages \quad D. 图片数组
+
+\end{enumerate}
+
+\subsection*{B. 判断题（3题）}
+\begin{enumerate}
+  \item resources 的内容是由应用主动注入到 prompt 中的。（\quad）
+  \item prompts 更接近用户主动触发的操作。（\quad）
+  \item \texttt{get\_prompt} 的返回值通常会直接进入后续对话流程。（\quad）
+\end{enumerate}
+
+\subsection*{C. 简答题（2题）}
+\begin{enumerate}
+  \item 为什么文档资源适合通过 \texttt{@} 这种交互方式引入？
+  \item 说明 resources 和 prompts 的区别。
+\end{enumerate}
+
+\section*{8. 参考答案}
+\addcontentsline{toc}{section}{8. 参考答案}
+\subsection*{选择题答案}
+1.B \quad 2.A \quad 3.B \quad 4.A \quad 5.C
+
+\subsection*{判断题答案}
+1. 对 \quad 2. 对 \quad 3. 对
+
+\subsection*{简答题要点}
+\begin{enumerate}
+  \item 因为它可以把“引用文档”变成很自然的输入动作，随后由应用自动补足上下文。
+  \item resources 由应用决定何时取用并注入数据；prompts 由用户决定何时触发一个模板化操作。
+\end{enumerate}
+
+\end{document}

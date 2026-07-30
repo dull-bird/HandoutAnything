@@ -103,6 +103,7 @@ def main():
     ext = "jpg" if args.format == "jpg" else "png"
     success = 0
     failed = 0
+    index_entries = []
 
     # Group by video file for cleaner naming
     for i, kf in enumerate(keyframes):
@@ -110,6 +111,8 @@ def main():
         time_sec = kf["time"]
         reason = kf.get("reason", "frame")
         text = kf.get("text", "")
+        cue_text = kf.get("cue_text", text)
+        hint = kf.get("hint", "")
 
         if not video_name:
             # Try to infer from vtt filename
@@ -144,10 +147,39 @@ def main():
         if ok and out_path.exists() and out_path.stat().st_size > 0:
             size_kb = out_path.stat().st_size / 1024
             print(f"  [{i+1}/{len(keyframes)}] {out_name} ({size_kb:.0f}K)")
+            index_entries.append(
+                {
+                    "frame": out_name,
+                    "video": video_name,
+                    "time": round(float(time_sec), 3),
+                    "reason": reason,
+                    "hint": hint,
+                    "text": cue_text,
+                    "context": kf.get("context", ""),
+                    "vtt": kf.get("vtt", ""),
+                }
+            )
             success += 1
         else:
             print(f"  [{i+1}/{len(keyframes)}] FAILED: {out_name}", file=sys.stderr)
             failed += 1
+
+    if index_entries:
+        index_json = output_dir / "index.json"
+        index_json.write_text(json.dumps(index_entries, ensure_ascii=False, indent=2), encoding="utf-8")
+
+        md_lines = ["# Keyframe Review Index", ""]
+        for entry in index_entries:
+            time_label = seconds_to_label(entry["time"])
+            md_lines.append(f"- `{entry['frame']}` @ `{time_label}`")
+            md_lines.append(f"  - reason: {entry['reason']}")
+            if entry.get("hint"):
+                md_lines.append(f"  - hint: {entry['hint']}")
+            if entry.get("text"):
+                md_lines.append(f"  - cue: {entry['text']}")
+            if entry.get("context"):
+                md_lines.append(f"  - context: {entry['context']}")
+        (output_dir / "index.md").write_text("\n".join(md_lines) + "\n", encoding="utf-8")
 
     print(f"\nDone: {success} frames extracted, {failed} failed")
     print(f"Output: {output_dir}")

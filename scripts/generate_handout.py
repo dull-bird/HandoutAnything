@@ -46,6 +46,10 @@ TEXT = {
         "title_instructor": "授课教师：",
         "title_note": "本讲义由课程字幕、补充材料与可选的 AI 推断关键帧自动生成。",
         "overview": "0. 概要",
+        "diagram": "理解框图",
+        "visual_notes": "关键帧观察点",
+        "discussion": "延伸讨论",
+        "synthesis": "单元串讲",
         "knowledge_map": "本单元知识地图",
         "knowledge_topic": "主题",
         "knowledge_question": "核心问题",
@@ -62,9 +66,12 @@ TEXT = {
         "truefalse_answers": "判断题答案",
         "shortanswer_answers": "简答题要点",
         "keyframe_reason": {
+            "architecture": "框图 / 架构",
             "concept_shift": "概念转折",
             "definition": "核心定义",
+            "comparison": "对比",
             "example": "示例讲解",
+            "workflow": "流程 / 步骤",
             "summary": "总结回顾",
             "interval": "内容节选",
         },
@@ -78,6 +85,10 @@ TEXT = {
         "title_instructor": "Instructor:",
         "title_note": "This handout was generated from lecture captions, supplementary materials, and optional AI-inferred keyframes.",
         "overview": "0. Overview",
+        "diagram": "Concept Diagram",
+        "visual_notes": "Visual Cues",
+        "discussion": "Discussion & Extension",
+        "synthesis": "Unit Synthesis",
         "knowledge_map": "Knowledge Map",
         "knowledge_topic": "Topic",
         "knowledge_question": "Core Question",
@@ -94,9 +105,12 @@ TEXT = {
         "truefalse_answers": "True/False",
         "shortanswer_answers": "Short Answer Key Points",
         "keyframe_reason": {
+            "architecture": "Architecture",
             "concept_shift": "Concept shift",
             "definition": "Core definition",
+            "comparison": "Comparison",
             "example": "Example",
+            "workflow": "Workflow",
             "summary": "Summary",
             "interval": "Excerpt",
         },
@@ -756,34 +770,69 @@ def pick_snippets(snippets: list[str], lang: str, limit: int = 4) -> list[str]:
     return [snippet for _, _, snippet in selected]
 
 
+def compact_snippet(snippet: str, lang: str, max_len: int = 160) -> str:
+    """Trim filler and keep a transcript snippet readable as a bullet."""
+    text = re.sub(r"\s+", " ", snippet).strip()
+    if not text:
+        return ""
+    if lang == "zh":
+        for prefix in [
+            "这一讲",
+            "这一部分",
+            "我们",
+            "接下来",
+            "然后",
+            "最后",
+            "现在",
+        ]:
+            if text.startswith(prefix):
+                text = text[len(prefix):].lstrip("，,。:：-— ")
+                break
+    else:
+        lower = text.lower()
+        for prefix in [
+            "this lecture ",
+            "in this lecture ",
+            "in this module, ",
+            "we are going to ",
+            "we're going to ",
+            "now ",
+            "next, ",
+            "finally, ",
+        ]:
+            if lower.startswith(prefix):
+                text = text[len(prefix):].lstrip(",.:- ")
+                break
+    if len(text) > max_len:
+        cut_points = [text.rfind(p, 0, max_len) for p in ["。", "！", "？", "；", ".", "!", "?", ";", "，", ","]]
+        cut = max(cut_points)
+        if cut < max_len // 2:
+            cut = max_len
+        text = text[:cut].rstrip()
+        if not text.endswith("…"):
+            text += "…"
+    return text
+
+
 def build_auto_digest(snippets: list[str], lang: str, label: str, intro: str, limit: int = 5) -> str:
-    """Render a theme-level auto digest block in LaTeX."""
+    """Render a lecture-local auto digest block from transcript snippets."""
     selected = pick_snippets(snippets, lang, limit=limit)
     if not selected:
         return ""
-    themes: list[str] = []
-    for snippet in selected:
-        theme_key = classify_summary_theme(snippet, lang)
-        if theme_key and theme_key not in themes:
-            themes.append(theme_key)
-    if not themes:
-        themes.append("summary")
     parts = [r"\begin{keyconcept}"]
     parts.append(rf"\textbf{{{tex_escape(label)}}}")
     parts.append(tex_escape(intro))
     parts.append(r"\begin{itemize}")
-    for theme_key in themes[:limit]:
-        theme = theme_summary(theme_key, lang)
-        if not theme:
-            continue
-        title, summary = theme
-        parts.append(f"  \\item \\textbf{{{tex_escape(title)}}}: {tex_escape(summary)}")
+    for snippet in selected[:limit]:
+        compact = compact_snippet(snippet, lang)
+        if compact:
+            parts.append(f"  \\item {tex_escape(compact)}")
     parts.append(r"\end{itemize}")
     parts.append(r"\end{keyconcept}")
     return "\n".join(parts)
 
 
-def build_transcript_digest(subtitle_path: Path | None, lang: str) -> str:
+def build_transcript_digest(subtitle_path: Path | None, lang: str, lecture_title: str = "") -> str:
     """Create a digest from subtitle content when hand-authored content is sparse."""
     if not subtitle_path or not subtitle_path.exists():
         return ""
@@ -794,11 +843,14 @@ def build_transcript_digest(subtitle_path: Path | None, lang: str) -> str:
         snippets = parse_vtt_cues(subtitle_path)
     else:
         snippets = split_text_units(raw_text, lang)
-    label = "自动摘要" if lang == "zh" else "Auto-generated digest"
+    if lecture_title:
+        label = f"{lecture_title} 的字幕要点" if lang == "zh" else f"{lecture_title} transcript notes"
+    else:
+        label = "字幕要点" if lang == "zh" else "Transcript notes"
     intro = (
-        "根据字幕自动扩写，这一讲再补充几条最值得记住的线索。"
+        "根据字幕自动提炼，这一讲再补充几条最值得记住的线索。"
         if lang == "zh"
-        else "Expanded automatically from the transcript to add the lecture's main lines of argument."
+        else "Expanded automatically from the transcript to keep the lecture's main lines visible."
     )
     return build_auto_digest(snippets, lang, label, intro)
 
@@ -815,13 +867,135 @@ def build_pdf_digest(pdf_path: Path | None, lang: str, resource_name: str = "") 
     if lang == "en" and not is_likely_english_text(extracted):
         return ""
     snippets = split_text_units(extracted, lang)
-    label = "自动摘要" if lang == "zh" else "Auto-generated reading digest"
+    label = "补充材料要点" if lang == "zh" else "Reading notes"
     intro = (
-        "根据补充材料自动扩写，这份阅读再补几条关键线索。"
+        "根据补充材料自动提炼，这份阅读再补几条关键线索。"
         if lang == "zh"
         else "Expanded automatically from the extracted PDF text to surface the main points."
     )
     return build_auto_digest(snippets, lang, label, intro, limit=3)
+
+
+def render_text_box(title: str, lines: list[str]) -> str:
+    """Render a compact framed box with monospaced multi-line content."""
+    cleaned = [line.rstrip() for line in lines if line and line.strip()]
+    if not cleaned:
+        return ""
+    body = r"\\ ".join(tex_escape(line) for line in cleaned)
+    return "\n".join(
+        [
+            r"\begin{center}",
+            r"\fcolorbox{darkgray}{white}{%",
+            r"\begin{minipage}{0.94\linewidth}",
+            rf"\textbf{{{tex_escape(title)}}}\\[0.35em]",
+            r"\ttfamily\small",
+            body,
+            r"\end{minipage}}",
+            r"\end{center}",
+        ]
+    )
+
+
+def normalize_plain_items(value) -> list[str]:
+    """Flatten a value into a clean list of plain-text items."""
+    if value is None:
+        return []
+    if isinstance(value, str):
+        text = re.sub(r"\s+", " ", value).strip()
+        return [text] if text else []
+    if isinstance(value, dict):
+        items: list[str] = []
+        for key in ("summary", "lead", "body", "text", "key_points", "bullets", "diagram", "visual_notes", "discussion"):
+            if key in value:
+                items.extend(normalize_plain_items(value[key]))
+        return items
+    if isinstance(value, (list, tuple)):
+        items: list[str] = []
+        for item in value:
+            items.extend(normalize_plain_items(item))
+        return items
+    text = re.sub(r"\s+", " ", str(value)).strip()
+    return [text] if text else []
+
+
+def normalize_line_items(value) -> list[str]:
+    """Flatten a value into lines, preserving explicit line breaks when present."""
+    if isinstance(value, str):
+        lines = [line.strip() for line in value.splitlines() if line.strip()]
+        if lines:
+            return lines
+    return normalize_plain_items(value)
+
+
+def collect_visible_text(value) -> str:
+    """Collect all text fragments from a structured block for length checks."""
+    return " ".join(normalize_plain_items(value))
+
+
+def render_itemize_box(title: str, items: list[str]) -> str:
+    """Render a framed bullet list box."""
+    cleaned = [item.strip() for item in items if item and item.strip()]
+    if not cleaned:
+        return ""
+    parts = [r"\begin{keyconcept}", rf"\textbf{{{tex_escape(title)}}}", r"\begin{itemize}"]
+    for item in cleaned:
+        parts.append(f"  \\item {tex_escape(item)}")
+    parts.append(r"\end{itemize}")
+    parts.append(r"\end{keyconcept}")
+    return "\n".join(parts)
+
+
+def render_content_block(block, lang: str) -> str:
+    """Render a lecture or unit content block in either legacy or structured form."""
+    if not block:
+        return ""
+    if isinstance(block, str):
+        return block
+    if isinstance(block, list):
+        paragraphs = [part for part in normalize_plain_items(block)]
+        return "\n\n".join(paragraphs)
+    if not isinstance(block, dict):
+        return tex_escape(str(block))
+
+    parts: list[str] = []
+    summary = block.get("summary") or block.get("body") or block.get("text")
+    if summary:
+        if isinstance(summary, str):
+            parts.append(summary)
+        else:
+            summary_parts = [part for part in normalize_plain_items(summary)]
+            if summary_parts:
+                parts.append("\n\n".join(summary_parts))
+
+    key_points = block.get("key_points") or block.get("bullets")
+    if key_points:
+        parts.append(render_itemize_box(block.get("key_points_title", ""), normalize_plain_items(key_points)))
+
+    diagram = block.get("diagram")
+    if diagram:
+        title = block.get("diagram_title") or get_text(lang, "diagram")
+        parts.append(render_text_box(title, normalize_line_items(diagram)))
+
+    visual_notes = block.get("visual_notes") or block.get("frame_notes")
+    if visual_notes:
+        title = block.get("visual_notes_title") or get_text(lang, "visual_notes")
+        parts.append(render_itemize_box(title, normalize_line_items(visual_notes)))
+
+    discussion = block.get("discussion")
+    if discussion:
+        title = block.get("discussion_title") or get_text(lang, "discussion")
+        parts.append(render_itemize_box(title, normalize_line_items(discussion)))
+
+    extra = block.get("extra")
+    if extra:
+        parts.append(render_content_block(extra, lang))
+
+    return "\n\n".join(part for part in parts if part)
+
+
+def block_visible_len(block) -> int:
+    """Estimate visible text length for strings or structured content blocks."""
+    return visible_text_len(collect_visible_text(block))
 
 
 def tex_escape(text: str) -> str:
@@ -916,7 +1090,7 @@ def generate_handout(
     tex.append(rf"\section*{{{get_text(lang, 'overview')}}}")
     tex.append(add_toc_entry("section", get_text(lang, "overview")))
     if overview:
-        tex.append(overview)
+        tex.append(render_content_block(overview, lang))
     else:
         tex.append(
             r"This unit covers the core concepts of the course."
@@ -961,10 +1135,10 @@ def generate_handout(
 
         # Per-lecture content from content.json
         lecture_content = lecture_summaries.get(video_stem_key) or lecture_summaries.get(vtt_stem_key) or ""
-        auto_lecture_content = build_transcript_digest(subtitle_path, lang)
+        auto_lecture_content = build_transcript_digest(subtitle_path, lang, lecture_title)
         if lecture_content:
-            tex.append(lecture_content)
-            if visible_text_len(lecture_content) < 420 and auto_lecture_content:
+            tex.append(render_content_block(lecture_content, lang))
+            if block_visible_len(lecture_content) < 420 and auto_lecture_content:
                 tex.append("")
                 tex.append(auto_lecture_content)
         elif auto_lecture_content:
@@ -1028,12 +1202,32 @@ def generate_handout(
                         reason_label = get_text(lang, "keyframe_reason").get(kf["reason"], kf["reason"])
                         caption = get_text(lang, "keyframe_caption").format(time=int(kf["time"]), reason=reason_label)
                         tex.append(f"\\keyframe{{{frame_file}}}{{{caption}}}")
-                tex.append("")
+        tex.append("")
+
+    # ── Unit synthesis / discussion ──
+    next_section_num = len(manifest) + 1
+    synthesis = content_data.get("synthesis", "")
+    if synthesis:
+        section_title = f"{next_section_num}. {get_text(lang, 'synthesis')}"
+        tex.append(rf"\section*{{{section_title}}}")
+        tex.append(add_toc_entry("section", section_title))
+        tex.append(render_content_block(synthesis, lang))
+        tex.append("")
+        next_section_num += 1
+
+    discussion = content_data.get("discussion", "")
+    if discussion:
+        section_title = f"{next_section_num}. {get_text(lang, 'discussion')}"
+        tex.append(rf"\section*{{{section_title}}}")
+        tex.append(add_toc_entry("section", section_title))
+        tex.append(render_content_block(discussion, lang))
+        tex.append("")
+        next_section_num += 1
 
     # ── Key Takeaways ──
     key_takeaways = content_data.get("key_takeaways", [])
     if key_takeaways:
-        takeaway_num = len(manifest) + 1
+        takeaway_num = next_section_num
         if lang == "en":
             section_title = f"{takeaway_num}. {get_text(lang, 'key_takeaways')}"
             tex.append(rf"\section*{{{section_title}}}")
@@ -1049,12 +1243,13 @@ def generate_handout(
             tex.append(f"  \\item {t}")
         tex.append(r"\end{enumerate}")
         tex.append("")
+        next_section_num += 1
 
     # ── Exercises ──
     exercises = content_data.get("exercises", {})
     answers = content_data.get("answers", {})
     if exercises:
-        ex_num = len(manifest) + (2 if key_takeaways else 1)
+        ex_num = next_section_num
         section_title = f"{ex_num}. {get_text(lang, 'exercises')}"
         tex.append(rf"\section*{{{section_title}}}")
         tex.append(add_toc_entry("section", section_title))
@@ -1091,10 +1286,11 @@ def generate_handout(
                 tex.append(f"  \\item {q}")
             tex.append(r"\end{enumerate}")
             tex.append("")
+        next_section_num += 1
 
     # ── Answers ──
     if answers:
-        ans_num = len(manifest) + (3 if key_takeaways else 2)
+        ans_num = next_section_num
         section_title = f"{ans_num}. {get_text(lang, 'answers')}"
         tex.append(rf"\section*{{{section_title}}}")
         tex.append(add_toc_entry("section", section_title))

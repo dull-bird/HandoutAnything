@@ -1,0 +1,95 @@
+{
+  "overview": "这一单元进入动手阶段，围绕一个 CLI 聊天机器人项目搭建 MCP server 并验证工具。\n核心目标不是写出炫技代码，而是把“定义能力 -> 运行调试 -> 修正实现”的闭环建立起来。\n\n\\begin{itemize}\n  \\item 先用一个小项目把 MCP 落地。\n  \\item 工具是 server 暴露给模型的可调用动作。\n  \\item Inspector 能让你快速检查 server 的实际行为。\n\\end{itemize}",
+  "knowledge_map": [
+    {
+      "topic": "练习项目",
+      "question": "为什么要先做一个 CLI 聊天机器人？"
+    },
+    {
+      "topic": "工具定义",
+      "question": "read / update 文档分别对应什么操作？"
+    },
+    {
+      "topic": "调试闭环",
+      "question": "Inspector 在开发流程里扮演什么角色？"
+    }
+  ],
+  "lectures": {
+    "01_project-setup": "\\textbf{本讲重点：} 先把练习项目搭起来，再往里填 MCP 逻辑。\n\n这一讲启动了一个 CLI 聊天机器人项目，用它来观察 client 和 server 如何真正协作。\n项目里会用到一组存放在内存中的文档，方便我们把注意力集中在 MCP 的结构，而不是持久化细节。\n\n这个设计的好处是：你可以一边在终端里聊天，一边逐步把服务器能力补进去，\n每一个新功能都能马上看到效果。\n\n\\begin{itemize}\n  \\item 这是一个练习性质的 CLI 聊天机器人，而不是完整产品。\n  \\item 文档先放在内存里，便于快速迭代。\n  \\item 项目目标是让你看到 client 和 server 如何协同工作。\n\\end{itemize}",
+    "02_defining-tools-with-mcp": "\\textbf{本讲重点：} 开始给 server 增加两个最基础的 tool。\n\n讲者在 \\texttt{mcpserver.py} 里准备了一个基础 MCP server，\n接下来要补上的就是两个工具：读取文档和更新文档。\n这一步的重点不是语法炫技，而是理解 tool 是 server 暴露出来、供模型调用的能力。\n\n这个单元还提醒你，MCP tool 的定义通常要带上清晰的输入输出结构；\n从工程角度看，这就是把“能做什么”和“怎么调用”拆成可验证的接口。\n\n\\begin{itemize}\n  \\item 先实现 read / update 这样的基础能力。\n  \\item 工具代码放在 \texttt{mcpserver.py} 中。\n  \\item JSON schema 让工具接口更明确、可检查。\n\\end{itemize}",
+    "03_the-server-inspector": "\\textbf{本讲重点：} 用 Inspector 把 server 的行为看清楚。\n\n这一讲介绍如何运行 \\texttt{mcp dev}，再在浏览器里打开 MCP inspector。\n这套工具把调试回路缩短了：你能直接连接 server，切换资源、提示词和工具标签页，\n观察它到底返回了什么。\n\n讲者也提醒，Inspector 仍在快速演进，所以界面细节可能变化。\n但核心思路不会变：先连上 server，再逐项验证能力是否符合预期。\n\n\\begin{itemize}\n  \\item Inspector 是验证 server 是否按预期工作的调试面板。\n  \\item 它能帮助你尽早发现工具定义或返回值的问题。\n  \\item 把开发、测试和修正连成一个短闭环很重要。\n\\end{itemize}"
+  },
+  "key_takeaways": [
+    "项目先行，概念才能落地。",
+    "tools 是 server 端最直接的能力暴露方式。",
+    "mcp dev + Inspector 构成了很实用的调试闭环。",
+    "把文档放进内存可以暂时降低复杂度。",
+    "清晰的接口比复杂的实现更重要。"
+  ],
+  "exercises": {
+    "choice": [
+      {
+        "q": "本单元要做的项目是什么？",
+        "options": [
+          "A. 画图应用",
+          "B. CLI 聊天机器人",
+          "C. 视频播放器",
+          "D. 电子表格"
+        ]
+      },
+      {
+        "q": "服务器先实现哪两个 tool？",
+        "options": [
+          "A. read / update document",
+          "B. search / delete",
+          "C. summarize / translate",
+          "D. login / logout"
+        ]
+      },
+      {
+        "q": "mcp dev 的用途是什么？",
+        "options": [
+          "A. 运行前端",
+          "B. 启动 Inspector 调试 server",
+          "C. 编译文档",
+          "D. 安装依赖"
+        ]
+      },
+      {
+        "q": "Inspector 能帮助你做什么？",
+        "options": [
+          "A. 只看日志",
+          "B. 测试资源、提示词和工具",
+          "C. 写前端样式",
+          "D. 训练模型"
+        ]
+      },
+      {
+        "q": "项目中的文档最初存放在哪里？",
+        "options": [
+          "A. 远程数据库",
+          "B. 内存",
+          "C. 浏览器 localStorage",
+          "D. GitHub"
+        ]
+      }
+    ],
+    "truefalse": [
+      "这个项目一开始就依赖完整的持久化存储。",
+      "工具是 server 侧实现出来、供模型调用的能力。",
+      "Inspector 的目标之一是帮你验证工具返回值是否符合预期。"
+    ],
+    "shortanswer": [
+      "为什么课程会选择先做一个小型 CLI 项目？",
+      "Inspector 能帮你发现哪些类别的问题？"
+    ]
+  },
+  "answers": {
+    "choice": "1.B \\quad 2.A \\quad 3.B \\quad 4.B \\quad 5.B",
+    "truefalse": "1. 错 \\quad 2. 对 \\quad 3. 对",
+    "shortanswer": [
+      "因为小项目能把 MCP 的抽象概念压缩到一个可观察的工程场景里，便于理解 client 和 server 的配合。",
+      "它可以帮助检查工具定义、返回数据结构、连接状态以及 server 是否按预期响应。"
+    ]
+  }
+}

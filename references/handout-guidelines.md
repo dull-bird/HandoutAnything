@@ -69,6 +69,13 @@ Use bullets for:
 - A good handout usually has fewer sections than the raw lecture list.
 - If a merged heading would become vague, split it back into two clearer headings.
 
+## Visual notes
+
+- Use a diagram block when the lecture explains a flow, architecture, comparison, or protocol message path.
+- Use keyframes as review anchors: inspect the frame, then write the point that the frame is trying to teach.
+- Prefer one short visual note per keyframe over dumping screenshots into the final handout.
+- If a lecture has no strong visual material, keep the visual note section short and text-first.
+
 ## Good default layout
 
 0. 概要

@@ -1,0 +1,26 @@
+[
+  {
+    "title": "项目搭建",
+    "title_en": "Project Setup",
+    "lesson": "第二单元：搭建服务器与工具",
+    "lesson_en": "Module 2: Setting Up the Server and Tools",
+    "page_url": "https://www.coursera.org/learn/introduction-to-model-context-protocol/home/module/2",
+    "video": "01_project-setup.mp4"
+  },
+  {
+    "title": "使用 MCP 定义工具",
+    "title_en": "Defining Tools with MCP",
+    "lesson": "第二单元：搭建服务器与工具",
+    "lesson_en": "Module 2: Setting Up the Server and Tools",
+    "page_url": "https://www.coursera.org/learn/introduction-to-model-context-protocol/home/module/2",
+    "video": "02_defining-tools-with-mcp.mp4"
+  },
+  {
+    "title": "服务器 Inspector",
+    "title_en": "The Server Inspector",
+    "lesson": "第二单元：搭建服务器与工具",
+    "lesson_en": "Module 2: Setting Up the Server and Tools",
+    "page_url": "https://www.coursera.org/learn/introduction-to-model-context-protocol/home/module/2",
+    "video": "03_the-server-inspector.mp4"
+  }
+]

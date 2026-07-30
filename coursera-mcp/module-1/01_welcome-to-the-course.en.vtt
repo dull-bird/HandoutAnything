@@ -1,0 +1,57 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:04.000
+Welcome to this course focused on getting started with Model Contacts Protocol.
+
+2
+00:00:04.000 --> 00:00:09.000
+My name is Stephen Greider and I'll be guiding you through everything you need to know around MCP.
+
+3
+00:00:09.000 --> 00:00:13.000
+Let's first begin by understanding exactly what we'll cover in the coming videos.
+
+4
+00:00:13.000 --> 00:00:18.000
+We'll first get an overview on MCP and understand what problems it is intended to solve.
+
+5
+00:00:18.000 --> 00:00:25.000
+We'll then start to look at the basics of MCP architecture by covering the responsibilities of MCP clients and servers.
+
+6
+00:00:25.000 --> 00:00:29.000
+Then it is on to the three basic components of an MCP server.
+
+7
+00:00:29.000 --> 00:00:33.000
+First, we'll look at tools, which are intended to be consumed by language models.
+
+8
+00:00:33.000 --> 00:00:38.000
+After that, we'll study resources, which allow a server to share data with clients.
+
+9
+00:00:38.000 --> 00:00:43.000
+And finally, prompts, which will provide tuned directions to language models.
+
+10
+00:00:43.000 --> 00:00:48.000
+Now, there's a lot of content for us to get through, so there are a couple of requirements on your side.
+
+11
+00:00:48.000 --> 00:00:51.000
+First, you need to have some basic Python knowledge.
+
+12
+00:00:51.000 --> 00:00:56.000
+Second, we will be writing out some code, and this will require a local Python installation.
+
+13
+00:00:56.000 --> 00:01:02.000
+We will be managing our project with the uv-cli, and if you don't have it installed, I recommend grabbing it now.
+
+14
+00:01:02.000 --> 00:01:04.000
+Get a link to it on the screen.

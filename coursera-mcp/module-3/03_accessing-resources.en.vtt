@@ -1,0 +1,333 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:03.599
+We have defined two separate resources inside of our MCP server.
+
+2
+00:00:03.599 --> 00:00:07.519
+So now our client needs the ability to request these resources.
+
+3
+00:00:08.159 --> 00:00:12.720
+To do so, we're going to add in a single function inside of our MCP client.
+
+4
+00:00:12.720 --> 00:00:16.799
+And remember, this MCP client is going to have some functionality that we're putting together
+
+5
+00:00:16.799 --> 00:00:19.040
+that is going to be used by the rest of our application.
+
+6
+00:00:19.040 --> 00:00:21.120
+And I've already put together that code already.
+
+7
+00:00:21.120 --> 00:00:24.879
+So somewhere else inside this project, something is going to try to
+
+8
+00:00:24.879 --> 00:00:28.000
+make use of this function that we're about to add into the MCP client.
+
+9
+00:00:28.719 --> 00:00:32.400
+To get started, I'm going to open up the MCP client file again.
+
+10
+00:00:32.400 --> 00:00:37.200
+I'm going to scroll down and find read resource right here.
+
+11
+00:00:38.159 --> 00:00:42.400
+So our goal inside of here is to read a particular resource by making a request
+
+12
+00:00:42.400 --> 00:00:47.840
+off to our MCP server and then parse the contents that come back depending upon its MIME type,
+
+13
+00:00:47.840 --> 00:00:49.759
+and then just return whatever data we get.
+
+14
+00:00:50.639 --> 00:00:53.040
+So you'll notice that a argument to it is the URI.
+
+15
+00:00:53.040 --> 00:00:56.560
+This is going to be the URI of the resource that we want to fetch from the server.
+
+16
+00:00:57.360 --> 00:01:01.040
+In order to make a request, just to get all of our types nicely,
+
+17
+00:01:01.040 --> 00:01:04.400
+we're going to add two imports at the very top of the file.
+
+18
+00:01:04.400 --> 00:01:07.279
+I'm going to add in an import for the JSON module.
+
+19
+00:01:07.839 --> 00:01:11.440
+And from pydanotic, I will import any URL.
+
+20
+00:01:13.919 --> 00:01:18.480
+Then I'll go back down to our read resource function.
+
+21
+00:01:18.480 --> 00:01:21.680
+I'm going to clear out the comment in the return statement.
+
+22
+00:01:21.680 --> 00:01:23.919
+Then I'll get a result from calling await.
+
+23
+00:01:24.879 --> 00:01:27.839
+Self session, I want to read resource.
+
+24
+00:01:27.839 --> 00:01:30.720
+And then again, this is really just to get the types to work out.
+
+25
+00:01:30.720 --> 00:01:34.000
+We're going to put in a any URL with the input URI.
+
+26
+00:01:36.639 --> 00:01:38.559
+Then I'm going to take from that result.
+
+27
+00:01:40.400 --> 00:01:44.959
+Response or excuse me, result contents at zero.
+
+28
+00:01:44.959 --> 00:01:47.919
+And I want to make this clear right here why we were adding this in.
+
+29
+00:01:47.919 --> 00:01:51.680
+So just a moment ago inside of our inspector, we saw the response we get back.
+
+30
+00:01:51.680 --> 00:01:54.080
+So this is essentially that result variable.
+
+31
+00:01:54.080 --> 00:01:56.400
+Result has a contents list.
+
+32
+00:01:56.400 --> 00:01:58.720
+And there's going to be a list of elements inside there.
+
+33
+00:01:58.720 --> 00:02:01.199
+We really only care about the very first one.
+
+34
+00:02:01.199 --> 00:02:03.199
+So I want to get the first dictionary.
+
+35
+00:02:03.199 --> 00:02:06.239
+I want to access the type property and the MIME type.
+
+36
+00:02:06.239 --> 00:02:09.360
+I want specifically the MIME type because it's going to help me understand
+
+37
+00:02:09.360 --> 00:02:11.039
+what kind of data we got back.
+
+38
+00:02:11.039 --> 00:02:16.240
+If it is JSON, then I want to make sure I parse the text as JSON and return that result.
+
+39
+00:02:16.240 --> 00:02:17.679
+So let me show you how we're going to do that.
+
+40
+00:02:18.399 --> 00:02:29.039
+I'm going to add in a if is instance of resource types text resource contents.
+
+41
+00:02:30.160 --> 00:02:36.880
+And inside there, if resource MIME type is equal to application JSON.
+
+42
+00:02:36.880 --> 00:02:39.119
+So this is our hint in use.
+
+43
+00:02:39.119 --> 00:02:41.759
+If the server told us that it's giving us back some JSON,
+
+44
+00:02:41.759 --> 00:02:45.679
+we need to make sure that we parse the text content as JSON.
+
+45
+00:02:45.679 --> 00:02:49.839
+So I will return in that case a JSON loads of resource dot text.
+
+46
+00:02:50.800 --> 00:02:54.160
+And then otherwise, if we don't fall into that if statement and return early,
+
+47
+00:02:54.160 --> 00:02:57.440
+I want to just return resource dot text.
+
+48
+00:02:58.000 --> 00:03:01.039
+So in this scenario, we'd be returning the text as just plain text.
+
+49
+00:03:01.039 --> 00:03:02.559
+We're not parsing anything.
+
+50
+00:03:02.559 --> 00:03:06.639
+So this would really be the case in which we get back the contents of a single document.
+
+51
+00:03:08.320 --> 00:03:10.160
+All right, so that should really be it.
+
+52
+00:03:10.160 --> 00:03:12.399
+We've got our read resource put together.
+
+53
+00:03:12.960 --> 00:03:14.479
+Now, again, I want to remind you,
+
+54
+00:03:14.479 --> 00:03:15.759
+I know I've said this several times,
+
+55
+00:03:15.759 --> 00:03:18.720
+but I just want to remind you because I think it might be a little bit unclear.
+
+56
+00:03:19.360 --> 00:03:21.679
+The code that we're writing inside of the MCP client
+
+57
+00:03:21.679 --> 00:03:25.199
+is being used from several other places inside of this code base.
+
+58
+00:03:25.199 --> 00:03:26.960
+So somewhere else in this code base,
+
+59
+00:03:26.960 --> 00:03:29.440
+we're going to be calling that function that we just put together
+
+60
+00:03:29.440 --> 00:03:31.600
+to get the list of document names
+
+61
+00:03:31.600 --> 00:03:35.440
+and then eventually get the contents of a document to put into a prompt.
+
+62
+00:03:36.000 --> 00:03:38.479
+So at this point, everything should essentially work
+
+63
+00:03:38.479 --> 00:03:40.720
+because the rest of the work has already been done for us.
+
+64
+00:03:41.600 --> 00:03:43.679
+So with that in mind, let's go back over to our terminal
+
+65
+00:03:43.679 --> 00:03:46.000
+and we're going to test out our CLI application again
+
+66
+00:03:46.000 --> 00:03:48.080
+and see if this mention feature works.
+
+67
+00:03:49.440 --> 00:03:53.919
+Okay, so back over here, I'll do a uv run main.py
+
+68
+00:03:54.559 --> 00:03:58.080
+and now I should be able to say something like what's in the at,
+
+69
+00:03:58.080 --> 00:04:00.240
+and there we go, I see my list of resources
+
+70
+00:04:00.240 --> 00:04:02.080
+and I can use the arrow key to scroll through.
+
+71
+00:04:02.720 --> 00:04:05.679
+Once I am at a resource I like, I'll just hit space
+
+72
+00:04:05.679 --> 00:04:08.080
+and it will insert that resource.
+
+73
+00:04:08.080 --> 00:04:10.800
+So what's in the report.pdf document.
+
+74
+00:04:11.520 --> 00:04:15.279
+And now I can tell you that everything is working as expected here.
+
+75
+00:04:15.279 --> 00:04:17.200
+In other words, the contents of this document
+
+76
+00:04:17.200 --> 00:04:19.600
+is being sent off to Claude inside of a prompt.
+
+77
+00:04:19.600 --> 00:04:22.880
+So if I submit this, I should see an immediate response
+
+78
+00:04:22.880 --> 00:04:25.839
+and it's going to tell me what is inside of report.pdf.
+
+79
+00:04:25.839 --> 00:04:28.720
+So this time around, Claude did not have to use a tool
+
+80
+00:04:28.720 --> 00:04:30.320
+to read the contents of the document.
+
+81
+00:04:31.200 --> 00:04:32.880
+All right, so that is resources.
+
+82
+00:04:32.880 --> 00:04:36.880
+Again, we make use of resources to expose some amount of information
+
+83
+00:04:36.880 --> 00:04:38.160
+from our MCP server.

@@ -1,0 +1,217 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:03.839
+In this module, we are going to focus on Model Context Protocol.
+
+2
+00:00:03.839 --> 00:00:09.039
+MCP is a communication layer designed to provide Cloud with context and tools
+
+3
+00:00:09.039 --> 00:00:12.720
+without requiring you, the developer, to write a bunch of tedious code.
+
+4
+00:00:13.279 --> 00:00:16.799
+When you first get started with MCP, you will see diagrams that look like this
+
+5
+00:00:16.799 --> 00:00:22.559
+very often. It shows two major elements of MCP, namely the client and the server.
+
+6
+00:00:22.559 --> 00:00:25.920
+The server often contains a number of internal components,
+
+7
+00:00:25.920 --> 00:00:30.319
+named tools, resources, and prompts. There's a lot of terminology here,
+
+8
+00:00:30.319 --> 00:00:35.040
+so to help you understand all of this, we're going to imagine that we are building a small app
+
+9
+00:00:35.040 --> 00:00:40.000
+and see how MCP fits into it. Our sample app is going to be another
+
+10
+00:00:40.000 --> 00:00:45.439
+chat interface. It's going to allow a user to chat with Cloud about their GitHub data.
+
+11
+00:00:45.439 --> 00:00:50.080
+So if a user asks a question like, what open pull request do I have across all my different
+
+12
+00:00:50.080 --> 00:00:55.040
+repositories, the expectation is that Cloud is probably going to make use of a tool
+
+13
+00:00:55.040 --> 00:01:00.000
+to reach out to GitHub, access the user's account, and see what open pull requests they have,
+
+14
+00:01:00.000 --> 00:01:04.879
+maybe open repositories or whatever else. The point here is that we would implement this
+
+15
+00:01:04.879 --> 00:01:09.040
+probably by using a set of tools. Now one thing I want to mention
+
+16
+00:01:09.040 --> 00:01:13.279
+really quickly is that GitHub has a tremendous amount of functionality.
+
+17
+00:01:13.279 --> 00:01:18.639
+There are repositories, pull requests, issues, projects, and tons of other things.
+
+18
+00:01:19.199 --> 00:01:24.720
+So to have a complete GitHub chatbot, we would really have to author a tremendous number of
+
+19
+00:01:24.720 --> 00:01:29.519
+tools. If we wanted to build that sample app, we would be on the hook for authoring all these
+
+20
+00:01:29.519 --> 00:01:34.800
+schemas and all these functions. And this is all code that you and I as developers would have to
+
+21
+00:01:34.800 --> 00:01:40.239
+write, test, and maintain. That's a lot of effort, a lot of burden being placed on us.
+
+22
+00:01:40.879 --> 00:01:46.239
+This challenge of making developers maintain a big set of integrations is one of the primary
+
+23
+00:01:46.239 --> 00:01:53.360
+difficulties that model context aims to solve. MCP shifts the burden of defining and running tools
+
+24
+00:01:53.360 --> 00:01:58.959
+from your server to something else called an MCP server. So no longer would you and I have to
+
+25
+00:01:58.959 --> 00:02:04.080
+author this tool right here. Instead, it would be authored and executed somewhere else inside
+
+26
+00:02:04.080 --> 00:02:09.600
+of this MCP server. These MCP servers can really be thought of as like an interface to some outside
+
+27
+00:02:09.600 --> 00:02:15.679
+service. So I might have a GitHub MCP server that provides access to data and functionality provided
+
+28
+00:02:15.679 --> 00:02:20.880
+by specifically GitHub. We're essentially wrapping up a ton of functionality around GitHub and
+
+29
+00:02:20.880 --> 00:02:26.479
+placing it into this MCP server in the form of a set of tools. So at this point, we have a very
+
+30
+00:02:26.479 --> 00:02:32.080
+basic understanding of what a MCP server is. It gives us access to a set of tools that exposes
+
+31
+00:02:32.080 --> 00:02:37.440
+functionality related to some outside service. And the benefit here is that you and I do not
+
+32
+00:02:37.440 --> 00:02:42.720
+have to author all these different tool schemas and functions and so on. Now that we have this
+
+33
+00:02:42.720 --> 00:02:47.759
+basic understanding, I want to address some very common questions that a lot of people have when
+
+34
+00:02:47.759 --> 00:02:52.800
+they first learn about MCP servers. So three common questions that seem to always come up.
+
+35
+00:02:52.800 --> 00:02:58.240
+The first common question is who authors these MCP servers? And the answer is anyone. Anyone can
+
+36
+00:02:58.240 --> 00:03:03.919
+make an MCP server implementation. But very often, you will find that service providers make their own
+
+37
+00:03:03.919 --> 00:03:09.279
+official implementation. So for example, AWS might decide to release their own official
+
+38
+00:03:09.279 --> 00:03:14.559
+MCP server implementation. And inside of it, it might have a wide variety of different tools
+
+39
+00:03:14.559 --> 00:03:21.119
+available for you to use. The second common question is how is using a MCP server different
+
+40
+00:03:21.119 --> 00:03:27.919
+than just calling a services API directly? Well, as we just saw, if we wanted to call a API directly,
+
+41
+00:03:27.919 --> 00:03:37.600
+such as GitHub, then we would have to author this tool ourselves. And now we can call GitHub directly.
+
+42
+00:03:37.600 --> 00:03:42.800
+So what did we gain here? Well, all that really changed was we are now having to author the schema
+
+43
+00:03:42.800 --> 00:03:48.479
+ourselves and the function implementation ourselves. So simply by adding in the MCP server,
+
+44
+00:03:48.479 --> 00:03:53.520
+we are saving ourselves a little bit of time. The final common question is more of a common
+
+45
+00:03:53.520 --> 00:03:58.559
+criticism that you're going to see people have around MCP. And this criticism is most often
+
+46
+00:03:58.559 --> 00:04:03.119
+coming from people who don't quite understand what MCP is all about. So very often, you will
+
+47
+00:04:03.119 --> 00:04:08.479
+see people saying MCP and tool use are the same thing. Well, as I have just laid out to you,
+
+48
+00:04:08.479 --> 00:04:13.119
+MCP servers and tool use, they are complementary. They are different things, but they are
+
+49
+00:04:13.119 --> 00:04:19.279
+complementary. The idea behind MCP is that you do not have to author the tool function and the tool
+
+50
+00:04:19.279 --> 00:04:23.920
+schema. That is something that's done for you by someone else and is being wrapped up inside of
+
+51
+00:04:23.920 --> 00:04:29.600
+this MCP server. So at some level, yeah, they're kind of similar because we are talking about tool
+
+52
+00:04:29.600 --> 00:04:34.559
+use in both cases. But MCP servers are really talking about who is doing the actual work.
+
+53
+00:04:35.200 --> 00:04:37.279
+So if you ever see this criticism, again,
+
+54
+00:04:37.279 --> 00:04:40.799
+it's usually because people don't quite understand what MCP is all about.

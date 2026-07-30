@@ -1,0 +1,169 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:04.480
+We have put together some functionality inside of our MCP server but we have no idea if it works
+
+2
+00:00:04.480 --> 00:00:09.359
+so it'd be really great if we could test this out somehow. It turns out that by using this Python
+
+3
+00:00:09.359 --> 00:00:14.960
+SDK we automatically get access to an in-browser debugger so we can make sure that this server is
+
+4
+00:00:14.960 --> 00:00:20.239
+working as expected. Let me show you how to use it really quickly. Back inside my terminal,
+
+5
+00:00:20.239 --> 00:00:25.440
+I'm going to make sure that I have my Python environment activated. Remember the readme
+
+6
+00:00:25.440 --> 00:00:30.000
+document goes into detail on the exact command to run to make sure that you have activated that
+
+7
+00:00:30.000 --> 00:00:36.159
+environment. Once you are sure that it is activated we'll run mcp dev and then the
+
+8
+00:00:36.159 --> 00:00:43.759
+name of the file that contains our server. In this case it is mcpserver.py. Once I run that I'll then
+
+9
+00:00:43.759 --> 00:00:49.840
+be told that I have a server listening on port 6277 and I'll be given a direct address to actually
+
+10
+00:00:49.840 --> 00:00:54.639
+access it. I'm going to open up that address inside my browser and once you go there you'll
+
+11
+00:00:54.639 --> 00:00:59.919
+see something that looks like this. This is the MCP inspector. Now right away there's something
+
+12
+00:00:59.919 --> 00:01:05.040
+important I want you to understand here. This inspector is in active development so by the time
+
+13
+00:01:05.040 --> 00:01:09.440
+you are watching this video what you see on the screen right now might be very very different than
+
+14
+00:01:09.440 --> 00:01:13.919
+what I am showing. Nonetheless it's probably still going to have some very similar functionality.
+
+15
+00:01:14.879 --> 00:01:19.440
+On the left hand side you'll see a connect button. That is going to start up your MCP
+
+16
+00:01:19.440 --> 00:01:24.959
+server so that file that we just edited. I'm going to click on connect and then right away
+
+17
+00:01:24.959 --> 00:01:28.959
+we'll see a couple of different things on the screen appear. I first want you to notice the
+
+18
+00:01:28.959 --> 00:01:34.319
+top menu bar up here. It lists out resources, prompts, tools and some other stuff. Again the
+
+19
+00:01:34.319 --> 00:01:39.199
+UI might change by the time you watch this video so if you do not see this menu bar up here all we
+
+20
+00:01:39.199 --> 00:01:46.720
+are really looking for here is some tools section. Once I click on tools I will click on list tools
+
+21
+00:01:46.720 --> 00:01:51.839
+and we'll see the name of the tools that we just put together. If I click on one the right hand
+
+22
+00:01:51.839 --> 00:01:57.279
+panel is then going to change and I can use this panel over here to manually invoke one of my tools
+
+23
+00:01:57.279 --> 00:02:02.480
+to make sure that it is working as expected. So this is how we can do some live development
+
+24
+00:02:02.480 --> 00:02:08.399
+on our MCP server without actually having to wire it up to a real application. In order to
+
+25
+00:02:08.399 --> 00:02:14.320
+use the read doc contents tool all we have to do is put in a document ID. If I go back over to my
+
+26
+00:02:14.320 --> 00:02:21.839
+editor and go up to the docs dictionary right here I can copy one of these document IDs so I
+
+27
+00:02:21.839 --> 00:02:30.399
+will take out deposition.md. I will put it in as the doc ID and then click on run tool. I should
+
+28
+00:02:30.399 --> 00:02:35.279
+then see run tool of success with the contents of the document and that is it right there. I can
+
+29
+00:02:35.279 --> 00:02:41.119
+verify it it's the same exact string as what I see right there. We can use this same exact technique
+
+30
+00:02:41.119 --> 00:02:47.199
+to test out the other tool as well. So I will change over to the edit document tool now I'll
+
+31
+00:02:47.199 --> 00:02:53.759
+put in my document ID my old string that I want to replace. How about we replace the word deposition
+
+32
+00:02:53.759 --> 00:02:58.399
+actually how about an easier word to type out how about just this that'll be a little bit easier. So
+
+33
+00:02:58.399 --> 00:03:04.479
+my old string is this remember that is going to be capital sensitive and I'm going to replace it with
+
+34
+00:03:05.039 --> 00:03:12.960
+a report and if I run the tool I'll then be given a success. Remember that tool does not actually
+
+35
+00:03:12.960 --> 00:03:18.240
+return the document's contents it just edits the document. So now to verify the edit was done
+
+36
+00:03:18.240 --> 00:03:24.080
+correctly I can go back over to the read doc contents tool run that one again with the same
+
+37
+00:03:24.080 --> 00:03:30.639
+document ID and I should see a report deposition and then blah blah blah. All right so as you can
+
+38
+00:03:30.639 --> 00:03:36.880
+see this MCP inspector allows us to very easily debug a MCP server that we are implementing
+
+39
+00:03:36.880 --> 00:03:42.160
+without actually having to wire the server up to an actual application. As you start building your
+
+40
+00:03:42.160 --> 00:03:46.639
+own MCP servers I expect you'll be using this inspector tool quite a bit and we'll probably
+
+41
+00:03:46.639 --> 00:03:50.880
+use it a little bit more inside of this module just to make sure that our server development
+
+42
+00:03:50.880 --> 00:03:59.279
+is going along pretty well.

@@ -1,0 +1,97 @@
+{
+  "overview": "这一单元把 server 侧能力接回客户端，完成 resource 和 prompt 的读取、注入与交互。\n你会看到 MCP 不只是“把模型接到工具”，更是把应用里的上下文流转做成可组合的接口。\n\n\\begin{itemize}\n  \\item client session 管理连接与清理。\n  \\item resources 适合做应用控制的数据注入。\n  \\item prompts 适合做用户控制的可复用模板。\n\\end{itemize}",
+  "knowledge_map": [
+    {
+      "topic": "Client session",
+      "question": "它为什么不仅仅是一个请求对象？"
+    },
+    {
+      "topic": "资源注入",
+      "question": "为什么 \\texttt{@} 能改善上下文输入？"
+    },
+    {
+      "topic": "Prompt 调用",
+      "question": "list / get prompt 分别承担什么职责？"
+    }
+  ],
+  "lectures": {
+    "01_implementing-a-client": "\\textbf{本讲重点：} 把 server 侧能力接回 client，完成真正的往返调用。\n\n这一讲开始实现 \\texttt{client.py} 里的 MCP client 类。它会把 client session 包起来，\n让应用可以稳定地和 server 建立连接、发消息、收结果。\n\n讲者特别提醒：这个类还负责收尾清理，所以它不是单纯的“发请求对象”，\n而是应用和外部 server 之间的生命周期管理者。\n\n\\begin{itemize}\n  \\item client session 是真实连接的核心。\n  \\item client 代码比 server 更像应用基础设施的一部分。\n  \\item 连接管理和资源清理不能省。\n\\end{itemize}",
+    "02_defining-resources": "\\textbf{本讲重点：} resources 让应用把上下文数据主动送给模型。\n\n这一讲增加了一个很典型的交互：用户输入 \\texttt{@} 时，界面显示可引用的文档；\n用户选中文档后，应用会把该文档内容自动插入到发给 Claude 的 prompt 里。\n\n这说明 resources 更像“应用控制的数据注入层”：它不是等模型自己去调用 tool，\n而是由应用先把合适的上下文准备好，再送进模型。\n\n\\begin{itemize}\n  \\item 资源配合 \texttt{@} 自动补全，体验会更自然。\n  \\item 资源的内容会被插入 prompt，而不是让模型自己猜。\n  \\item 这是 app-controlled 的典型例子。\n\\end{itemize}",
+    "03_accessing-resources": "\\textbf{本讲重点：} client 需要主动向 server 取回资源内容。\n\n在定义完资源之后，client 侧就要补上读取逻辑：给定一个 resource URI，\n发出请求、拿到响应，并根据 MIME type 把数据解析成应用能继续使用的形式。\n\n这一步的意义在于把“资源”真正变成可消费的上下文，而不是只停留在 server 的名词定义上。\n\n\\begin{itemize}\n  \\item client 需要知道如何按 URI 拉取资源。\n  \\item 不同 MIME type 需要不同的解析方式。\n  \\item 资源要最终变成 prompt 的一部分，才算真正用起来。\n\\end{itemize}",
+    "04_defining-prompts": "\\textbf{本讲重点：} prompts 让用户用 slash command 触发可复用模板。\n\n这一讲引入 \\texttt{/} 开头的命令，例如 \\texttt{format}。用户一旦选择某个命令，\n应用就会把对应 prompt 当作一个可复用的操作模板来执行。\n\n和 resources 不同，prompts 更强调“用户主动选择要执行什么”，因此它更接近\n交互式 UI 里的命令面板或菜单。\n\n\\begin{itemize}\n  \\item slash command 是 prompts 的自然入口。\n  \\item prompts 适合做模板化、可复用的动作。\n  \\item 它更像用户控制的操作，而不是模型自动触发的动作。\n\\end{itemize}",
+    "05_prompts-in-the-client": "\\textbf{本讲重点：} 把 prompt 的发现和调用接到 client 里。\n\n最后一个任务是实现 \\texttt{list\\_prompts} 和 \\texttt{get\\_prompt}：\n前者列出 server 提供的 prompt，后者把 prompt 名称和参数传进去，\n再把返回的 messages 交给 Claude。\n\n这样一来，client 就不只是能拉资源，也能把模板化提示词真正接到应用交互里。\n用户在终端里看到的 slash command，背后其实就是这套消息流。\n\n\\begin{itemize}\n  \\item \\texttt{list\\_prompts} 负责发现 server 提供了哪些 prompt。\n  \\item \\texttt{get\\_prompt} 负责把参数插值进 prompt。\n  \\item 返回的 messages 可以直接喂给 Claude 继续对话。\n\\end{itemize}"
+  },
+  "key_takeaways": [
+    "client session 负责管理与 server 的真实连接。",
+    "resources 负责把上下文数据插入 prompt。",
+    "prompts 让用户通过 slash command 触发模板。",
+    "client 侧要补齐读取资源与调用 prompt 的能力。",
+    "MCP 的重点之一是把上下文流转拆成清晰的接口。"
+  ],
+  "exercises": {
+    "choice": [
+      {
+        "q": "MCP client 中的 client session 主要负责什么？",
+        "options": [
+          "A. 保存 UI 主题",
+          "B. 管理与 server 的连接和清理",
+          "C. 生成 prompt 模板",
+          "D. 存储文档正文"
+        ]
+      },
+      {
+        "q": "resources 的设计目标是什么？",
+        "options": [
+          "A. 让用户输入 @ 时自动引用文档并注入上下文",
+          "B. 让模型训练参数",
+          "C. 让 server 自己写日志",
+          "D. 让 UI 更花哨"
+        ]
+      },
+      {
+        "q": "\\texttt{@} 触发的功能是什么？",
+        "options": [
+          "A. 自动删除文件",
+          "B. 显示可引用文档列表并插入内容",
+          "C. 创建 prompt",
+          "D. 启动 Inspector"
+        ]
+      },
+      {
+        "q": "prompts 更像什么？",
+        "options": [
+          "A. 用户控制的 slash commands",
+          "B. 随机种子",
+          "C. 数据库 schema",
+          "D. 网络协议"
+        ]
+      },
+      {
+        "q": "\\texttt{get\\_prompt} 返回的通常是什么？",
+        "options": [
+          "A. 文件路径",
+          "B. 一段 HTML",
+          "C. 要直接喂给 Claude 的 messages",
+          "D. 图片数组"
+        ]
+      }
+    ],
+    "truefalse": [
+      "resources 的内容是由应用主动注入到 prompt 中的。",
+      "prompts 更接近用户主动触发的操作。",
+      "\\texttt{get\\_prompt} 的返回值通常会直接进入后续对话流程。"
+    ],
+    "shortanswer": [
+      "为什么文档资源适合通过 \\texttt{@} 这种交互方式引入？",
+      "说明 resources 和 prompts 的区别。"
+    ]
+  },
+  "answers": {
+    "choice": "1.B \\quad 2.A \\quad 3.B \\quad 4.A \\quad 5.C",
+    "truefalse": "1. 对 \\quad 2. 对 \\quad 3. 对",
+    "shortanswer": [
+      "因为它可以把“引用文档”变成很自然的输入动作，随后由应用自动补足上下文。",
+      "resources 由应用决定何时取用并注入数据；prompts 由用户决定何时触发一个模板化操作。"
+    ]
+  }
+}
