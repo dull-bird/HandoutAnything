@@ -39,6 +39,8 @@ HandoutAnything/
 │   └── ...                     ← 其他参考资料
 ├── scripts/
 │   ├── generate_handout.py     ← 字幕类材料 → LaTeX 讲义（manifest + content.json）
+│   ├── lint_handout.py         ← 成品静默失败检查（直引号/省略号/引号配对/缺字形/编译错误）
+│   ├── review_handout.py       ← 讲义结构审查（方法论 §5/§6 的硬指标，0 errors 才交付）
 │   ├── vtt_keyframes.py        ← 从字幕语义推断关键帧时间戳
 │   └── extract_frames.py       ← ffmpeg 按时间戳截帧（本地视频配图）
 ├── feynman-technique/          ← 实例：视频字幕转录 → 费曼学习法讲义
@@ -55,6 +57,13 @@ HandoutAnything/
 ```bash
 cd physics-handout
 TEXINPUTS="./texmf//:" xelatex physics-handout.tex && TEXINPUTS="./texmf//:" xelatex physics-handout.tex
+```
+
+编译后跑两道质量门（详见 `handout-anything/SKILL.md` 第 4 步）：
+
+```bash
+python3 scripts/lint_handout.py handout.tex handout.log   # 静默失败检查
+python3 scripts/review_handout.py handout.tex             # 结构审查（0 errors 才交付）
 ```
 
 ## License

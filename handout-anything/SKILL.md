@@ -52,6 +52,10 @@ allowed-tools: Bash, Read, Write, Edit, Glob, Grep
 逐项执行方法论 §6 验证清单。硬指标：
 
 - 编译 0 错误；日志无 `Missing character`；
+- **lint 通过**：`python3 scripts/lint_handout.py handout.tex handout.log`（ASCII 直引号、ASCII 省略号、中文引号配对、孤立单个 …、缺字形、编译错误）；
+- **review 通过**：`python3 scripts/review_handout.py handout.tex`（开始前/今日自测/参考答案/收尾呼应/单元数 5–9 等结构硬指标）；要求 0 errors，warnings 每条都必须有意识地为它找到理由；
+- 每单元已按方法论 §2.5 公式标注实际工作量（写完再报，禁止先报时间再凑内容）；
+- 每单元已标优先级与难度，"开始前"页有依赖关系图；
 - 逐页目检（渲染 PNG 抽查全部图页）；
 - 概念清单中【全新】概念每个都有落点；
 - 收尾"能讲给别人听的 N 句话"与开篇呼应。

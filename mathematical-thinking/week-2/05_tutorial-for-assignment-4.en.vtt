@@ -1,0 +1,1235 @@
+WEBVTT
+
+1
+00:00:01.700 --> 00:00:05.060
+Assignment four was pretty long,
+but I would hope that by now,
+
+2
+00:00:05.060 --> 00:00:07.480
+working with other students in the class,
+
+3
+00:00:07.480 --> 00:00:11.780
+you were able to get through most
+of the ones that you were tempted.
+
+4
+00:00:11.780 --> 00:00:16.007
+I'm just going to focus on three of them,
+I think, I'll look at number 6, 10,
+
+5
+00:00:16.007 --> 00:00:16.577
+and 12.
+
+6
+00:00:16.577 --> 00:00:19.442
+Most of the other ones were just
+straightforward through table calculation
+
+7
+00:00:19.442 --> 00:00:22.640
+and I'm pretty sure that by now,
+you should have done those.
+
+8
+00:00:22.640 --> 00:00:24.150
+And if not then do go back and
+
+9
+00:00:24.150 --> 00:00:28.000
+talk with friends and
+other students and try and sort it out.
+
+10
+00:00:28.000 --> 00:00:32.110
+And you may not have had too much
+difficulty with 6, 10 and 12 as well.
+
+11
+00:00:32.110 --> 00:00:36.745
+But let me just play it safe and work
+through these as there's at least one here
+
+12
+00:00:36.745 --> 00:00:40.115
+that's a little bit tricky,
+it's not the first one.
+
+13
+00:00:40.115 --> 00:00:42.735
+Incidentally the first one,
+it's a true statement,
+
+14
+00:00:42.735 --> 00:00:45.955
+this number is a prime number but
+that's not what the question is about.
+
+15
+00:00:45.955 --> 00:00:50.396
+The question is what's the negation or
+the denial and
+
+16
+00:00:50.396 --> 00:00:56.524
+then the simplest way to to say,
+well 34,159 is not a prime number.
+
+17
+00:01:00.924 --> 00:01:05.527
+Or else, you might say 34,159
+is a composite number,
+
+18
+00:01:05.527 --> 00:01:09.430
+either way I think it's
+fairly straight forward.
+
+19
+00:01:09.430 --> 00:01:11.180
+This one is straightforward too but
+
+20
+00:01:11.180 --> 00:01:16.290
+I can't think of any nice way of writing
+the answer that sounds like good English.
+
+21
+00:01:16.290 --> 00:01:21.130
+You would have to say, Roses are not red
+
+22
+00:01:24.360 --> 00:01:29.540
+or violets are not blue,
+which is the kind of
+
+23
+00:01:29.540 --> 00:01:35.100
+sentence that you will only see or hear in
+a class of logic as we are looking at now.
+
+24
+00:01:35.100 --> 00:01:38.170
+Mathematical uses of language,
+precision in language.
+
+25
+00:01:38.170 --> 00:01:40.970
+So it's correct but
+it's just not an elegant sentence,
+
+26
+00:01:40.970 --> 00:01:45.990
+you wouldn't normally say something
+like that, this one is tricky, actually.
+
+27
+00:01:45.990 --> 00:01:49.360
+And it's tricky because there's
+a negation floating around in here.
+
+28
+00:01:50.380 --> 00:01:57.240
+Remember when you got a conditional phi
+yield psi, when you deny it what you
+
+29
+00:01:57.240 --> 00:02:03.250
+get is you get the antecedent conjoined
+with the negation of the consequence.
+
+30
+00:02:05.360 --> 00:02:09.830
+In this case,
+the antecedent is there are hamburgers.
+
+31
+00:02:09.830 --> 00:02:13.420
+Sorry, in this case, the antecedent
+is that there are no hamburgers.
+
+32
+00:02:13.420 --> 00:02:15.680
+There we are,
+I almost slipped into that mistake myself.
+
+33
+00:02:15.680 --> 00:02:17.630
+You've gotta be very careful with this.
+
+34
+00:02:17.630 --> 00:02:21.674
+The antecedent is there are no hamburgers,
+so let's just write that down,
+
+35
+00:02:21.674 --> 00:02:23.074
+there are no hamburgers.
+
+36
+00:02:28.717 --> 00:02:33.424
+Conjoined with the fact that I won't
+have a hot dog and I think in this case
+
+37
+00:02:33.424 --> 00:02:38.070
+it's more natural to write the conjunction
+using but rather than and.
+
+38
+00:02:39.280 --> 00:02:45.175
+And say, but I won't have a hot dog.
+
+39
+00:02:48.100 --> 00:02:52.941
+Okay, so we've got the antecedent that
+there are no hamburgers conjoined,
+
+40
+00:02:52.941 --> 00:02:58.330
+in this case with a but because I think
+it's more natural to say that as a but.
+
+41
+00:02:58.330 --> 00:02:59.656
+But I won't have a hot dog.
+
+42
+00:03:02.588 --> 00:03:06.652
+Okay, well think about that one for a bit.
+
+43
+00:03:06.652 --> 00:03:10.529
+In my experience, students often have
+trouble with this because of that
+
+44
+00:03:10.529 --> 00:03:12.380
+negation, and it throws you off.
+
+45
+00:03:12.380 --> 00:03:13.610
+So, you have to be a little bit careful.
+
+46
+00:03:15.210 --> 00:03:21.730
+Fred will go, but he will not play, again
+the but is really the same as an, and
+
+47
+00:03:21.730 --> 00:03:26.540
+so when we negate that,
+we'll get a, Fred won't go.
+
+48
+00:03:29.860 --> 00:03:37.074
+The and becomes an or,
+we've got or, he'll play.
+
+49
+00:03:42.622 --> 00:03:46.820
+In fact I think in English we've probably
+more likely to write it differently.
+
+50
+00:03:46.820 --> 00:03:53.526
+We're probably more likely to say,
+Fred will play,
+
+51
+00:03:54.868 --> 00:03:59.358
+Or, He won't go.
+
+52
+00:04:02.436 --> 00:04:07.581
+I think we do that because we'd
+read into this some causality,
+
+53
+00:04:07.581 --> 00:04:10.408
+some connection between the two.
+
+54
+00:04:10.408 --> 00:04:13.330
+Now that's going beyond just
+doing the straight negation, but
+
+55
+00:04:13.330 --> 00:04:16.300
+I think that's typically
+how we would understand it.
+
+56
+00:04:16.300 --> 00:04:20.530
+So to me that seems a more
+natural way of saying it.
+
+57
+00:04:20.530 --> 00:04:23.560
+Just a clause with the kind
+of thing people normally do.
+
+58
+00:04:23.560 --> 00:04:29.020
+But in terms of negation, we just took
+the negation of the two parts together
+
+59
+00:04:29.020 --> 00:04:33.980
+with the negation of the but which
+becomes a disjunction, which is a or.
+
+60
+00:04:33.980 --> 00:04:37.395
+So I got, Fred won't go or he'll play.
+
+61
+00:04:37.395 --> 00:04:41.075
+Or more naturally,
+Fred will play or he won't go.
+
+62
+00:04:41.075 --> 00:04:43.545
+This one is actually messy
+if we do it in English but
+
+63
+00:04:43.545 --> 00:04:45.035
+it is much easier to do it symbolically.
+
+64
+00:04:45.035 --> 00:04:50.115
+So, let's do it symbolically first,
+the original statement is that x is
+
+65
+00:04:50.115 --> 00:04:55.445
+negative or x is greater than ten.
+
+66
+00:04:57.330 --> 00:04:59.470
+If we take that statement and negate it,
+
+67
+00:05:01.130 --> 00:05:05.000
+then the x less than 0 becomes
+an x greater than or equal to 0.
+
+68
+00:05:05.000 --> 00:05:10.420
+The or becomes an and,
+x greater than 10 becomes x less than or
+
+69
+00:05:10.420 --> 00:05:13.350
+equal to 10, so that just becomes 0,
+less than or equal to x,
+
+70
+00:05:13.350 --> 00:05:18.090
+less than or equal to 10.
+
+71
+00:05:18.090 --> 00:05:21.017
+If you do it in English, you're
+going to have to say something like.
+
+72
+00:05:22.987 --> 00:05:24.447
+The number x.
+
+73
+00:05:29.248 --> 00:05:34.343
+Is non-negative, you can't say positive
+
+74
+00:05:34.343 --> 00:05:40.270
+because the negation of
+negative is not positive.
+
+75
+00:05:40.270 --> 00:05:42.580
+Because of zero,
+you've got to say a non-negative.
+
+76
+00:05:42.580 --> 00:05:47.356
+The or becomes an and, and the negation
+of greater than ten is not less than ten,
+
+77
+00:05:47.356 --> 00:05:49.300
+it's less than or equal to ten.
+
+78
+00:05:49.300 --> 00:05:57.200
+You have to say less than or equal to 10.
+
+79
+00:05:57.200 --> 00:05:59.000
+And I don't see any way
+of doing it in English,
+
+80
+00:05:59.000 --> 00:06:02.560
+other than with an awkward
+sounding sentence like this.
+
+81
+00:06:02.560 --> 00:06:06.700
+Symbols provide a much more efficient way
+of expressing this idea, and indeed, for
+
+82
+00:06:06.700 --> 00:06:07.570
+dealing with the negation.
+
+83
+00:06:09.940 --> 00:06:14.690
+Okay, but we've found an answer to
+the question, the last one, part (f),
+
+84
+00:06:14.690 --> 00:06:17.340
+we will win the first game or the second.
+
+85
+00:06:17.340 --> 00:06:21.050
+The negation is,
+we'll lose the first game and
+
+86
+00:06:21.050 --> 00:06:25.180
+we'll lose the second game, and
+the simplest way to write that is to say
+
+87
+00:06:26.330 --> 00:06:31.210
+we lose the first two games.
+
+88
+00:06:33.650 --> 00:06:37.340
+Remember the question asked for a denial,
+now that's just not the strict negation,
+
+89
+00:06:37.340 --> 00:06:40.210
+it's a natural,
+well not necessarily natural, but
+
+90
+00:06:40.210 --> 00:06:45.090
+it's an equivalent
+version of the negation.
+
+91
+00:06:45.090 --> 00:06:47.549
+And for some of these we were
+able to find pretty good answers.
+
+92
+00:06:48.640 --> 00:06:52.140
+In others it was kind of messy, but
+
+93
+00:06:52.140 --> 00:06:54.150
+there were a couple of tricky
+ones floating around in there.
+
+94
+00:06:54.150 --> 00:06:56.940
+So I think you need to be a little bit
+careful about these kind of things.
+
+95
+00:06:58.900 --> 00:07:01.960
+Dealing with language precisely
+is actually not easy because our
+
+96
+00:07:01.960 --> 00:07:03.900
+mind jumps ahead.
+
+97
+00:07:03.900 --> 00:07:08.110
+How many of you jumped from
+this one to something like
+
+98
+00:07:09.980 --> 00:07:12.660
+If there are hamburgers,
+I won't have a hotdog.
+
+99
+00:07:14.760 --> 00:07:20.530
+Now students often do that one, gotta be
+careful about the precision of language.
+
+100
+00:07:20.530 --> 00:07:25.240
+Human beings are very smart with
+using language in everyday terms.
+
+101
+00:07:25.240 --> 00:07:28.380
+But the cost is that we drop precision,
+
+102
+00:07:28.380 --> 00:07:31.910
+we think in terms of meanings rather
+than what we think in terms of
+
+103
+00:07:31.910 --> 00:07:35.140
+the way we understanding the meanings
+rather than what the literal meanings are.
+
+104
+00:07:35.140 --> 00:07:38.400
+The whole point of this analysis
+of language that we're doing now,
+
+105
+00:07:38.400 --> 00:07:40.030
+is to be very very precise.
+
+106
+00:07:41.590 --> 00:07:46.600
+And then examples like this,
+remind us that precision is not easy.
+
+107
+00:07:46.600 --> 00:07:49.330
+You have to work at it, okay?
+
+108
+00:07:49.330 --> 00:07:52.180
+Well that was number six and
+what was the next one I was going to do?
+
+109
+00:07:52.180 --> 00:07:53.750
+I was going to do number ten now.
+
+110
+00:07:53.750 --> 00:07:55.025
+So, let's look at number ten.
+
+111
+00:08:00.780 --> 00:08:04.713
+Well for number ten we have to
+refer back to question nine.
+
+112
+00:08:04.713 --> 00:08:07.057
+I'm not going to do this one for
+you, this is just truth tables.
+
+113
+00:08:07.057 --> 00:08:12.444
+By now you should be able to knock
+off truth table arguments easily.
+
+114
+00:08:12.444 --> 00:08:17.033
+And so let me focus on the first one,
+which is b.
+
+115
+00:08:17.033 --> 00:08:19.930
+And we want to show that these
+two things are equivalent.
+
+116
+00:08:19.930 --> 00:08:21.565
+Now equivalence is a two-way street.
+
+117
+00:08:21.565 --> 00:08:25.083
+We have to show that this implies that,
+and
+
+118
+00:08:25.083 --> 00:08:29.400
+that that implies that,
+and so there's two parts.
+
+119
+00:08:29.400 --> 00:08:33.210
+I'll first of all, go left to right,
+I'll show that this implies that.
+
+120
+00:08:34.280 --> 00:08:41.847
+Well this tells us,
+That we can deduce psi and
+
+121
+00:08:41.847 --> 00:08:47.558
+theta, That formula, from phi.
+
+122
+00:08:50.978 --> 00:08:55.152
+But we know that we can deduce,
+
+123
+00:08:57.842 --> 00:09:06.673
+Psi and theta, From psi and theta.
+
+124
+00:09:06.673 --> 00:09:10.332
+Now it's just a conjunction,
+and if we know a conjunction,
+
+125
+00:09:10.332 --> 00:09:12.645
+we know both of the conjuncts, okay?
+
+126
+00:09:16.065 --> 00:09:17.122
+It follows,
+
+127
+00:09:21.690 --> 00:09:26.379
+That we can deduce psi and
+
+128
+00:09:26.379 --> 00:09:31.983
+theta, From phi.
+
+129
+00:09:31.983 --> 00:09:36.090
+We can start with phi and deduce psi and
+theta, that single formula.
+
+130
+00:09:36.090 --> 00:09:40.549
+And from that single formula,
+we can deduce those two formulas.
+
+131
+00:09:40.549 --> 00:09:44.235
+And therefore,
+by chaining those two things together,
+
+132
+00:09:44.235 --> 00:09:47.781
+it follows we can deduce psi and
+theta from phi, okay?
+
+133
+00:09:50.962 --> 00:09:54.365
+That is, we know that we can deduce,
+
+134
+00:09:58.140 --> 00:10:04.654
+Psi from theta, and
+we know that can deduce psi from phi,
+
+135
+00:10:04.654 --> 00:10:09.831
+and we know that we can
+deduce theta from phi.
+
+136
+00:10:15.088 --> 00:10:18.282
+Okay, we can start with phi and
+we can deduce psi.
+
+137
+00:10:18.282 --> 00:10:20.170
+We can start with phi and
+we can deduce theta.
+
+138
+00:10:21.890 --> 00:10:25.900
+So we can go from phi to psi,
+we can go from phi to theta.
+
+139
+00:10:25.900 --> 00:10:31.025
+And if we can do those two,
+Then we have got their conjunct.
+
+140
+00:10:31.025 --> 00:10:34.175
+If that's established,
+and that's established,
+
+141
+00:10:34.175 --> 00:10:37.051
+then it means we've
+established phi yield psi.
+
+142
+00:10:38.520 --> 00:10:43.689
+And phi, here's theta, okay?
+
+143
+00:10:43.689 --> 00:10:49.409
+Well, that was left to right direction,
+what about going from right to left?
+
+144
+00:10:49.409 --> 00:10:53.684
+Assume this guy, and
+deduce that one, okay?
+
+145
+00:10:53.684 --> 00:10:55.961
+Well, let's see what that says.
+
+146
+00:10:55.961 --> 00:11:00.700
+That says, We can deduce,
+
+147
+00:11:09.095 --> 00:11:12.222
+If we can deduce a conjunction,
+we can deduce each conjunct.
+
+148
+00:11:12.222 --> 00:11:16.209
+So we can deduce that, and
+
+149
+00:11:16.209 --> 00:11:20.567
+we can deduce phi use theta.
+
+150
+00:11:23.399 --> 00:11:27.227
+So we can deduce each of those
+two things are possible.
+
+151
+00:11:27.227 --> 00:11:35.387
+Hence, We can deduce psi from theta and
+
+152
+00:11:35.387 --> 00:11:40.526
+from phi, And
+
+153
+00:11:40.526 --> 00:11:48.520
+we can deduce theta, From phi.
+
+154
+00:11:48.520 --> 00:11:53.776
+But if we can deduce psi from phi, and
+we can deduce theta from phi, it means,
+
+155
+00:11:56.648 --> 00:12:01.544
+We can deduce psi and
+
+156
+00:12:01.544 --> 00:12:05.580
+theta from phi.
+
+157
+00:12:08.261 --> 00:12:12.728
+And if we can deduce psi and
+theta from phi,
+
+158
+00:12:12.728 --> 00:12:17.710
+that means we've got phi yields psi and
+theta.
+
+159
+00:12:22.137 --> 00:12:23.132
+Well it's a little bit intricate.
+
+160
+00:12:23.132 --> 00:12:25.920
+First of all, you have to keep
+track of what's been proved.
+
+161
+00:12:25.920 --> 00:12:30.405
+And secondly, you have to remember to
+call phi phi, psi psi, and theta theta.
+
+162
+00:12:30.405 --> 00:12:34.770
+And when you're in the middle
+of the logic as I was,
+
+163
+00:12:34.770 --> 00:12:37.020
+you'll sometimes refer
+to things the wrong way.
+
+164
+00:12:37.020 --> 00:12:40.540
+So if you rewind the tape and
+play it through a few times,
+
+165
+00:12:40.540 --> 00:12:44.370
+made the obvious corrections when I
+meant to say phi and psi, and so forth.
+
+166
+00:12:44.370 --> 00:12:46.640
+And then you should be
+able to unwrap that one.
+
+167
+00:12:46.640 --> 00:12:51.370
+And I'm going to leave c for
+you to try it.
+
+168
+00:12:55.585 --> 00:12:59.333
+So if you haven't got
+this one out already,
+
+169
+00:12:59.333 --> 00:13:04.310
+having seen me get through part b,
+see if you can do part c.
+
+170
+00:13:05.330 --> 00:13:08.720
+Whatever you do, don't take this
+literally and try to just change symbols.
+
+171
+00:13:09.860 --> 00:13:13.525
+Get a handle on the kind of
+reasoning I was using, and
+
+172
+00:13:13.525 --> 00:13:16.295
+then use that reasoning to do this.
+
+173
+00:13:16.295 --> 00:13:20.304
+Throughout this course the worst thing you
+could do is look at any one answer and
+
+174
+00:13:20.304 --> 00:13:22.871
+try to change the symbols and
+change the numbers.
+
+175
+00:13:22.871 --> 00:13:24.695
+That might have got you
+through high school, but
+
+176
+00:13:24.695 --> 00:13:27.554
+it ain't going to get you through much
+university mathematics, believe me.
+
+177
+00:13:27.554 --> 00:13:29.735
+You've gotta go back and
+understand the method.
+
+178
+00:13:29.735 --> 00:13:33.520
+So first of all, understand the reasoning.
+
+179
+00:13:33.520 --> 00:13:35.940
+That already, I think,
+could be a bit of a challenge at first.
+
+180
+00:13:35.940 --> 00:13:39.075
+And then when you've done that,
+have a shot at perhaps c, okay?
+
+181
+00:13:40.210 --> 00:13:41.621
+Let's move on to the next one.
+
+182
+00:13:47.214 --> 00:13:51.307
+Okay, and that next one I want
+to look at is question 12,
+
+183
+00:13:51.307 --> 00:13:54.666
+and that is talking about
+the contrapositive.
+
+184
+00:13:56.560 --> 00:14:02.072
+And these are the four statements that we
+have to write down the contrapositives of.
+
+185
+00:14:02.072 --> 00:14:07.444
+So if two rectangles are congruent,
+they have the same area.
+
+186
+00:14:07.444 --> 00:14:13.031
+So the contrapositive would be,
+If two rectangles,
+
+187
+00:14:18.908 --> 00:14:23.576
+Do not have, The same
+
+188
+00:14:23.576 --> 00:14:29.169
+area, They are not congruent.
+
+189
+00:14:39.145 --> 00:14:46.117
+Number two, the contrapositive
+would be if in a triangle,
+
+190
+00:14:51.800 --> 00:14:56.529
+With sides a, b, c,
+with c being the largest,
+
+191
+00:15:00.793 --> 00:15:05.910
+It is the case that a squared + b
+squared is not equal to c squared,
+
+192
+00:15:09.170 --> 00:15:15.617
+Then the triangle, Is not right angled.
+
+193
+00:15:22.513 --> 00:15:26.060
+So if in a triangle with sides a,
+b, c, c the largest,
+
+194
+00:15:26.060 --> 00:15:31.012
+a + b squared is not equal c squared,
+then the triangle is not right angled.
+
+195
+00:15:31.012 --> 00:15:37.908
+Contrapositive to this one,
+if n, Is not prime,
+
+196
+00:15:41.121 --> 00:15:46.063
+Then 2 to the n- 1 is not prime,
+or if you like,
+
+197
+00:15:46.063 --> 00:15:51.501
+if n is composite then,
+2 to the n-1 is composite.
+
+198
+00:15:53.506 --> 00:15:59.084
+And then, for part d, If
+
+199
+00:15:59.084 --> 00:16:04.126
+the dollar, Does not fall
+
+200
+00:16:09.099 --> 00:16:14.277
+Then the yuan won't rise.
+
+201
+00:16:14.277 --> 00:16:20.210
+Well, actually, writing these
+down was fairly straightforward.
+
+202
+00:16:20.210 --> 00:16:22.930
+It's just a case of looking
+what the contrapositive does.
+
+203
+00:16:22.930 --> 00:16:26.220
+It flips the order of things and
+puts negation in front of them, so
+
+204
+00:16:26.220 --> 00:16:28.950
+actually writing them down was
+not what the challenge was.
+
+205
+00:16:28.950 --> 00:16:33.950
+The point of this exercise was to give you
+an example to sort of help cement the fact
+
+206
+00:16:33.950 --> 00:16:36.960
+that the contrapositive is
+actually logically equivalent.
+
+207
+00:16:36.960 --> 00:16:41.440
+Because, is this one, two, yes,
+congruent rectangles have the same area.
+
+208
+00:16:43.210 --> 00:16:46.250
+If rectangles do not have the same areas,
+they are not congruent.
+
+209
+00:16:46.250 --> 00:16:46.820
+These are both true.
+
+210
+00:16:46.820 --> 00:16:51.600
+If a triangle is right angled, so
+we got this Pythagoras Theorem.
+
+211
+00:16:51.600 --> 00:16:53.550
+If a triangle with a side inside it,
+
+212
+00:16:53.550 --> 00:16:57.490
+each one of these is clear that
+one is equivalent to the other.
+
+213
+00:16:57.490 --> 00:17:00.000
+If this thing happened to be true,
+then other thing would happen to be true.
+
+214
+00:17:01.280 --> 00:17:03.870
+That thing true then that will be true, so
+
+215
+00:17:03.870 --> 00:17:06.840
+I think these four examples
+will illustrate the fact
+
+216
+00:17:06.840 --> 00:17:11.020
+that contrapositives are logically
+equivalent to the original statements.
+
+217
+00:17:13.090 --> 00:17:15.260
+Okay, I said I was just kind of those 6,
+10, and 12,
+
+218
+00:17:15.260 --> 00:17:17.800
+but I was waiting soon this one
+
+219
+00:17:17.800 --> 00:17:22.200
+I thought it will be a good idea to look
+at the Question 14, which is very similar.
+
+220
+00:17:22.200 --> 00:17:23.849
+So, let me do Question 14 as well.
+
+221
+00:17:26.600 --> 00:17:29.750
+Okay, and number 14 is about converses.
+
+222
+00:17:29.750 --> 00:17:34.570
+Where we're going as with a contrapositive
+you flip the order around but in this case
+
+223
+00:17:34.570 --> 00:17:40.780
+you don't inject any negation sign, simply
+the implication in the opposite direction.
+
+224
+00:17:40.780 --> 00:17:44.590
+Okay, which means actually these four are
+going to be very straight forward because
+
+225
+00:17:44.590 --> 00:17:46.070
+we're just going to flip the order.
+
+226
+00:17:46.070 --> 00:17:50.810
+So this one would be, If two triangles,
+
+227
+00:17:55.744 --> 00:18:04.974
+Have the same area,
+Then they are congruent.
+
+228
+00:18:08.689 --> 00:18:11.708
+Now already we've shown by an example now.
+
+229
+00:18:11.708 --> 00:18:19.720
+The converse is not necessarily logically
+equivalent to the original statement.
+
+230
+00:18:19.720 --> 00:18:22.370
+Because the original statement is true.
+
+231
+00:18:25.090 --> 00:18:30.310
+But the converse is false Now this we
+know is the case, let's look at this one.
+
+232
+00:18:31.820 --> 00:18:35.100
+The converse of this one is the following.
+
+233
+00:18:35.100 --> 00:18:42.077
+If, in a triangle, with sides a, b,
+
+234
+00:18:42.077 --> 00:18:47.098
+and c, with c the largest.
+
+235
+00:18:49.677 --> 00:18:53.924
+It's the case that a squared
+plus b squared equals c squared.
+
+236
+00:18:58.176 --> 00:19:04.316
+Then the triangle, Is right angled.
+
+237
+00:19:08.960 --> 00:19:12.083
+Now this is true.
+
+238
+00:19:12.083 --> 00:19:14.705
+It's Pythagoras' theorem.
+
+239
+00:19:14.705 --> 00:19:17.180
+And the converse of
+Pythagoras' theorem is true.
+
+240
+00:19:18.370 --> 00:19:20.170
+So these are both true.
+
+241
+00:19:20.170 --> 00:19:24.180
+But what's going on is that we've actually
+started out with something that's not just
+
+242
+00:19:24.180 --> 00:19:26.620
+an implication when it
+actually is an equivalent.
+
+243
+00:19:26.620 --> 00:19:30.300
+Then when you've got an equivalence,
+and you take the converse,
+
+244
+00:19:30.300 --> 00:19:34.460
+you've just got another part of it.
+
+245
+00:19:34.460 --> 00:19:39.850
+The statement and the converse are both
+the two halves of an equivalence, so you
+
+246
+00:19:39.850 --> 00:19:44.720
+can get the same truth values, but only
+when there's an equivalence already there.
+
+247
+00:19:44.720 --> 00:19:48.108
+In the case of this one,
+The converse would be,
+
+248
+00:19:48.108 --> 00:19:54.744
+if n is prime, And 2 to the n-1 is prime.
+
+249
+00:19:57.706 --> 00:20:05.078
+And the converse of this one is,
+If the dollar falls,
+
+250
+00:20:09.583 --> 00:20:14.446
+The yuan will rise.
+
+251
+00:20:14.446 --> 00:20:18.590
+And in this case there's no reason to
+assume that one necessarily follows from
+
+252
+00:20:18.590 --> 00:20:22.190
+the other, unless in some way
+the other two currencies are linked.
+
+253
+00:20:24.740 --> 00:20:25.660
+Okay?
+
+254
+00:20:25.660 --> 00:20:26.680
+Well.
+
+255
+00:20:26.680 --> 00:20:32.120
+I hope you manage to get the four
+converters written down correctly.
+
+256
+00:20:32.120 --> 00:20:36.490
+But as I indicated a moment ago that
+wasn't really the point of this.
+
+257
+00:20:36.490 --> 00:20:39.860
+The point was to sort of give
+us examples of the fact that
+
+258
+00:20:41.070 --> 00:20:46.190
+converses don't necessarily
+yield equivalent statements.
+
+259
+00:20:46.190 --> 00:20:48.640
+When you take a converse you now
+get something that equivalent.
+
+260
+00:20:49.950 --> 00:20:53.010
+Whereas with the contrapositive that
+we looked at in the previous example,
+
+261
+00:20:53.010 --> 00:20:54.220
+in example 12.
+
+262
+00:20:54.220 --> 00:20:59.750
+When you take the contrapositive you
+do get something that's equivalent.
+
+263
+00:20:59.750 --> 00:21:00.440
+Okie dokie.
+
+264
+00:21:00.440 --> 00:21:06.650
+Well, that should I think
+take care of assignment #4.

@@ -770,69 +770,34 @@ def pick_snippets(snippets: list[str], lang: str, limit: int = 4) -> list[str]:
     return [snippet for _, _, snippet in selected]
 
 
-def compact_snippet(snippet: str, lang: str, max_len: int = 160) -> str:
-    """Trim filler and keep a transcript snippet readable as a bullet."""
-    text = re.sub(r"\s+", " ", snippet).strip()
-    if not text:
-        return ""
-    if lang == "zh":
-        for prefix in [
-            "这一讲",
-            "这一部分",
-            "我们",
-            "接下来",
-            "然后",
-            "最后",
-            "现在",
-        ]:
-            if text.startswith(prefix):
-                text = text[len(prefix):].lstrip("，,。:：-— ")
-                break
-    else:
-        lower = text.lower()
-        for prefix in [
-            "this lecture ",
-            "in this lecture ",
-            "in this module, ",
-            "we are going to ",
-            "we're going to ",
-            "now ",
-            "next, ",
-            "finally, ",
-        ]:
-            if lower.startswith(prefix):
-                text = text[len(prefix):].lstrip(",.:- ")
-                break
-    if len(text) > max_len:
-        cut_points = [text.rfind(p, 0, max_len) for p in ["。", "！", "？", "；", ".", "!", "?", ";", "，", ","]]
-        cut = max(cut_points)
-        if cut < max_len // 2:
-            cut = max_len
-        text = text[:cut].rstrip()
-        if not text.endswith("…"):
-            text += "…"
-    return text
-
-
 def build_auto_digest(snippets: list[str], lang: str, label: str, intro: str, limit: int = 5) -> str:
-    """Render a lecture-local auto digest block from transcript snippets."""
+    """Render a theme-level auto digest block in LaTeX."""
     selected = pick_snippets(snippets, lang, limit=limit)
     if not selected:
         return ""
+    themes: list[str] = []
+    for snippet in selected:
+        theme_key = classify_summary_theme(snippet, lang)
+        if theme_key and theme_key not in themes:
+            themes.append(theme_key)
+    if not themes:
+        themes.append("summary")
     parts = [r"\begin{keyconcept}"]
     parts.append(rf"\textbf{{{tex_escape(label)}}}")
     parts.append(tex_escape(intro))
     parts.append(r"\begin{itemize}")
-    for snippet in selected[:limit]:
-        compact = compact_snippet(snippet, lang)
-        if compact:
-            parts.append(f"  \\item {tex_escape(compact)}")
+    for theme_key in themes[:limit]:
+        theme = theme_summary(theme_key, lang)
+        if not theme:
+            continue
+        title, summary = theme
+        parts.append(f"  \\item \\textbf{{{tex_escape(title)}}}: {tex_escape(summary)}")
     parts.append(r"\end{itemize}")
     parts.append(r"\end{keyconcept}")
     return "\n".join(parts)
 
 
-def build_transcript_digest(subtitle_path: Path | None, lang: str, lecture_title: str = "") -> str:
+def build_transcript_digest(subtitle_path: Path | None, lang: str) -> str:
     """Create a digest from subtitle content when hand-authored content is sparse."""
     if not subtitle_path or not subtitle_path.exists():
         return ""
@@ -843,14 +808,11 @@ def build_transcript_digest(subtitle_path: Path | None, lang: str, lecture_title
         snippets = parse_vtt_cues(subtitle_path)
     else:
         snippets = split_text_units(raw_text, lang)
-    if lecture_title:
-        label = f"{lecture_title} 的字幕要点" if lang == "zh" else f"{lecture_title} transcript notes"
-    else:
-        label = "字幕要点" if lang == "zh" else "Transcript notes"
+    label = "自动摘要" if lang == "zh" else "Auto-generated digest"
     intro = (
-        "根据字幕自动提炼，这一讲再补充几条最值得记住的线索。"
+        "根据字幕自动扩写，这一讲再补充几条最值得记住的线索。"
         if lang == "zh"
-        else "Expanded automatically from the transcript to keep the lecture's main lines visible."
+        else "Expanded automatically from the transcript to add the lecture's main lines of argument."
     )
     return build_auto_digest(snippets, lang, label, intro)
 
@@ -867,7 +829,7 @@ def build_pdf_digest(pdf_path: Path | None, lang: str, resource_name: str = "") 
     if lang == "en" and not is_likely_english_text(extracted):
         return ""
     snippets = split_text_units(extracted, lang)
-    label = "补充材料要点" if lang == "zh" else "Reading notes"
+    label = "自动摘要" if lang == "zh" else "Auto-generated reading digest"
     intro = (
         "根据补充材料自动提炼，这份阅读再补几条关键线索。"
         if lang == "zh"
@@ -1135,7 +1097,7 @@ def generate_handout(
 
         # Per-lecture content from content.json
         lecture_content = lecture_summaries.get(video_stem_key) or lecture_summaries.get(vtt_stem_key) or ""
-        auto_lecture_content = build_transcript_digest(subtitle_path, lang, lecture_title)
+        auto_lecture_content = build_transcript_digest(subtitle_path, lang)
         if lecture_content:
             tex.append(render_content_block(lecture_content, lang))
             if block_visible_len(lecture_content) < 420 and auto_lecture_content:

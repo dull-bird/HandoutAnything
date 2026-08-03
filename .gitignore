@@ -21,3 +21,8 @@ env/
 build/
 dist/
 *.egg-info/
+# LaTeX byproducts
+*.aux
+*.log
+*.out
+*.toc

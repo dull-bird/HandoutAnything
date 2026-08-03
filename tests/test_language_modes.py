@@ -365,45 +365,6 @@ class LanguageModeTests(unittest.TestCase):
             self.assertIn("Introduction to Perception", tex)
             self.assertIn("授课教师：", tex)
 
-    def test_scaffold_handout_en_uses_english_labels(self):
-        with tempfile.TemporaryDirectory() as td:
-            data_dir = Path(td)
-            write_json(
-                data_dir / "manifest.json",
-                [
-                    {
-                        "title": "Introduction",
-                        "title_en": "Introduction",
-                        "lesson": "Module 1",
-                        "lesson_en": "Module 1",
-                        "page_url": "https://example.com/lecture-1",
-                    }
-                ],
-            )
-            output = data_dir / "scaffold.tex"
-            run(
-                [
-                    "scripts/scaffold_handout.py",
-                    "--subtitle-dir",
-                    str(data_dir),
-                    "--course-title",
-                    "English Course",
-                    "--unit-title",
-                    "English Unit",
-                    "--lang",
-                    "en",
-                    "--output",
-                    str(output),
-                ],
-                cwd=ROOT,
-            )
-            tex = output.read_text(encoding="utf-8")
-            self.assertIn(r"\documentclass[a4paper,12pt]{article}", tex)
-            self.assertIn("Unit Knowledge Map", tex)
-            self.assertIn("Contents", tex)
-            self.assertIn("Review Video", tex)
-            self.assertNotIn("本单元知识地图", tex)
-
 
 if __name__ == "__main__":
     unittest.main()

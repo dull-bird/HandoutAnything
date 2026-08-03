@@ -1,0 +1,2028 @@
+WEBVTT
+
+1
+00:00:03.354 --> 00:00:04.591
+Welcome to the third lecture.
+
+2
+00:00:05.900 --> 00:00:09.000
+I hope you made good progress with
+the assignment from the last session.
+
+3
+00:00:09.000 --> 00:00:11.960
+Our next step in becoming more
+precise about our use of language for
+
+4
+00:00:11.960 --> 00:00:16.240
+use in mathematics is to take a close
+look at the meaning of the word implies.
+
+5
+00:00:17.800 --> 00:00:20.150
+This turns out to be pretty tricky.
+
+6
+00:00:20.150 --> 00:00:21.060
+Brace yourself for
+
+7
+00:00:21.060 --> 00:00:26.230
+several days of confusion until the idea
+sought themselves out in your mind.
+
+8
+00:00:26.230 --> 00:00:28.500
+Just like learning to ride a bike.
+
+9
+00:00:28.500 --> 00:00:31.820
+Well, all the actual learning occurs
+before you finally get the hang of it.
+
+10
+00:00:32.820 --> 00:00:36.170
+So too, most of the benefit
+from understanding the way
+
+11
+00:00:36.170 --> 00:00:39.620
+our language is used in mathematics
+comes from trying to figure it out.
+
+12
+00:00:41.140 --> 00:00:45.190
+The benefits in this case is helping
+to develop your mathematical thinking
+
+13
+00:00:45.190 --> 00:00:47.170
+ability, and
+
+14
+00:00:47.170 --> 00:00:50.410
+extra process of trying to understand
+the issue that goes out for you.
+
+15
+00:00:51.905 --> 00:00:55.360
+Yeah, sure, once you've sorted
+this language stuff out,
+
+16
+00:00:55.360 --> 00:00:57.150
+you'll be able to use
+language well actually.
+
+17
+00:00:58.620 --> 00:01:03.571
+But by that stage, you'll just using it,
+the part that helps you with when and
+
+18
+00:01:03.571 --> 00:01:06.510
+how to think mathematically
+is largely over.
+
+19
+00:01:08.630 --> 00:01:12.760
+We'll need other tasks to develop your
+mathematical thinking ability forever.
+
+20
+00:01:12.760 --> 00:01:17.000
+So as you get into this, bear in mind
+that the pay off for struggling with
+
+21
+00:01:17.000 --> 00:01:21.060
+issues is significant in terms of being
+able to think like a mathematician.
+
+22
+00:01:22.300 --> 00:01:22.800
+Here we go.
+
+23
+00:01:24.340 --> 00:01:28.150
+In mathematics, we frequently encounter
+expressions of the form, Phi implies Psi.
+
+24
+00:01:30.040 --> 00:01:33.920
+Indeed, implication is the means by
+which we prove results in mathematics,
+
+25
+00:01:33.920 --> 00:01:35.750
+starting with observations or axioms.
+
+26
+00:01:37.250 --> 00:01:40.020
+So we'd better understand how
+the word implies behaves.
+
+27
+00:01:40.020 --> 00:01:44.793
+In particular, how does the truth or
+falsity of a statement Phi implies Psi
+
+28
+00:01:44.793 --> 00:01:47.990
+depend upon the truth or
+falsity of Phi and of Psi?
+
+29
+00:01:51.249 --> 00:01:55.910
+Well, the obvious answer is to
+say that Phi implies Psi if
+
+30
+00:01:55.910 --> 00:01:59.710
+the truth of Psi follows
+from the truth of Phi.
+
+31
+00:02:06.427 --> 00:02:07.530
+But is that what we want?
+
+32
+00:02:08.840 --> 00:02:13.250
+Let me give you an example, that phi
+of the statement loop 2 is a rational.
+
+33
+00:02:17.065 --> 00:02:21.350
+And that psi of the statement
+is 0 is less than 1.
+
+34
+00:02:21.350 --> 00:02:26.111
+And let's ask ourselves,
+
+35
+00:02:26.111 --> 00:02:33.153
+is the statements phi implies psi true?
+
+36
+00:02:35.369 --> 00:02:37.030
+Well, phi is true.
+
+37
+00:02:38.260 --> 00:02:41.960
+As I've mentioned once already, we're
+going to prove that later in the course.
+
+38
+00:02:44.040 --> 00:02:46.820
+And we all know that psi is true,
+0 is certainly less than 1.
+
+39
+00:02:47.890 --> 00:02:49.170
+So we have the truth of this.
+
+40
+00:02:49.170 --> 00:02:50.010
+We have the truth of that.
+
+41
+00:02:51.170 --> 00:02:53.920
+Does that mean that phi implies psi?
+
+42
+00:02:53.920 --> 00:02:55.420
+Obviously not.
+
+43
+00:02:55.420 --> 00:02:57.860
+There's no relationship between phi and
+psi.
+
+44
+00:02:57.860 --> 00:03:01.254
+This takes some effort to prove,
+as you'll see.
+
+45
+00:03:01.254 --> 00:03:02.220
+We all know this one.
+
+46
+00:03:03.570 --> 00:03:06.360
+So yes, this is true and that's true, but
+
+47
+00:03:06.360 --> 00:03:08.550
+the truth of this doesn't
+follow from the truth of that.
+
+48
+00:03:09.680 --> 00:03:12.590
+And now we realize there's
+a complexity with implication that
+
+49
+00:03:12.590 --> 00:03:16.400
+we didn't meet before when we were
+dealing with and, with or, and with not.
+
+50
+00:03:17.870 --> 00:03:21.050
+And the complexity is that implication
+
+51
+00:03:26.646 --> 00:03:28.459
+Involves causality.
+
+52
+00:03:37.380 --> 00:03:42.142
+Causality is an issue of great complexity
+that philosophers have been discussing for
+
+53
+00:03:42.142 --> 00:03:43.010
+generations.
+
+54
+00:03:44.560 --> 00:03:45.570
+Now, we're facing a problem.
+
+55
+00:03:47.070 --> 00:03:51.480
+It didn't arise before, because when
+we're dealing with conjunction and
+
+56
+00:03:51.480 --> 00:03:54.090
+disjunction, it didn't
+matter whether there was
+
+57
+00:03:54.090 --> 00:03:56.980
+any kind of relationship between
+the two conjuncts or the two disjuncts.
+
+58
+00:03:58.580 --> 00:04:03.680
+For example, let's look at the sentence,
+Julius Caesar is dead,
+
+59
+00:04:03.680 --> 00:04:09.955
+and let's conjoin it with the sentence
+1 + 1 = 3, the mathematical sentence.
+
+60
+00:04:13.899 --> 00:04:15.485
+And let's do the same
+thing with disjunction.
+
+61
+00:04:18.959 --> 00:04:20.477
+Forming a conjunction and
+
+62
+00:04:20.477 --> 00:04:24.826
+disjunction didn't require any kind
+of relationship between these two.
+
+63
+00:04:24.826 --> 00:04:26.090
+Clearly, they're independent.
+
+64
+00:04:26.090 --> 00:04:29.430
+One's a statement about
+a long dead individual, and
+
+65
+00:04:29.430 --> 00:04:30.830
+the other one is a mathematical statement.
+
+66
+00:04:31.910 --> 00:04:33.688
+Incidentally, why do we
+got these in front of us?
+
+67
+00:04:33.688 --> 00:04:35.962
+Let me just give you a quick quiz.
+
+68
+00:04:35.962 --> 00:04:39.040
+Is the first one true, or is it false?
+
+69
+00:04:40.320 --> 00:04:44.170
+Is the second one true, or is it false?
+
+70
+00:04:44.170 --> 00:04:44.670
+What do you think?
+
+71
+00:04:46.720 --> 00:04:48.960
+Well, remember what the definition was.
+
+72
+00:04:48.960 --> 00:04:51.540
+A conjunction is true if
+both conjuncts are true.
+
+73
+00:04:52.930 --> 00:04:57.580
+This one's true but this one's false,
+so the conjunction's false.
+
+74
+00:04:59.190 --> 00:05:00.450
+This one's true.
+
+75
+00:05:00.450 --> 00:05:02.030
+This one's false.
+
+76
+00:05:02.030 --> 00:05:02.620
+All that you need for
+
+77
+00:05:02.620 --> 00:05:05.860
+a disjunction to be true is at least
+one of the disjuncts to be true.
+
+78
+00:05:05.860 --> 00:05:06.570
+So that one's true.
+
+79
+00:05:09.650 --> 00:05:12.560
+And the fact that there's no
+meaningful relationship between the two
+
+80
+00:05:12.560 --> 00:05:15.050
+conjuncts in this case, or
+the two disjuncts in that case,
+
+81
+00:05:16.210 --> 00:05:19.060
+created no lull in determining
+what the truth value was.
+
+82
+00:05:19.060 --> 00:05:21.010
+It was purely in terms of truth and
+falsity.
+
+83
+00:05:22.890 --> 00:05:27.890
+But it's not sitting with implication,
+because implication involves causality.
+
+84
+00:05:30.380 --> 00:05:33.400
+So let me just express that explicitly.
+
+85
+00:05:33.400 --> 00:05:36.820
+Implication has a truth part and
+a causation part.
+
+86
+00:05:38.570 --> 00:05:43.550
+What we're going to do
+is ignore that part.
+
+87
+00:05:43.550 --> 00:05:46.620
+We're going to leave that to the
+philosophers if you like and we're just
+
+88
+00:05:46.620 --> 00:05:52.510
+going to focus on the truth part, now that
+might sound to be a very rush thing to do.
+
+89
+00:05:54.110 --> 00:05:57.000
+Throwing away a causation, now,
+we can't be left with anything useful, but
+
+90
+00:05:57.000 --> 00:06:00.420
+it turns out yeah,
+it might seem a dangerous thing to do,
+
+91
+00:06:00.420 --> 00:06:05.170
+to throw away this important causation
+implication, but it turns out when we
+
+92
+00:06:05.170 --> 00:06:09.250
+focus on the truth part we are left with
+enough to save our leaves in mathematics.
+
+93
+00:06:10.870 --> 00:06:13.910
+So much so
+that we're going to give this a name.
+
+94
+00:06:13.910 --> 00:06:15.274
+We're going to call it the conditional.
+
+95
+00:06:20.672 --> 00:06:22.420
+Or sometimes, the material conditional.
+
+96
+00:06:26.935 --> 00:06:28.564
+That's the part we're going to focus on.
+
+97
+00:06:32.561 --> 00:06:37.760
+So we're going to split implication into
+two parts, conditional and causation.
+
+98
+00:06:40.490 --> 00:06:41.970
+The first part, the conditional,
+
+99
+00:06:41.970 --> 00:06:45.690
+we're going to define entirely
+in terms of truth values.
+
+100
+00:06:45.690 --> 00:06:47.452
+And the second part we're going
+to leave to the philosophers.
+
+101
+00:06:51.472 --> 00:06:54.167
+The symbol that we use normally for
+conditional,
+
+102
+00:06:54.167 --> 00:06:57.260
+at least the symbol I'm going to use,
+is a double arrow.
+
+103
+00:06:59.580 --> 00:07:04.932
+Lots of textbooks use a single arrow,
+but that has many uses in mathematics,
+
+104
+00:07:04.932 --> 00:07:08.400
+so we certainly are going to use that for
+something else later on in the course.
+
+105
+00:07:08.400 --> 00:07:12.260
+So to avoid confusion, I'm going to stick
+to this notation for the conditional.
+
+106
+00:07:15.501 --> 00:07:19.320
+So I'm going to write conditional
+expressions like this.
+
+107
+00:07:19.320 --> 00:07:23.037
+That's the truth part of phi implies psi.
+
+108
+00:07:28.145 --> 00:07:33.127
+When we have a conditional,
+we call phi the antecedent, and
+
+109
+00:07:33.127 --> 00:07:35.480
+we call psi the consequent.
+
+110
+00:07:37.880 --> 00:07:42.528
+And we're going to formally define
+the truth of phi conditional psi in
+
+111
+00:07:42.528 --> 00:07:45.698
+terms of the truth of phi,
+and the truth of psi.
+
+112
+00:07:52.857 --> 00:07:55.812
+Well, you might worry that by
+throwing away a causation,
+
+113
+00:07:55.812 --> 00:07:59.450
+we're going to be left with a notion
+that's really of no use whatsoever.
+
+114
+00:07:59.450 --> 00:08:01.472
+That actually is not the case.
+
+115
+00:08:01.472 --> 00:08:06.198
+Even though we're throwing away
+something of great significance,
+
+116
+00:08:06.198 --> 00:08:10.440
+hanging on to the truth part
+leaves us something very useful.
+
+117
+00:08:11.750 --> 00:08:15.614
+And the reason is,
+whenever we have a genuine implication,
+
+118
+00:08:15.614 --> 00:08:20.088
+which are actually the only
+circumstances in which we're ultimately
+
+119
+00:08:20.088 --> 00:08:24.332
+going to be interested,
+whenever we have a genuine implication,
+
+120
+00:08:24.332 --> 00:08:28.550
+the truth behavior of
+the conditional is the correct one.
+
+121
+00:08:28.550 --> 00:08:31.739
+It really does capture what
+happens with truth and falsity,
+
+122
+00:08:31.739 --> 00:08:33.686
+when we have a genuine implication.
+
+123
+00:08:45.304 --> 00:08:48.555
+That probably seems a bit
+mysterious at this stage, but
+
+124
+00:08:48.555 --> 00:08:53.337
+when we start to look at some examples, I
+think it should become clear what I mean.
+
+125
+00:08:53.337 --> 00:08:58.550
+The advantage is that
+the conditional is always defined.
+
+126
+00:09:03.184 --> 00:09:08.108
+For real implication, you've got that
+issue of causation, the square root
+
+127
+00:09:08.108 --> 00:09:13.030
+of 2 and the 0 less than 1 example,
+the truth or falsity wasn't the issue,
+
+128
+00:09:13.030 --> 00:09:17.770
+it was whether there was a relationship
+between those two statements.
+
+129
+00:09:17.770 --> 00:09:18.920
+Now, that's a complicated issue.
+
+130
+00:09:21.160 --> 00:09:25.710
+But because we're going to
+define the conditional purely in
+
+131
+00:09:25.710 --> 00:09:30.620
+terms of the truth value of the two
+constituents, the antecedent and
+
+132
+00:09:30.620 --> 00:09:35.580
+the consequent, it turns out that
+the conditional will always be defined.
+
+133
+00:09:35.580 --> 00:09:38.010
+When we do have a genuine implication,
+
+134
+00:09:38.010 --> 00:09:41.990
+the definition of the conditional will
+agree with the way implication behaves.
+
+135
+00:09:43.270 --> 00:09:45.380
+And when we don't have
+a genuine implication,
+
+136
+00:09:45.380 --> 00:09:49.400
+the conditional will still be defined,
+and so we can proceed.
+
+137
+00:09:50.790 --> 00:09:55.060
+Again, this probably seems very mysterious
+when I describe it in this way.
+
+138
+00:09:55.060 --> 00:09:56.241
+But as we develop some examples,
+
+139
+00:09:56.241 --> 00:09:58.487
+I hope you'll be able to understand
+what I'm trying to get at.
+
+140
+00:10:03.190 --> 00:10:05.956
+Okay, I think we need
+to catch our breaths.
+
+141
+00:10:05.956 --> 00:10:07.589
+Let me do that by giving you a quiz.
+
+142
+00:10:12.069 --> 00:10:16.125
+The truth of the conditional from
+phi to psi is defined in terms of?
+
+143
+00:10:20.241 --> 00:10:25.158
+1, the truth of phi and psi, or 2,
+
+144
+00:10:25.158 --> 00:10:29.780
+whether phi causes psi, or both.
+
+145
+00:10:31.530 --> 00:10:32.030
+Which is it?
+
+146
+00:10:33.660 --> 00:10:34.250
+It's number 1.
+
+147
+00:10:36.520 --> 00:10:40.650
+We define the truth of a conditional
+in terms of the truth and
+
+148
+00:10:40.650 --> 00:10:42.900
+falsity of the antecedents and
+the consequent.
+
+149
+00:10:44.190 --> 00:10:47.490
+And because we define the truth of
+the conditional in terms of truth and
+
+150
+00:10:47.490 --> 00:10:50.340
+falsity in that way, it has a truth table.
+
+151
+00:10:51.350 --> 00:10:52.850
+So let's see if we can
+figure out what it is.
+
+152
+00:10:55.580 --> 00:10:57.550
+Well, the, I'm not giving you,
+this is a quiz, by the way,
+
+153
+00:10:57.550 --> 00:10:59.190
+I'm going to work this one through.
+
+154
+00:10:59.190 --> 00:11:03.230
+This is tricky, we're not out of
+the woods yet by any means, so
+
+155
+00:11:03.230 --> 00:11:04.340
+I'm going to lead you through this one.
+
+156
+00:11:05.680 --> 00:11:06.830
+This part we've already looked at.
+
+157
+00:11:09.800 --> 00:11:14.460
+We define the conditional as
+the truth part of implication.
+
+158
+00:11:16.650 --> 00:11:19.270
+And implication has a property
+
+159
+00:11:19.270 --> 00:11:24.200
+that a true implication leads to a true
+conclusion from a true assumption.
+
+160
+00:11:25.770 --> 00:11:29.160
+So because we take the conditional
+from real implication,
+
+161
+00:11:29.160 --> 00:11:31.670
+we have to have truths all
+the way throughout the top level.
+
+162
+00:11:34.120 --> 00:11:35.780
+Now the fun begins.
+
+163
+00:11:35.780 --> 00:11:39.543
+We have to fill in these three values.
+
+164
+00:11:39.543 --> 00:11:45.205
+And when I say fun, I mean fun.
+
+165
+00:11:45.205 --> 00:11:46.979
+Let's look at that first
+row of the truth table.
+
+166
+00:11:50.683 --> 00:11:56.320
+Suppose phi is the statement
+N is bigger than 7.
+
+167
+00:11:56.320 --> 00:12:02.800
+And suppose psi is the statement
+N squared is bigger than 40.
+
+168
+00:12:02.800 --> 00:12:08.601
+If phi is true, in other words,
+if N is bigger than 7,
+
+169
+00:12:08.601 --> 00:12:13.538
+then N squared is
+certainly bigger than 40.
+
+170
+00:12:13.538 --> 00:12:16.642
+In fact, it's bigger than 40 now.
+
+171
+00:12:16.642 --> 00:12:22.040
+So, certainly, in this case,
+phi does imply psi.
+
+172
+00:12:27.819 --> 00:12:30.623
+So that thing is true.
+
+173
+00:12:30.623 --> 00:12:36.461
+If N is bigger than 7, then N squared is
+certainly bigger than 40, so that's true.
+
+174
+00:12:39.920 --> 00:12:45.610
+We have truth everywhere.
+
+175
+00:12:45.610 --> 00:12:47.710
+So this is consistent
+with the truth table.
+
+176
+00:12:50.330 --> 00:12:51.680
+Now let's look at a different example.
+
+177
+00:12:52.840 --> 00:12:58.537
+Let phi be the statement our old
+friend Julius Caesar is dead.
+
+178
+00:12:58.537 --> 00:13:04.423
+And let psi be the statement
+pi is bigger than 3.
+
+179
+00:13:04.423 --> 00:13:07.243
+Phi is true.
+
+180
+00:13:07.243 --> 00:13:08.900
+Psi is true.
+
+181
+00:13:08.900 --> 00:13:12.904
+According to the truth table, it follows
+that phi conditional psi is true.
+
+182
+00:13:17.418 --> 00:13:24.345
+In other words, Julius Caesar is dead,
+conditional, pi is bigger than 3.
+
+183
+00:13:27.370 --> 00:13:32.202
+Now, if you read this as Julius Caesar
+is dead implies pi bigger than 3,
+
+184
+00:13:32.202 --> 00:13:34.640
+then you're in a nonsensical situation.
+
+185
+00:13:34.640 --> 00:13:39.710
+But remember, this isn't implication, this
+is just the truth part of implication.
+
+186
+00:13:41.400 --> 00:13:43.366
+And in terms of the truth part,
+there's no problem.
+
+187
+00:13:43.366 --> 00:13:49.660
+That's true, that's true,
+the conditional is true.
+
+188
+00:13:51.230 --> 00:13:52.940
+In the first example,
+
+189
+00:13:52.940 --> 00:13:55.500
+there is a meaningful
+relationship between phi and psi.
+
+190
+00:13:57.130 --> 00:13:59.347
+When we know that N is bigger than 7,
+
+191
+00:13:59.347 --> 00:14:03.371
+then we can conclude that N squared
+is certainly bigger than 40.
+
+192
+00:14:03.371 --> 00:14:07.912
+There's a connection between the two.
+
+193
+00:14:07.912 --> 00:14:11.619
+And in that case, the behavior of the
+conditional is certainly consistent with
+
+194
+00:14:11.619 --> 00:14:12.850
+what's really going on.
+
+195
+00:14:14.130 --> 00:14:16.820
+In the second case,
+there's no connection between the two.
+
+196
+00:14:18.980 --> 00:14:20.447
+The conditional is true, but
+
+197
+00:14:20.447 --> 00:14:23.623
+it's got nothing to do with one
+thing following from the other.
+
+198
+00:14:27.075 --> 00:14:32.343
+The value of doing this is,
+even though this has no meaning
+
+199
+00:14:32.343 --> 00:14:37.300
+in terms of implication,
+its truth value is defined.
+
+200
+00:14:39.270 --> 00:14:45.380
+In both cases,
+we have a well-defined truth value.
+
+201
+00:14:45.380 --> 00:14:47.660
+In the first case,
+it's a meaningful truth value.
+
+202
+00:14:49.990 --> 00:14:52.050
+That does follow from that.
+
+203
+00:14:52.050 --> 00:14:56.519
+In the second case,
+it's purely a defined truth value.
+
+204
+00:14:59.326 --> 00:15:01.581
+But that's not going to
+cause us any problems,
+
+205
+00:15:01.581 --> 00:15:05.700
+because we're never going to encounter
+this kind of thing in mathematics.
+
+206
+00:15:05.700 --> 00:15:08.150
+We encounter this kind
+of thing all the time.
+
+207
+00:15:08.150 --> 00:15:10.280
+But we're not going to
+encounter this kind of thing.
+
+208
+00:15:10.280 --> 00:15:12.690
+So all we've done is
+we've extended a notion
+
+209
+00:15:13.730 --> 00:15:16.870
+to be defined under all circumstances.
+
+210
+00:15:16.870 --> 00:15:18.890
+And we've done it in
+a way that's consistent
+
+211
+00:15:20.160 --> 00:15:23.240
+with the behavior we want when
+something meaningful is going on.
+
+212
+00:15:24.730 --> 00:15:27.970
+This is actually quite common in
+mathematics to extend the domain of
+
+213
+00:15:27.970 --> 00:15:30.570
+definition of something so
+that it's always defined.
+
+214
+00:15:32.200 --> 00:15:35.930
+So long as it has the correct behavior,
+the correct definition for
+
+215
+00:15:35.930 --> 00:15:40.260
+the meaningful cases, and
+provided we do the definition correctly,
+
+216
+00:15:40.260 --> 00:15:41.850
+it really doesn't cause any problems.
+
+217
+00:15:41.850 --> 00:15:45.090
+In fact, it solves a lot of problems and
+eliminates a lot of difficulties
+
+218
+00:15:46.600 --> 00:15:50.250
+if we extend the definition so
+that it covers all cases.
+
+219
+00:15:50.250 --> 00:15:53.407
+Is it just something we do
+in mathematics all the time?
+
+220
+00:15:53.407 --> 00:15:56.332
+May seem strange when you first meet it,
+but
+
+221
+00:15:56.332 --> 00:15:59.347
+it is a part of modern
+advanced mathematics.
+
+222
+00:15:59.347 --> 00:16:03.032
+Incidentally, if you think
+this is just playing games,
+
+223
+00:16:03.032 --> 00:16:07.717
+Let me mention that the computer system
+that controls that aircraft that
+
+224
+00:16:07.717 --> 00:16:11.018
+you'll be flying in next
+time depends upon the fact
+
+225
+00:16:11.018 --> 00:16:14.500
+that expressions like this
+are always well defined.
+
+226
+00:16:15.600 --> 00:16:18.170
+That software control
+system doesn't depend upon
+
+227
+00:16:19.730 --> 00:16:22.140
+knowing whether Julius Caesar is dead or
+things like that.
+
+228
+00:16:22.140 --> 00:16:24.340
+It doesn't depend on those
+kind of facts of the world.
+
+229
+00:16:24.340 --> 00:16:28.210
+Computer systems, by and large,
+don't depend upon understanding causation,
+
+230
+00:16:28.210 --> 00:16:30.380
+which is just as well, because they don't.
+
+231
+00:16:30.380 --> 00:16:33.641
+What computer systems depend upon is
+that things are always accurately and
+
+232
+00:16:33.641 --> 00:16:34.580
+precisely defined.
+
+233
+00:16:37.345 --> 00:16:38.762
+And this expression,
+
+234
+00:16:38.762 --> 00:16:43.770
+phi conditional psi occurs all over
+the place in software systems.
+
+235
+00:16:43.770 --> 00:16:44.640
+So, quite literally,
+
+236
+00:16:44.640 --> 00:16:48.270
+your life depends upon the fact
+that this is always well-defined.
+
+237
+00:16:48.270 --> 00:16:50.571
+It doesn't depend upon the fact that
+the computer doesn't know whether
+
+238
+00:16:50.571 --> 00:16:51.520
+Julius Caesar is dead or not.
+
+239
+00:16:56.818 --> 00:17:00.777
+Okay, time to look at the second
+row of the truth table.
+
+240
+00:17:05.012 --> 00:17:10.580
+What goes in here, T or F?
+
+241
+00:17:10.580 --> 00:17:12.170
+Well we've only got two to choose from.
+
+242
+00:17:12.170 --> 00:17:14.080
+I guess we could just make a guess but
+we're not going to do that,
+
+243
+00:17:14.080 --> 00:17:15.760
+we're going to figure it out and
+get the right answer.
+
+244
+00:17:17.070 --> 00:17:21.180
+Well, what would happen
+if we put a T here.
+
+245
+00:17:21.180 --> 00:17:24.430
+Let me put it in very lightly,
+because I'm sure it's going to be a T.
+
+246
+00:17:24.430 --> 00:17:27.120
+If this were true,
+
+247
+00:17:29.670 --> 00:17:33.220
+when we think about it in terms of genuine
+implication, because we are trying to
+
+248
+00:17:33.220 --> 00:17:36.430
+capture the truth behavior with
+genuine implication, remember.
+
+249
+00:17:38.600 --> 00:17:42.320
+So if it was the case that
+phi really did imply psi.
+
+250
+00:17:42.320 --> 00:17:46.500
+If that statement was true when we
+interpret it as real implication
+
+251
+00:17:49.200 --> 00:17:52.420
+then the truth of psi would
+follow from the truth of phi.
+
+252
+00:17:52.420 --> 00:17:54.260
+That's how we began remember.
+
+253
+00:17:54.260 --> 00:17:55.660
+That's what real implication means,
+
+254
+00:17:55.660 --> 00:17:59.820
+real implication means the truth of this
+would follow from the truth of that.
+
+255
+00:17:59.820 --> 00:18:03.420
+So if that were a T, and
+it was real implication,
+
+256
+00:18:03.420 --> 00:18:07.130
+then when we have a T here,
+we would have to have a T there.
+
+257
+00:18:07.130 --> 00:18:10.610
+But we don't, we've got an F.
+
+258
+00:18:10.610 --> 00:18:16.050
+So we can't have a T here,
+because if we put a T here the conditional
+
+259
+00:18:16.050 --> 00:18:20.960
+is contrary, it contradicts real
+implication and we're trying to extend
+
+260
+00:18:20.960 --> 00:18:24.440
+implication to be defined in all
+cases where there's no causation.
+
+261
+00:18:25.780 --> 00:18:26.810
+So this has to be an F.
+
+262
+00:18:29.380 --> 00:18:31.610
+If we put a T there we're in trouble.
+
+263
+00:18:31.610 --> 00:18:33.670
+Our notion doesn't agree
+with real implication.
+
+264
+00:18:34.940 --> 00:18:42.480
+In order that the conditional agrees with
+real implication, that has to be an F.
+
+265
+00:18:43.810 --> 00:18:48.730
+It's if a truth, then we would have
+
+266
+00:18:48.730 --> 00:18:53.610
+a true antecedent and a false
+consequence from a true implication.
+
+267
+00:18:55.230 --> 00:18:57.920
+So we've argued backwards to
+conclude that this has to be F.
+
+268
+00:18:59.710 --> 00:19:02.270
+Let me write that down just to make
+sure everyone's following what I'm
+
+269
+00:19:02.270 --> 00:19:02.880
+trying to say.
+
+270
+00:19:04.570 --> 00:19:08.310
+If there were a genuine
+implication phi implies psi and
+
+271
+00:19:08.310 --> 00:19:12.750
+if that implication were true,
+then psi would have to be true.
+
+272
+00:19:12.750 --> 00:19:13.647
+If phi were true.
+
+273
+00:19:17.618 --> 00:19:23.380
+So we cannot have phi true and
+psi false, if phi implies psi is true.
+
+274
+00:19:26.418 --> 00:19:32.956
+That means,
+that in the case where phi is true.
+
+275
+00:19:32.956 --> 00:19:36.680
+And psi is false,
+we have to have a false here.
+
+276
+00:19:39.848 --> 00:19:40.709
+Let me write that down.
+
+277
+00:19:47.501 --> 00:19:48.505
+Are you confused?
+
+278
+00:19:49.805 --> 00:19:50.510
+This is tricky.
+
+279
+00:19:50.510 --> 00:19:54.345
+There's no getting around the fact
+that sorting out implications and
+
+280
+00:19:54.345 --> 00:19:58.075
+then extracting conditional
+form implications is tricky.
+
+281
+00:19:59.170 --> 00:20:03.270
+You're probably going to have to
+replay the videos several times and
+
+282
+00:20:03.270 --> 00:20:07.010
+look at what's been written and
+think about it in order to sort this out.
+
+283
+00:20:08.900 --> 00:20:12.940
+I remember when I first met this, it took
+me quite a while to get on top of it.
+
+284
+00:20:12.940 --> 00:20:15.380
+It really isn't an easy thing to do.
+
+285
+00:20:15.380 --> 00:20:17.435
+So, you certainly have my sympathy
+that you're going to have to
+
+286
+00:20:17.435 --> 00:20:19.300
+struggle with this thing.
+
+287
+00:20:19.300 --> 00:20:22.135
+It's probably one of the hardest
+things in the course,
+
+288
+00:20:22.135 --> 00:20:26.074
+to really come to terms with the way we
+define the meaning of the conditional.
+
+289
+00:20:29.389 --> 00:20:31.340
+Okay, final straight.
+
+290
+00:20:31.340 --> 00:20:33.930
+Let's see if we can fill in the last
+two entries in the truth table for
+
+291
+00:20:33.930 --> 00:20:34.980
+the conditional.
+
+292
+00:20:34.980 --> 00:20:37.171
+When we've done that, we'll all
+go off in search of some aspirin.
+
+293
+00:20:42.630 --> 00:20:48.020
+Now if you're like me, you have no
+intuitions as to what to put here.
+
+294
+00:20:48.020 --> 00:20:50.920
+And the reason you have no
+intuition is that even though
+
+295
+00:20:50.920 --> 00:20:53.520
+you're used to dealing with implication
+
+296
+00:20:53.520 --> 00:20:58.070
+you've never dealt with an implication
+where the antecedent was false.
+
+297
+00:20:58.070 --> 00:21:03.400
+You're only ever interested in drawing
+conclusions from true assumptions.
+
+298
+00:21:04.440 --> 00:21:06.799
+So you never dealt with
+a true one of these guys.
+
+299
+00:21:08.230 --> 00:21:09.420
+When this guy was false.
+
+300
+00:21:11.710 --> 00:21:12.840
+You don't have any intuitions.
+
+301
+00:21:15.140 --> 00:21:18.684
+You do however have
+intuitions about this guy.
+
+302
+00:21:25.198 --> 00:21:32.470
+And the reason that's going to help us out
+is that negation, swaps around F and T.
+
+303
+00:21:36.080 --> 00:21:42.640
+So corresponding to the Fs here, when
+we look at this guy we'll have truths.
+
+304
+00:21:42.640 --> 00:21:44.800
+We'll have Ts for this.
+
+305
+00:21:44.800 --> 00:21:48.259
+So you are used to having
+to deal with this.
+
+306
+00:21:50.080 --> 00:21:50.930
+When this is true,
+
+307
+00:21:50.930 --> 00:21:55.180
+and that will be equivalent to
+dealing with this when that's false.
+
+308
+00:21:55.180 --> 00:21:56.990
+Because negation swaps truth and falsity.
+
+309
+00:21:58.710 --> 00:22:03.520
+So the trick, or at least the idea by
+which we're going to figure out what goes
+
+310
+00:22:03.520 --> 00:22:08.130
+here, is to stop looking
+at implication and
+
+311
+00:22:08.130 --> 00:22:13.270
+look at not implication.
+
+312
+00:22:13.270 --> 00:22:19.365
+Phi does not imply psi if
+even though phi is true,
+
+313
+00:22:19.365 --> 00:22:22.940
+psi is nevertheless false.
+
+314
+00:22:25.800 --> 00:22:30.875
+Just think about that for
+a minute, phi does not imply psi
+
+315
+00:22:30.875 --> 00:22:35.650
+if even though phi is true
+psi is nevertheless false.
+
+316
+00:22:38.050 --> 00:22:41.860
+That's how you know that this guy holds.
+
+317
+00:22:41.860 --> 00:22:47.449
+You know that phi doesn't imply psi
+if you can check that phi is true but
+
+318
+00:22:47.449 --> 00:22:49.735
+psi is nevertheless false.
+
+319
+00:22:53.200 --> 00:22:57.470
+That's the only circumstance under which
+you can conclude this thing is true.
+
+320
+00:22:58.850 --> 00:23:02.560
+In all other circumstances,
+this guy will be false.
+
+321
+00:23:02.560 --> 00:23:03.490
+So let me write that down.
+
+322
+00:23:09.204 --> 00:23:10.578
+Okay?
+
+323
+00:23:10.578 --> 00:23:16.650
+This guy is true if you have phi true and
+psi false.
+
+324
+00:23:18.340 --> 00:23:23.750
+In all other circumstances,
+this guy will be false.
+
+325
+00:23:25.600 --> 00:23:27.020
+You still with me?
+
+326
+00:23:27.020 --> 00:23:29.390
+Because we're only one line
+away from the conclusion now.
+
+327
+00:23:31.260 --> 00:23:34.230
+Let me just, Rewrite that as follows.
+
+328
+00:23:40.643 --> 00:23:43.984
+Because negation swaps F and T,
+
+329
+00:23:43.984 --> 00:23:48.702
+this guy will be false,
+and this guy is true.
+
+330
+00:23:52.923 --> 00:24:00.288
+So if we have T and F, which we have here.
+
+331
+00:24:00.288 --> 00:24:04.860
+Then negation is false,
+which means this guy is true.
+
+332
+00:24:06.360 --> 00:24:12.460
+In all other circumstances,
+this guy is true, so those are true.
+
+333
+00:24:14.730 --> 00:24:15.230
+And we're done.
+
+334
+00:24:16.860 --> 00:24:19.170
+Phew, that was difficult.
+
+335
+00:24:19.170 --> 00:24:23.410
+In fact, in my mind, this is the most
+difficult part of the entire course.
+
+336
+00:24:23.410 --> 00:24:24.690
+This is not easy stuff,
+
+337
+00:24:24.690 --> 00:24:27.980
+it's going to take you some time
+before you sort it out in your mind.
+
+338
+00:24:27.980 --> 00:24:30.010
+You're going to have to
+keep working at this.
+
+339
+00:24:30.010 --> 00:24:32.990
+Look through the lecture several times and
+think about it.
+
+340
+00:24:32.990 --> 00:24:35.940
+It will take effort, but you'll get there.
+
+341
+00:24:35.940 --> 00:24:37.850
+We all get there in the end,
+but it's just not easy.
+
+342
+00:24:39.540 --> 00:24:41.560
+In the meantime, you've got this far.
+
+343
+00:24:42.700 --> 00:24:45.895
+We should start thinking about
+opening a bottle of champagne.
+
+344
+00:24:48.527 --> 00:24:51.954
+But before you crack open the bottle, let
+me leave you with one more little quiz.
+
+345
+00:24:54.842 --> 00:24:56.150
+Which of the following are true?
+
+346
+00:24:58.740 --> 00:25:04.974
+Phi conditional psi is true whenever,
+
+347
+00:25:07.526 --> 00:25:10.246
+(1) Phi and psi are both true.
+
+348
+00:25:10.246 --> 00:25:15.196
+(2) Phi is false and psi is true.
+
+349
+00:25:15.196 --> 00:25:18.116
+(3) Phi and psi are both false.
+
+350
+00:25:22.032 --> 00:25:28.860
+And (4), phi is true and psi is false.
+
+351
+00:25:32.010 --> 00:25:33.740
+And I want you to check all that are true.
+
+352
+00:25:35.470 --> 00:25:40.850
+Well, which of these four, Are the case?
+
+353
+00:25:41.930 --> 00:25:44.640
+Which of these four conditions
+tell you when phi, psi is true?
+
+354
+00:25:45.920 --> 00:25:49.160
+The answer is 1, 2, and 3.
+
+355
+00:25:51.734 --> 00:25:55.679
+Phi conditional psi is true
+either when 1 is true, or
+
+356
+00:25:55.679 --> 00:25:59.040
+when 2 is true, or when 3 is true.
+
+357
+00:25:59.040 --> 00:26:03.630
+The only time when phi conditional
+psi is false is when 4 holds.
+
+358
+00:26:04.640 --> 00:26:10.550
+So the correct answer is 1,
+2, and 3, and 4 is not.
+
+359
+00:26:10.550 --> 00:26:12.271
+Okay, now you can open that champagne.
+
+360
+00:26:15.395 --> 00:26:16.680
+Let me sum up what we've done.
+
+361
+00:26:17.930 --> 00:26:20.520
+We've defined a notion, the conditional,
+
+362
+00:26:20.520 --> 00:26:22.590
+that captures only part
+of what implies means.
+
+363
+00:26:23.640 --> 00:26:25.320
+To avoid difficulties,
+
+364
+00:26:25.320 --> 00:26:29.400
+we base our definition solely on
+the notion of truth and falsity.
+
+365
+00:26:29.400 --> 00:26:32.590
+Our definition agrees with our
+intuition concerning implication in
+
+366
+00:26:32.590 --> 00:26:34.490
+all meaningful cases.
+
+367
+00:26:34.490 --> 00:26:37.090
+The definition for a true antecedent
+
+368
+00:26:37.090 --> 00:26:40.740
+is based on an analysis of the truth
+values of genuine implication.
+
+369
+00:26:41.920 --> 00:26:46.820
+The definition for our false antecedents
+is based on a truth value analysis
+
+370
+00:26:46.820 --> 00:26:48.580
+of the notion does not imply.
+
+371
+00:26:50.270 --> 00:26:54.850
+In defining the conditional the way we do,
+we do not end up with a notion that
+
+372
+00:26:54.850 --> 00:26:56.970
+contradicts a notion of
+genuine implication.
+
+373
+00:26:58.270 --> 00:27:02.050
+Rather, we obtain a notion that
+extends genuine implication
+
+374
+00:27:02.050 --> 00:27:06.070
+to cover those cases where the claim
+of implication is irrelevant,
+
+375
+00:27:06.070 --> 00:27:10.060
+because the antecedent is false or
+meaningless
+
+376
+00:27:10.060 --> 00:27:13.900
+when there's no real connection between
+the antecedent and the consequence.
+
+377
+00:27:15.080 --> 00:27:19.040
+In the meaningful case where there is
+a relationship between phi and psi, and
+
+378
+00:27:19.040 --> 00:27:22.380
+in addition, where phi is true, namely,
+
+379
+00:27:22.380 --> 00:27:27.130
+the cases covered by the first two rows
+of the truth table, the truth value of
+
+380
+00:27:27.130 --> 00:27:30.940
+the conditional will be the same as
+the truth value of the actual implication.
+
+381
+00:27:32.770 --> 00:27:36.043
+Remember, it's the fact that
+the conditional always has
+
+382
+00:27:36.043 --> 00:27:40.721
+a well-defined truth value that makes this
+notion important in mathematics since
+
+383
+00:27:40.721 --> 00:27:41.723
+in mathematics,
+
+384
+00:27:41.723 --> 00:27:46.435
+we can't afford to have statements with
+undefined truth values floating around.
+
+385
+00:27:48.700 --> 00:27:50.590
+Let's finish this lecture
+with a short quiz.
+
+386
+00:27:51.840 --> 00:27:54.900
+When you've done that,
+you should complete assignment three.
+
+387
+00:27:57.320 --> 00:28:01.440
+I've kept assignment three fairly
+short since I expect you'll need most
+
+388
+00:28:01.440 --> 00:28:05.100
+of your time simply understanding
+our analysis of implication and
+
+389
+00:28:05.100 --> 00:28:06.350
+the definition of the conditional.
+
+390
+00:28:07.780 --> 00:28:10.040
+Remember to discuss these
+assignments with other students.
+
+391
+00:28:11.220 --> 00:28:12.840
+Don't struggle for too long on your own.
+
+392
+00:28:13.940 --> 00:28:17.700
+On this kind of material, it's much
+more effective to work with others.
+
+393
+00:28:18.720 --> 00:28:19.220
+Here's the quiz.
+
+394
+00:28:21.475 --> 00:28:24.310
+Well, the answer to the first
+one is that it's true.
+
+395
+00:28:25.720 --> 00:28:30.198
+The antecedent is true, and
+the consequence is true, so
+
+396
+00:28:30.198 --> 00:28:32.262
+the conditional is true.
+
+397
+00:28:35.751 --> 00:28:37.880
+In fact,
+there's a deeper result going on here.
+
+398
+00:28:39.090 --> 00:28:42.840
+Providing you take a positive number,
+instead of pi,
+
+399
+00:28:42.840 --> 00:28:47.672
+any positive number, then if the square
+of that positive number is bigger than 2,
+
+400
+00:28:47.672 --> 00:28:52.045
+that number must be bigger than 1.2.
+
+401
+00:28:55.077 --> 00:28:59.090
+Because the square root of 2 is 1.4,
+etc, etc, etc.
+
+402
+00:29:00.390 --> 00:29:06.316
+So for positive numbers, it doesn't
+have to be pi, it can be anything,
+
+403
+00:29:06.316 --> 00:29:13.135
+any positive number whose square is bigger
+than 2, it must be bigger than 1.2.
+
+404
+00:29:13.135 --> 00:29:16.490
+And that would be a case of genuine
+causation, genuine implication.
+
+405
+00:29:18.431 --> 00:29:21.825
+But in terms of the conditional,
+it's enough that the antecedent is true,
+
+406
+00:29:21.825 --> 00:29:23.210
+then the consequence is true.
+
+407
+00:29:25.697 --> 00:29:28.350
+For this one, it's also true.
+
+408
+00:29:29.870 --> 00:29:31.360
+Now the consequence is false.
+
+409
+00:29:32.360 --> 00:29:34.165
+Pi certainly does not equal 3.
+
+410
+00:29:37.583 --> 00:29:40.200
+But the antecedent is false.
+
+411
+00:29:41.200 --> 00:29:45.200
+Add if you have a false antecedent,
+the conditional is always true.
+
+412
+00:29:45.200 --> 00:29:47.537
+Pi squared is most
+certainly not less than 0.
+
+413
+00:29:47.537 --> 00:29:51.760
+So, you've got false, false,
+that makes the conditional true.
+
+414
+00:29:54.344 --> 00:29:59.850
+Number three, That one's false.
+
+415
+00:30:03.060 --> 00:30:07.090
+The antecedent is true, and
+the consequence is false.
+
+416
+00:30:07.090 --> 00:30:11.220
+And you cannot obtain a false
+conclusion from a true assumption.
+
+417
+00:30:13.790 --> 00:30:14.570
+What about the next one?
+
+418
+00:30:16.630 --> 00:30:17.200
+Well, that one's true.
+
+419
+00:30:20.120 --> 00:30:23.140
+The antecedent is true, and
+the consequence is true.
+
+420
+00:30:25.250 --> 00:30:25.900
+What about this one?
+
+421
+00:30:28.200 --> 00:30:29.718
+Do triangles have four sides?
+
+422
+00:30:29.718 --> 00:30:31.419
+No.
+
+423
+00:30:31.419 --> 00:30:32.664
+Do squares have five sides?
+
+424
+00:30:32.664 --> 00:30:34.359
+No.
+
+425
+00:30:37.064 --> 00:30:42.710
+But anything with a false
+antecedent is true, so that's true.
+
+426
+00:30:43.920 --> 00:30:47.921
+You've got false, conditional,
+false, and that's always true.
+
+427
+00:30:47.921 --> 00:30:48.720
+What about this one?
+
+428
+00:30:50.050 --> 00:30:51.920
+Well, we don't know when
+Euclid's birthday was.
+
+429
+00:30:51.920 --> 00:30:53.950
+At least,
+I don't know when Euclid's birthday was.
+
+430
+00:30:53.950 --> 00:30:55.303
+I suspect you don't either.
+
+431
+00:30:57.596 --> 00:31:01.100
+Rectangles certainly have four sides,
+however.
+
+432
+00:31:02.740 --> 00:31:06.470
+Either this is true, or it's false.
+
+433
+00:31:07.470 --> 00:31:14.277
+Either way, since the consequence is true,
+the thing is true.
+
+434
+00:31:17.341 --> 00:31:22.351
+We've going to run down
+using the two consequence.
+
+435
+00:31:22.351 --> 00:31:27.083
+So either we have true, true,
+in which case, it's true, or
+
+436
+00:31:27.083 --> 00:31:31.009
+we have false, true,
+in which case, it's true.
+
+437
+00:31:31.009 --> 00:31:34.790
+Okay, how did you get on with that?

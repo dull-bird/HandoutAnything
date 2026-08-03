@@ -1,0 +1,577 @@
+\documentclass[UTF8,a4paper,11pt]{ctexart}
+
+% ── Page geometry ──
+\usepackage[margin=2.2cm,top=2.5cm,bottom=2.5cm]{geometry}
+
+% ── Typography & math ──
+\usepackage{fontspec}
+\usepackage{amsmath,amssymb}
+\usepackage{setspace}
+\setstretch{1.25}
+
+% ── Graphics ──
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc,positioning}
+
+% ── Colors ──
+\usepackage{xcolor}
+\definecolor{accent}{HTML}{1a73e8}
+\definecolor{darkgray}{HTML}{333333}
+\definecolor{lightgray}{HTML}{f5f5f5}
+\definecolor{notebg}{HTML}{e8f0fe}
+\definecolor{warnbg}{HTML}{fef7e0}
+\definecolor{calcbg}{HTML}{e6f4ea}
+\definecolor{calcframe}{HTML}{188038}
+
+% ── Links ──
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=accent,urlcolor=accent}
+
+% ── Layout ──
+\usepackage{enumitem}
+\setlist[itemize]{leftmargin=1.8em,itemsep=2pt}
+\setlist[enumerate]{leftmargin=1.8em,itemsep=2pt}
+\usepackage{booktabs}
+\usepackage{tcolorbox}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+
+% ── Header/Footer ──
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{darkgray}{《数学思维导论》第二周 · 蕴含与等价}}
+\fancyhead[R]{\small\textcolor{darkgray}{四讲 · 核心概念讲义}}
+\fancyfoot[C]{\small\textcolor{darkgray}{\thepage\ / \pageref{LastPage}}}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ── Section styling ──
+\titleformat{\section}
+  {\Large\bfseries\color{accent}}
+  {\thesection}{1em}{}
+\titleformat{\subsection}
+  {\large\bfseries\color{darkgray}}
+  {\thesubsection}{1em}{}
+
+% ── Custom boxes ──
+\newtcolorbox{keyconcept}[1][]{
+  colback=notebg, colframe=accent,
+  fonttitle=\bfseries, boxrule=0.5pt,
+  left=8pt, right=8pt, top=6pt, bottom=6pt, title={#1}}
+\newtcolorbox{exercise}[1][]{
+  colback=warnbg, colframe=orange,
+  fonttitle=\bfseries, boxrule=0.5pt,
+  left=8pt, right=8pt, top=6pt, bottom=6pt, title={#1}}
+\newtcolorbox{calcbox}[1][]{
+  colback=calcbg, colframe=calcframe,
+  fonttitle=\bfseries, boxrule=0.5pt,
+  left=8pt, right=8pt, top=6pt, bottom=6pt, title={#1}}
+
+\newcommand{\daytitle}[2]{%
+  \section*{#1\quad #2}%
+  \addcontentsline{toc}{section}{#1\quad #2}}
+
+\begin{document}
+
+% ═══ 封面 ═══
+\begin{center}
+  \vspace*{2cm}
+  {\Huge\bfseries\color{accent} 《数学思维导论》第二周}\\[0.4cm]
+  {\LARGE 蕴含与等价}\\[1.2cm]
+  {\large 从日常的“如果……那么……”到数学家的条件句：四讲核心概念讲义}\\[0.5cm]
+  {\small\textcolor{darkgray}{依据：Stanford《Introduction to Mathematical Thinking》（Keith Devlin）Week 2 课程字幕（英文为准，中文辅助）}}\\[0.3cm]
+  {\small\textcolor{darkgray}{\today}}
+  \vfill
+  {\small 共 4 讲，全书约 2.5 小时：先读讲解，推导一定动笔跟一遍，再合上讲义把概念讲出来，最后做自测。}
+\end{center}
+\newpage
+
+\tableofcontents
+\newpage
+
+% ═══ 使用说明 ═══
+\section*{开始前：这份材料在讲什么}
+\addcontentsline{toc}{section}{开始前：这份材料在讲什么}
+
+这是斯坦福大学 Keith Devlin《数学思维导论》第二周的内容。第一周已经把 $\land$、$\lor$、$\neg$ 和真值表讲完了，本周回答两个更尖锐的问题：
+
+\begin{enumerate}
+  \item \textbf{日常的“如果……那么……”怎样才能变成数学里可以安全使用的精确工具？}日常语言里的“如果”掺杂着因果、语气和暗示，数学家必须把它提纯成一个只看真假、永远有定义的东西——条件句。这是 Devlin 自称“全课程最难的部分”。
+  \item \textbf{为什么数学家要围绕它发明一整套行话？}充分、必要、only if、iff——同一个关系有五六种说法，方向还各不相同。这套行话不止用于数学，法律文件、科学论证、分析性讨论里全是它；掌握之后，几乎所有数学文献你至少能读懂它在说什么。
+\end{enumerate}
+
+本周的难不在计算，而在\textbf{反直觉}：你会反复遇到“这句话按数学定义居然是真的”的时刻。所以读法是：\textbf{先理解每条定义为什么被设计成这样，再记它的真值行为}——只背真值表，等于没学。
+
+\begin{keyconcept}[四讲要带走的三样工具]
+\begin{itemize}
+  \item \textbf{条件句的真值表视角}：$\varphi \Rightarrow \psi$ 只看前后件的真假，与因果无关；仅当“前件真、后件假”时为假。扔掉因果不是妥协，是设计——它让条件句永远有定义。
+  \item \textbf{等价 = 两个方向的蕴含}：$\varphi \Leftrightarrow \psi$ 就是 $(\varphi \Rightarrow \psi) \land (\psi \Rightarrow \varphi)$ 的缩写；等价之于逻辑，如同等式之于算术。
+  \item \textbf{术语族的方向感}：充分条件在前件一侧，必要条件在后件一侧；only if 会把方向反转。方向感靠练，不靠背。
+\end{itemize}
+\end{keyconcept}
+
+\begin{calcbox}[记号声明（全书通用）]
+\begin{itemize}
+  \item 本课程用\textbf{双箭头} $\Rightarrow$ 表示条件句，读作“$\varphi$ 蕴含 $\psi$”或“如果 $\varphi$，那么 $\psi$”。许多教材用单箭头 $\rightarrow$，含义相同；本课程为避免与其他用途混淆，坚持用双箭头。
+  \item $\Leftrightarrow$ 表示\textbf{双条件}（等价），读作“$\varphi$ 当且仅当 $\psi$”。
+  \item \textbf{iff} 是 “if and only if”（当且仅当）的标准缩写，数学文献中随处可见。
+\end{itemize}
+\end{calcbox}
+
+\begin{center}
+\begin{tikzpicture}[>=Stealth,node distance=0.5cm,
+  must/.style={draw,rounded corners=4pt,thick,accent,fill=notebg,minimum height=1.1cm,align=center,font=\small}]
+  \node[must] (d1) {第 1 讲\\条件句：扔掉因果\\[2pt]\scriptsize $\star\star\star$};
+  \node[must,right=of d1] (d2) {第 2 讲\\等价与双条件\\[2pt]\scriptsize $\star\star$};
+  \node[must,right=of d2] (d3) {第 3 讲\\充分、必要与 iff\\[2pt]\scriptsize $\star\star$};
+  \node[must,right=of d3] (d4) {第 4 讲\\否定、逆否与逆\\[2pt]\scriptsize $\star\star\star$};
+  \draw[->,thick] (d1) -- (d2);
+  \draw[->,thick] (d2) -- (d3);
+  \draw[->,thick] (d3) -- (d4);
+\end{tikzpicture}
+\end{center}
+
+\noindent\textbf{依赖关系}：四讲全部\textbf{必看}，线性依赖，第 1 讲是全书的地基——等价（第 2 讲）定义在条件句上，术语族（第 3 讲）是条件句的读法，否定与逆否（第 4 讲）是条件句的变形。请按顺序阅读，不建议跳讲；时间紧也宁可放慢第 1 讲，它是后面一切的支点。
+
+\textbf{每讲的学习流程}：
+\begin{enumerate}
+  \item 读讲解，推导部分\textbf{动笔跟一遍}——真值表的每一行都要自己想过为什么；
+  \item 合上讲义，把当天概念\textbf{讲给别人听}（或讲给自己听），卡壳处就是没懂处；
+  \item 做“今日自测”，对照书末的答案要点；每讲至少有一题要求你“用自己的话讲”。
+\end{enumerate}
+
+\textbf{读者前提}：第一周的 $\land$（且）、$\lor$（或）、$\neg$（非）与真值表读法。本周只在需要时点名，不再重讲。
+
+\textbf{边界声明}：本讲义覆盖 Week 2 的两讲正课（Implication、Equivalence）与两次作业讲解（Tutorial for Assignment 3、4）中的全部数学概念。舍弃：课程评分细则视频（教学行政内容，“证明是交流”的观点留给后续证明写作周）；课程行政口播（作业安排等）；Tutorial 3 结尾谜题只作趣味机动题（见第 4 讲末），不进主线。日常语句形式化（Tutorial 3 的 Q1 八小题）只取方向辨析与异或两个要点融入自测，不逐题展开。
+
+\newpage
+
+% ═══ 第 1 讲 ═══
+\daytitle{第 1 讲}{从“如果……那么……”到条件句：扔掉因果，只留真值}
+\noindent\textbf{优先级}：必看\quad|\quad\textbf{难度}：$\star\star\star$\quad|\quad\textbf{用时}：约 40 分钟
+
+\textbf{核心问题}：为什么数学家敢让“凯撒已死 $\Rightarrow$ $\pi > 3$”这种毫无意义的话算作真命题？
+
+Devlin 在课上反复预警：这一部分可能要看好几遍视频才能想通，“可能是全课程最难的东西”。难的不是真值表本身——四行而已——难的是接受\textbf{为什么这样定义}。这一讲把四行全部推出来，一行一行推。
+
+\subsection*{1.1 日常的“如果”里藏着两样东西}
+
+先承认一个事实：$\land$、$\lor$ 这两个联结词\textbf{不要求}两边的子句有任何关系。“凯撒已死 $\land$ $1+1=3$”照样是一个合法语句——它为假，但假得明明白白（$1+1=3$ 假，合取就假）。“凯撒已死 $\lor$ $1+1=3$”也合法——它为真。合取和析取只对真假感兴趣，对内容是否相干毫无要求。
+
+但“如果……那么……”不一样。看两个语句：$\sqrt{2}$ 是无理数（真），$0 < 1$（真）。我们能说“$\sqrt{2}$ 是无理数\textbf{推出} $0<1$”吗？直觉说不——这两件事毫不相干，前一个跟后一个没有任何因果关系。可是 $0<1$ 明明是真的呀？
+
+\begin{keyconcept}[蕴含 = 真值部分 + 因果部分]
+日常的“$\varphi$ 蕴含 $\psi$”（implication）其实由两样东西叠成：
+\begin{itemize}
+  \item \textbf{真值部分}：只关心 $\varphi$ 和 $\psi$ 各自的真假组合；
+  \item \textbf{因果部分}：要求 $\varphi$ 与 $\psi$ 之间有意义上的关联，$\psi$ 是“因为”$\varphi$ 才成立的。
+\end{itemize}
+因果部分是哲学家吵了几代人都没有结论的难题。数学要的是一个没有歧义、可以机械判定的工具，所以 Devlin 的做法是：\textbf{把因果部分整个扔掉，只保留真值部分}，提纯后的东西叫\textbf{条件句}（conditional，也叫物质条件句），记作 $\varphi \Rightarrow \psi$。其中 $\varphi$ 叫\textbf{前件}（antecedent），$\psi$ 叫\textbf{后件}（consequent）。
+\end{keyconcept}
+
+也就是说：条件句不是对日常“如果”的\textbf{描述}，而是对它的\textbf{提纯}。它刻意比日常的“如果”少一样东西——这是本讲全部反直觉感的来源，也是它全部威力的来源。
+
+\subsection*{1.2 设计动机：定义是被设计的，不是被发现的}
+
+为什么要这样定义？这是本讲最该想通的一层，Devlin 给的论证有两步：
+
+\begin{enumerate}
+  \item \textbf{扔掉因果之后，条件句永远有定义}。$\varphi \Rightarrow \psi$ 的真假只由两个真值决定，一共四种组合，每种都能给出明确的答案——没有任何“这种情况说不清”的死角。
+  \item \textbf{在“真有蕴含”的情形下，条件句的行为与真蕴含一致}。只要前后件之间确实存在推导关系（数学实践中唯一真正遇到的情形），条件句给出的真假判断和直觉完全一致。
+\end{enumerate}
+
+\begin{calcbox}[同一设计模式的两个老熟人：$0! = 1$ 与 $a^0 = 1$]
+“把定义域扩展到所有情形，只要求在有意义的情形上行为正确”——这在数学里是常规操作，你早就见过：
+\begin{itemize}
+  \item 阶乘本来只对正整数有意义（$n! = n \times (n-1) \times \cdots \times 1$），定义 $0! = 1$ 不是“发现”，是为了让组合数公式在边界处依然成立而做的\textbf{设计}；
+  \item 指数本来表示“自乘 $n$ 次”，$a^0$ 按字面无意义，定义 $a^0 = 1$（$a \neq 0$）是为了让法则 $a^m \cdot a^n = a^{m+n}$ 在 $n=0$ 时依然成立。
+\end{itemize}
+条件句的真值表是同一种操作：对那些日常直觉管不着的情形（前件为假），给出一个让系统整体运转良好的规定值。
+\end{calcbox}
+
+\subsection*{1.3 真值表四行：一行一行推出来}
+
+$\varphi$、$\psi$ 各取真假，共四种组合。我们逐行确定 $\varphi \Rightarrow \psi$ 该取什么值——注意，每一步都是\textbf{论证}，不是规定完了事。
+
+\textbf{第一行（$\varphi$ 真、$\psi$ 真）$\rightarrow$ 真。}这是“真有蕴含”的典型情形：$\varphi$ 成立，$\psi$ 确实由 $\varphi$ 推出且为真。条件句在这里必须与真蕴含一致（设计动机的第二条），所以只能取真。
+
+\textbf{第二行（$\varphi$ 真、$\psi$ 假）$\rightarrow$ 假。}用反证。假设这一行取真，并且把条件句当作真蕴含来看：$\varphi$ 为真，而“$\varphi \Rightarrow \psi$”为真意味着 $\psi$ 应当能从 $\varphi$ 推出——那么 $\psi$ 就该为真。但本行 $\psi$ 为假，矛盾。所以这一行只能取假。\textbf{这是整张表的锚点}：前件真、后件假，是唯一“承诺被违背”的情形。
+
+\textbf{第三、四行（$\varphi$ 为假）$\rightarrow$ 都取真。}这是最绕的一段，值得慢慢来。问题在于：人对假前件\textbf{没有直觉}——“如果 $1+1=3$，那么……”后面无论接什么，日常语感都拒绝裁判。没有直觉，就换一个\textbf{有}直觉的问题来分析：不看“$\varphi$ 蕴含 $\psi$”，看它的反面——“$\varphi$ \textbf{不}蕴含 $\psi$”（does not imply）。
+
+“$\varphi$ 不蕴含 $\psi$”什么时候成立？只有唯一一种情况能让我们理直气壮地说“$\varphi$ 推不出 $\psi$”：$\varphi$ 明明为真，$\psi$ 却为假——前提都给你了，结论居然没跟上，这才叫推不出。其余三种组合（$\varphi$ 假，或 $\varphi$、$\psi$ 皆真）里，“不蕴含”都不成立：
+
+\begin{itemize}
+  \item $\varphi$ 真、$\psi$ 真：结论跟上了，当然不能说“推不出”；
+  \item $\varphi$ 假（无论 $\psi$ 真假）：前提根本没兑现，谈不上“推不出”——“推不出”的指控要求前提成立而结论缺席。
+\end{itemize}
+
+于是“$\varphi$ 不蕴含 $\psi$”只在第二行（真、假）成立。而 $\varphi \Rightarrow \psi$ 是它的否定：在第二行为假，\textbf{在其余三行——包括前件为假的两行——都为真}。四行就此全部确定：
+
+\begin{center}
+\begin{tabular}{cc|c}
+\toprule
+$\varphi$ & $\psi$ & $\varphi \Rightarrow \psi$ \\
+\midrule
+T & T & T \\
+T & F & F \\
+F & T & T \\
+F & F & T \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+读法只有一句话：\textbf{条件句仅在“前件真、后件假”时为假，其余三种情况均为真}。前件为假时条件句恒真，文献中称为 “vacuous truth”（空真）——注意，课程字幕没有用这个术语，\textbf{“假前件恒真”这个叫法是本讲义作者补充的}，课上 Devlin 只给了上面的推导。
+
+\subsection*{1.4 这个定义的代价与回报}
+
+\textbf{代价}：一些毫无意义的语句会被判为真。“凯撒已死 $\Rightarrow$ $\pi > 3$”——前件真、后件真，条件句为真，尽管凯撒和圆周率八竿子打不着。“如果三角形有四条边，那么正方形有五条边”——假推假，也为真。直觉会抗议，但 Devlin 指出：这\textbf{不会出问题}，因为数学实践中根本不会遇到这种无关联情形；条件句只要在有推导关系的地方行为正确，就完成了它的全部职责。
+
+\textbf{回报}：条件句\textbf{永远有定义}——这个性质是现代软件系统的地基。Devlin 的原话分量很重：你下次乘坐的飞机，其飞行控制软件就依赖“这类表达式永远有定义”——计算机系统不理解因果，它们依赖的是每个表达式在每种情形下都有精确、准确的定义，而 $\varphi \Rightarrow \psi$ 在软件系统里无处不在。所以，\textbf{毫不夸张地说，你的命都靠它}。
+
+\begin{keyconcept}[易错点：关于条件句的三个错误直觉]
+\begin{itemize}
+  \item \textbf{“前件假，条件句就无意义/为假”}——错。按定义，前件假时条件句恒真（第三、四行）。“无意义”是日常语感，数学里它没有存身之处：每个真值组合都必须有答案。
+  \item \textbf{把条件句读成因果}——错。$\varphi \Rightarrow \psi$ 为真不代表 $\varphi$ “导致” $\psi$。因果部分已被\textbf{刻意扔掉}；真值表只管真假组合。
+  \item \textbf{以为“后件真但与前件无关”就有问题}——错。只要后件为真，无论前件真假，条件句都为真（第一、三行）。“欧几里得生于某年 $\Rightarrow$ 矩形有四条边”为真。
+\end{itemize}
+\end{keyconcept}
+
+\begin{exercise}[今日自测]
+\begin{enumerate}
+  \item 不看讲义，写出 $\varphi \Rightarrow \psi$ 的真值表，并说明：四种真值组合中，哪几种让条件句为真？唯一为假的是哪种，为什么（用自己的话复述第二行的反证）？
+  \item 判断：“如果三角形有四条边，那么正方形有五条边”是真命题吗？“如果欧几里得生于公元前 300 年，那么矩形有四条边”呢？分别说明理由。
+  \item （讲给别人听）向一个没学过逻辑的人解释：为什么“前件为假时条件句算真”？请用“如果明天下雨我就带伞”造一个让对方接受的说法。
+\end{enumerate}
+\end{exercise}
+
+\newpage
+% ═══ 第 2 讲 ═══
+\daytitle{第 2 讲}{等价与双条件：两个方向的蕴含}
+\noindent\textbf{优先级}：必看\quad|\quad\textbf{难度}：$\star\star$\quad|\quad\textbf{用时}：约 25 分钟
+
+\textbf{核心问题}：数学家说两个语句“等价”，到底是在说什么？为什么这个关系配得上一个专门的符号？
+
+\subsection*{2.1 等价 = 互相蕴含}
+
+日常说“这两句话是一回事”，数学把它精确化为：\textbf{$\varphi$ 与 $\psi$ 逻辑等价，当且仅当它们互相蕴含}——$\varphi$ 能推出 $\psi$，$\psi$ 也能推出 $\varphi$。两个方向合起来，封装成一个新联结词：
+
+\begin{keyconcept}[双条件 $\Leftrightarrow$ 的定义]
+\[
+\varphi \Leftrightarrow \psi \quad\text{就是}\quad (\varphi \Rightarrow \psi) \land (\psi \Rightarrow \varphi) \quad\text{的缩写。}
+\]
+由条件句的真值表直接算它的真值表：$\varphi \Rightarrow \psi$ 只在（T,\,F）行失败，$\psi \Rightarrow \varphi$ 只在（F,\,T）行失败，两者取合取后，恰在 $\varphi$、$\psi$ \textbf{真值相同}（同真或同假）时为真：
+\begin{center}
+\begin{tabular}{cc|c}
+\toprule
+$\varphi$ & $\psi$ & $\varphi \Leftrightarrow \psi$ \\
+\midrule
+T & T & T \\
+T & F & F \\
+F & T & F \\
+F & F & T \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{keyconcept}
+
+Devlin 给了一个定位类比：\textbf{等价之于逻辑，如同等式之于算术与代数}。等式 $=$ 告诉你两边在数值上可以互换；等价 $\Leftrightarrow$ 告诉你两边在真假上可以互换——凡是用 $\varphi$ 的地方换成 $\psi$，任何语句的真假都不变。这就是为什么“证等价”在数学里无处不在：它是安全替换的许可证。
+
+\subsection*{2.2 真值表法证等价：一次完整示范}
+
+怎么证明两个复合语句等价？对命题逻辑，有一台\textbf{傻瓜机器}：把两边在所有真值组合下的取值全部算出来，逐行对比。全程演示一遍——证明
+\[
+(\varphi \land \psi) \lor \neg \varphi \;\equiv\; \varphi \Rightarrow \psi .
+\]
+
+逐列计算（每一列只用前面已算出的列）：
+
+\begin{center}
+\begin{tabular}{cc|c|c|c|c}
+\toprule
+$\varphi$ & $\psi$ & $\varphi \land \psi$ & $\neg \varphi$ & $(\varphi \land \psi) \lor \neg \varphi$ & $\varphi \Rightarrow \psi$ \\
+\midrule
+T & T & T & F & T & T \\
+T & F & F & F & F & F \\
+F & T & F & T & T & T \\
+F & F & F & T & T & T \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+最后两列完全相同（都是 T、F、T、T），所以两边在每一种真值组合下都同真假——等价证毕。注意这个等价本身的内容：它说“$(\varphi \land \psi) \lor \neg \varphi$”这个看起来和蕴含毫无关系的式子，其实就是条件句换了个写法。
+
+\subsection*{2.3 边界：真值表法只是一台特例机器}
+
+\begin{keyconcept}[易错点与失效边界：别指望真值表能证一切等价]
+\begin{itemize}
+  \item 真值表法\textbf{只对命题逻辑有效}：语句由有限个原子命题经 $\land$、$\lor$、$\neg$、$\Rightarrow$ 组合而成时，真值组合只有有限多种（$n$ 个原子命题对应 $2^n$ 行），穷举可行。
+  \item 真正的数学语句含量词、变量、无穷多的情形（“对所有自然数 $n$……”），穷举不可能。\textbf{一般情形下证等价很难}（字幕原话），要基于语句的含义构造证明——第 4 讲的 Q10(b) 会示范这种“不靠真值表”的证法。
+  \item 即使在命题逻辑里，真值表也只告诉你“等价成立”，不告诉你\textbf{为什么}成立。把它当验证工具，别当理解工具。
+  \item 另一个方向性易错：$\Leftrightarrow$ 是\textbf{两个}方向的合取。只验证 $\varphi \Rightarrow \psi$ 就宣布“等价”，等于只查了半个定义——第 4 讲的“逆命题”一节会用实例展示半个定义有多危险。
+\end{itemize}
+\end{keyconcept}
+
+\begin{exercise}[今日自测]
+\begin{enumerate}
+  \item 不看讲义，列出 $\varphi \Leftrightarrow \psi$ 的真值表，说出它为真的两种组合；再从定义 $(\varphi \Rightarrow \psi) \land (\psi \Rightarrow \varphi)$ 出发，解释为什么恰好是这两种。
+  \item 判断：“$\varphi \Rightarrow \psi$ 为真”与“$\varphi \Leftrightarrow \psi$ 为真”有什么区别？各举一个具体语句的例子，使前者成立而后者不成立。
+  \item （讲给别人听）向同学解释：为什么等价要定义成“两个方向的蕴含的合取”？一个方向为什么不够？请举一个“只有一个方向成立”的反例来支撑你的解释。
+\end{enumerate}
+\end{exercise}
+
+\newpage
+
+% ═══ 第 3 讲 ═══
+\daytitle{第 3 讲}{一套行话：充分、必要、only if 与 iff}
+\noindent\textbf{优先级}：必看\quad|\quad\textbf{难度}：$\star\star$\quad|\quad\textbf{用时}：约 35 分钟
+
+\textbf{核心问题}：同一个 $\varphi \Rightarrow \psi$，为什么数学家要用六种不同说法来表达——其中一种还会把方向反转？
+
+\subsection*{3.1 六种说法，一个箭头}
+
+以下六种说法\textbf{全部}表示同一个条件句 $\varphi \Rightarrow \psi$（$\varphi$ 是前件，$\psi$ 是后件）。这张表值得反复读到形成条件反射：
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+说法 & 方向注解 \\
+\midrule
+if $\varphi$, then $\psi$（如果 $\varphi$，那么 $\psi$） & 最直白的写法 \\
+$\varphi$ is sufficient for $\psi$（$\varphi$ 是 $\psi$ 的充分条件） & 有 $\varphi$ 就\textbf{足以}得到 $\psi$ \\
+$\varphi$ only if $\psi$（$\varphi$ 仅当 $\psi$） & \textbf{方向反转}，见 3.2 \\
+$\psi$ if $\varphi$（若 $\varphi$ 则 $\psi$） & 语序翻转，后件在前 \\
+$\psi$ whenever $\varphi$（每逢 $\varphi$ 就有 $\psi$） & 语序翻转，后件在前 \\
+$\psi$ is necessary for $\varphi$（$\psi$ 是 $\varphi$ 的必要条件） & 没有 $\psi$ 就不可能有 $\varphi$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+方向感的口诀：\textbf{充分条件坐在前件的位置，必要条件坐在后件的位置}。“$\varphi$ 充分于 $\psi$”——$\varphi$ 在前件侧，有它就够；“$\psi$ 必要于 $\varphi$”——$\psi$ 在后件侧，少了它 $\varphi$ 必假（否则就出现“前件真后件假”，条件句崩溃）。
+
+等价的说法对应地有三个：$\varphi$ is necessary and sufficient for $\psi$（$\varphi$ 是 $\psi$ 的充要条件）；$\varphi$ if and only if $\psi$；以及标准缩写 \textbf{iff}。回忆第 2 讲：这正是在说 $\varphi \Leftrightarrow \psi$ 是“两个方向”。
+
+\subsection*{3.2 only if：一个字扭转方向}
+
+最坑的是第三条：$\varphi$ only if $\psi$ \textbf{不等于} “if $\psi$ then $\varphi$”，它仍然是 $\varphi \Rightarrow \psi$。拆开看：if $\psi$ 本来会把 $\psi$ 放在前件位置（“if 跟着 $\psi$ 走”），但加上 only 之后方向反转——$\psi$ 被按回后件的位置，$\varphi$ 仍是前件。
+
+\begin{calcbox}[环法自行车赛：为什么方向不能反]
+对照两个句子：
+\begin{itemize}
+  \item “参加环法自行车赛，only if 有一辆自行车”——真：看见谁参赛，就能断定他有车（参赛 $\Rightarrow$ 有车）。
+  \item “有一辆自行车就能参加环法”——假：有车只是入场的前提之一，远远不够。
+\end{itemize}
+“$\varphi$ only if $\psi$”表达的是 $\varphi \Rightarrow \psi$：$\varphi$ 成立这件事\textbf{强迫} $\psi$ 必须成立——$\psi$ 是 $\varphi$ 绕不开的代价。所以 “$\varphi$ only if $\psi$” 和 “$\psi$ is necessary for $\varphi$” 是同一句话的两种说法：必要条件 = 后件。
+\end{calcbox}
+
+\subsection*{3.3 实战四连问：“$n$ 是 10 的倍数”}
+
+Devlin 课上的这组小测，是检验方向感的标准动作。固定 $n$ 为自然数，考察条件句“$n$ 是 10 的倍数 $\Rightarrow$ 条件”与“条件 $\Rightarrow$ $n$ 是 10 的倍数”对下列五条是否成立：
+
+\begin{enumerate}[label=\textcircled{\arabic*}]
+  \item $n$ 是 5 的倍数；
+  \item $n$ 是 20 的倍数；
+  \item $n$ 是偶数且是 5 的倍数；
+  \item $n$ 是 100 的倍数；
+  \item $n^2$ 是 100 的倍数。
+\end{enumerate}
+
+\textbf{必要条件}（$n$ 是 10 的倍数 $\Rightarrow$ 条件，即“10 的倍数必然具有的性质”）：\textcircled{1} 成立（$10 = 2 \times 5$，10 的倍数必含因子 5）；\textcircled{3} 成立（含因子 2 又含因子 5）；\textcircled{5} 成立（$n = 10k$ 时 $n^2 = 100k^2$）。\textcircled{2}\textcircled{4} 不成立：$n = 10$ 是 10 的倍数，却不是 20 或 100 的倍数。结论：必要条件是 \textbf{\textcircled{1}\textcircled{3}\textcircled{5}}。
+
+\textbf{充分条件}（条件 $\Rightarrow$ $n$ 是 10 的倍数，即“足以保证是 10 的倍数”）：\textcircled{2} 成立（20 的倍数当然是 10 的倍数）；\textcircled{3} 成立（既是偶数又是 5 的倍数，即含因子 $2 \times 5 = 10$）；\textcircled{4} 成立；\textcircled{5} 成立（$n^2$ 含因子 $100 = 2^2 \times 5^2$，则 $n$ 必含因子 $2 \times 5$——平方把每个素因子的指数翻倍，所以 $n^2$ 里有 $2^2$ 和 $5^2$ 就说明 $n$ 里至少有 $2$ 和 $5$）。\textcircled{1} 不成立：$n = 5$ 是 5 的倍数，却不是 10 的倍数。结论：充分条件是 \textbf{\textcircled{2}\textcircled{3}\textcircled{4}\textcircled{5}}。
+
+\textbf{充要条件}（两方向都成立）：取交集，\textbf{\textcircled{3}\textcircled{5}}。验证一下直觉：“偶数且是 5 的倍数”确实就是“10 的倍数”换了个说法——等价，所以两边都跑通。
+
+\begin{keyconcept}[易错点：方向感的三个坑]
+\begin{itemize}
+  \item \textbf{把 only if 当 if}：“$\varphi$ only if $\psi$” 是 $\varphi \Rightarrow \psi$，不是 $\psi \Rightarrow \varphi$。判方向的办法：问自己“看见 $\varphi$ 成立，能断定什么”——能断定的那个是后件。
+  \item \textbf{必要条件的方向写反}：“$\psi$ 是 $\varphi$ 的必要条件” = $\varphi \Rightarrow \psi$（$\psi$ 在后件侧）。记成“必要条件 = 结论成立绕不开的条件”，方向就不会错。
+  \item \textbf{“找前件”时不看语义看语序}：“Keith cycles only if the sun shines”里前件是 Keith cycles（看见我骑车 $\Rightarrow$ 天晴），尽管“太阳”在句子里离 if 更近。前件是\textbf{正在做蕴含}的那一方。
+\end{itemize}
+\end{keyconcept}
+
+\textbf{实践注记}：数学家日常把 $\Rightarrow$ 当 “implies”、把 $\Leftrightarrow$ 当 “equivalent” 的缩写随手使用。这样用之所以安全，是因为条件句/双条件与真蕴含/真等价的差异，只出现在正常数学实践中不会出现的情形里（回忆第 1 讲的凯撒例）。Devlin 强调：这套术语不止用于数学，法律文件、科学论证、分析性讨论里全是它；掌握之后，几乎所有数学文献你至少能读懂它在说什么。
+
+\begin{exercise}[今日自测]
+\begin{enumerate}
+  \item “Keith cycles only if the sun shines” 中谁是前件？把它写成 $\Rightarrow$ 形式，并说明为什么不能反过来写。
+  \item 对自然数 $n$，判断：“$n$ 是 4 的倍数”是“$n$ 是 2 的倍数”的充分条件、必要条件，还是充要条件？再回答：“$n$ 是 2 的倍数”是“$n$ 是 4 的倍数”的什么条件？
+  \item （讲给别人听）用“下雨”和“地湿”向朋友解释充分条件与必要条件的区别：哪个是哪个的充分条件，哪个是哪个的必要条件？“地湿 only if 下雨”对吗？
+\end{enumerate}
+\end{exercise}
+
+\newpage
+% ═══ 第 4 讲 ═══
+\daytitle{第 4 讲}{否定、逆否与逆：哪些变形保值，哪些不}
+\noindent\textbf{优先级}：必看\quad|\quad\textbf{难度}：$\star\star\star$\quad|\quad\textbf{用时}：约 40 分钟
+
+\textbf{核心问题}：一个条件句可以被改成哪些样子而意思不变（否定、逆否），哪些变形一改就变味（逆）？
+
+\subsection*{4.1 条件句的否定：不是“反过来”，是“抓到现行”}
+
+先补两条等价，都用第 2 讲的真值表法一验便知。第一条：$\varphi \Rightarrow \psi \equiv \neg \varphi \lor \psi$。
+
+\begin{center}
+\begin{tabular}{cc|c|c|c}
+\toprule
+$\varphi$ & $\psi$ & $\neg \varphi$ & $\neg \varphi \lor \psi$ & $\varphi \Rightarrow \psi$ \\
+\midrule
+T & T & F & T & T \\
+T & F & F & F & F \\
+F & T & T & T & T \\
+F & F & T & T & T \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+最后两列相同（T、F、T、T），等价成立。直觉：$\varphi \Rightarrow \psi$ 说“要么 $\varphi$ 不成立，要么 $\psi$ 跟着成立”，二选一。
+
+第二条是本讲的主角——\textbf{条件句的否定}：
+\[
+\neg (\varphi \Rightarrow \psi) \;\equiv\; \varphi \land \neg \psi .
+\]
+
+\begin{center}
+\begin{tabular}{cc|c|c|c|c}
+\toprule
+$\varphi$ & $\psi$ & $\varphi \Rightarrow \psi$ & $\neg (\varphi \Rightarrow \psi)$ & $\neg \psi$ & $\varphi \land \neg \psi$ \\
+\midrule
+T & T & T & F & F & F \\
+T & F & F & T & T & T \\
+F & T & T & F & F & F \\
+F & F & T & F & T & F \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+第四列与第六列相同（F、T、F、F），等价成立。内容值得停留：\textbf{否定一个条件句，不是得到另一个条件句，而是得到一次“抓到现行”}——前件成立、后件却缺席。这正是第 1 讲推假前件两行时用的工具：当时分析 “$\varphi$ does not imply $\psi$”，说它只在“$\varphi$ 真而 $\psi$ 假”时成立——那就是在（不自知地）使用这条等价。现在闭环了。
+
+\subsection*{4.2 写否定：六个示范，两个陷阱}
+
+规则就一条：否定的否定回原，$\neg(\varphi \land \psi) \equiv \neg \varphi \lor \neg \psi$，$\neg(\varphi \lor \psi) \equiv \neg \varphi \land \neg \psi$（德摩根），$\neg(\varphi \Rightarrow \psi) \equiv \varphi \land \neg \psi$。难在执行：
+
+\begin{enumerate}
+  \item “34159 是素数” $\rightarrow$ “34159 \textbf{不是}素数”（也可说“是合数”；题目只问否定，不管原命题本身真假）。
+  \item “玫瑰红\textbf{且}紫罗兰蓝” $\rightarrow$ “玫瑰不红\textbf{或}紫罗兰不蓝”（德摩根；英语说起来别扭，但正确）。
+  \item “如果\textbf{没有汉堡}，我就吃热狗” $\rightarrow$ “没有汉堡，但我\textbf{也不吃}热狗”。这是全场最大的陷阱：前件本身带着一个否定（“没有汉堡”），否定是对整个条件句做的——$\varphi \land \neg\psi$ 里的 $\varphi$ 是“没有汉堡”这个整体。Devlin 自己演示时都差点滑倒。常见错法：写成“如果有汉堡，我就不吃热狗”——那是\textbf{换了前件}，不是否定。
+  \item “Fred 会去\textbf{但}不玩”（but = and）$\rightarrow$ “Fred 不去\textbf{或}他会玩”。
+  \item “$x < 0$ 或 $x > 10$” $\rightarrow$ $0 \le x \le 10$。两个连环坑：“负数”的否定是“非负数”（含 0），不是“正数”；$x > 10$ 的否定是 $x \le 10$（含 10），不是 $x < 10$。\textbf{符号比英语干净得多}——用不等式写，这两个坑自动消失。
+  \item “我们会赢第一场\textbf{或}第二场” $\rightarrow$ “两场\textbf{都}输”。
+\end{enumerate}
+
+\subsection*{4.3 不靠真值表的等价证明：Q10(b) 全程示范}
+
+第 2 讲说过，真值表只是特例机器，一般情形要基于含义构造证明。这里是\textbf{全课程第一个不靠真值表的等价证明}（Tutorial for Assignment 4 的 Q10(b)；完整题干字幕未明说，以下按 Devlin 口述重建）：
+\[
+\varphi \Rightarrow (\psi \land \theta) \quad\Longleftrightarrow\quad (\varphi \Rightarrow \psi) \land (\varphi \Rightarrow \theta) .
+\]
+
+证等价 = 证两个方向（第 2 讲的定义）。
+
+\textbf{左 $\rightarrow$ 右}：假设 $\varphi \Rightarrow (\psi \land \theta)$，即由 $\varphi$ 能推出 $\psi \land \theta$。合取式成立后，两个合取支各自当然成立：由 $\psi \land \theta$ 可拆出 $\psi$，也可拆出 $\theta$。把推导接起来（链式）：由 $\varphi$ 推出 $\psi \land \theta$ 再拆出 $\psi$，故 $\varphi \Rightarrow \psi$；同理 $\varphi \Rightarrow \theta$。两者合取，右边成立。
+
+\textbf{右 $\rightarrow$ 左}：假设 $\varphi \Rightarrow \psi$ 与 $\varphi \Rightarrow \theta$ 都成立。给定 $\varphi$，由前一式得 $\psi$，由后一式得 $\theta$；$\psi$、$\theta$ 都在手，合取即得 $\psi \land \theta$。于是由 $\varphi$ 能推出 $\psi \land \theta$，即 $\varphi \Rightarrow (\psi \land \theta)$。两方向齐备，等价证毕。
+
+\begin{calcbox}[Devlin 的训诫：不许换符号套答案]
+看这道题的解答时，\textbf{最糟糕的做法}是盯着答案、把符号和数字换掉去套下一题。Devlin 的原话：那“也许能让你混过高中，但大学数学行不通，相信我”。正确姿势是回去\textbf{理解方法本身}：为什么证等价要分两个方向？为什么合取可以拆、可以并？——理解了推理，Q10(c) 以及后面所有同类题都是你的；只套符号，换一道就死。本讲义把 Q10(c) 留给你。
+\end{calcbox}
+
+\subsection*{4.4 逆否保值，逆不保值}
+
+条件句的两种常见变形，命运完全不同：
+
+\begin{keyconcept}[逆否（contrapositive）与逆（converse）]
+\begin{itemize}
+  \item \textbf{逆否}：翻转\textbf{并}两边加否定，$\varphi \Rightarrow \psi$ 的逆否是 $\neg \psi \Rightarrow \neg \varphi$。它与原命题\textbf{逻辑等价}（用 4.1 的等价可证：$\neg\psi \Rightarrow \neg\varphi \equiv \neg\neg\psi \lor \neg\varphi \equiv \psi \lor \neg\varphi \equiv \varphi \Rightarrow \psi$）——证明原命题等价于证明逆否，这是后续证明方法课的利器。
+  \item \textbf{逆}：只翻转，不加否定，$\varphi \Rightarrow \psi$ 的逆是 $\psi \Rightarrow \varphi$。它与原命题\textbf{没有任何真值保证}：原真逆可假，原真逆可真。
+\end{itemize}
+\end{keyconcept}
+
+实例对比（来自 Tutorial 的 Q12、Q14）：
+
+\begin{itemize}
+  \item “两矩形全等 $\Rightarrow$ 面积相同”（真）。逆否：“面积不同 $\Rightarrow$ 不全等”（真，必须真——与原命题等价）。逆：“面积相同 $\Rightarrow$ 全等”（\textbf{假}：$2 \times 6$ 与 $3 \times 4$ 的矩形面积相同却不全等）。
+  \item “直角三角形（$c$ 为最长边）$\Rightarrow$ $a^2 + b^2 = c^2$”（真）。逆否：“$a^2 + b^2 \neq c^2$ $\Rightarrow$ 不是直角三角形”（真）。逆：“$a^2 + b^2 = c^2$ $\Rightarrow$ 直角三角形”——也\textbf{真}！但这不矛盾：勾股定理本来就是等价（充要），逆命题恰好是等价的另一半。\textbf{只有当原命题本来就是等价时，逆才保真}。
+  \item “人民币升 $\Rightarrow$ 美元跌”。逆否：“美元没跌 $\Rightarrow$ 人民币不会升”。逆：“美元跌 $\Rightarrow$ 人民币升”——不必然成立，除非两种货币之间存在联动机制。
+  \item “$2^n - 1$ 是素数 $\Rightarrow$ $n$ 是素数”。逆否：“$n$ 不是素数 $\Rightarrow$ $2^n - 1$ 不是素数”。
+\end{itemize}
+
+练习的目的不是写对（写对很容易），而是用实例\textbf{体认}：逆否等价、逆不等价。
+
+\begin{keyconcept}[易错点：变形时的三个错法]
+\begin{itemize}
+  \item \textbf{汉堡陷阱}：否定前件自带否定的条件句时，把前件里的否定弄丢（4.2 第 3 例）。
+  \item \textbf{区间端点}：否定时漏掉等号——“负数”的否定含 0，“$>10$”的否定含 10（4.2 第 5 例）。
+  \item \textbf{把逆否写反}：逆否是“翻转 + 双否定”，只否定不翻转（$\neg \varphi \Rightarrow \neg \psi$）叫“否命题”，与原命题\textbf{不}等价；只翻转不否定（逆）也不等价。三者里只有逆否保值。
+\end{itemize}
+\end{keyconcept}
+
+\begin{calcbox}[趣味机动题：黑路、黑车、黑狗（Tutorial 3 结尾谜题）]
+一个女人在没有月亮、没有星光的夜里，开车行驶在一条漆黑的马路上，没开车灯；路中央卧着一条睡着的黑狗——她却恰到好处地绕开了。她怎么知道狗在那儿？线索：注意语言传达的信息。\textbf{经典答案：当时是白天}——“没有月亮和星光”并未说不是白天，是“夜里”这个预设误导了你，而题面（据说）并未明说夜里。注：谜题答案字幕未明说，以上为经典解法，供体会“语言如何偷偷塞进预设”。
+\end{calcbox}
+
+\begin{exercise}[今日自测]
+\begin{enumerate}
+  \item 写出“如果没有汉堡，我就吃热狗”的否定，并解释为什么“如果有汉堡，我就不吃热狗”是错的。
+  \item 否定“$x < 0$ 或 $x > 10$”，用不等式写出结果；指出“把负数的否定写成正数”错在哪。
+  \item 写出“若两矩形全等，则面积相同”的逆否与逆，并各自判断真假（逆若为假，给出反例）。
+  \item （讲给别人听）用“食言”视角向别人解释 $\neg(\varphi \Rightarrow \psi) \equiv \varphi \land \neg\psi$：为什么说否定“如果明天下雨我就带伞”，唯一的方式是“天下雨了而我没带伞”？
+\end{enumerate}
+\end{exercise}
+
+\newpage
+
+% ═══ 参考答案 ═══
+\section*{参考答案}
+\addcontentsline{toc}{section}{参考答案}
+
+\textbf{第 1 讲}
+\begin{enumerate}
+  \item 真值表四行依次为 T、F、T、T；为真的是（T,\,T）、（F,\,T）、（F,\,F）三种，唯一为假的是“前件真、后件假”。第二行的反证要点：若此行取真且把条件句当作真蕴含，则 $\psi$ 应能从真的 $\varphi$ 推出，$\psi$ 就该为真，与本行 $\psi$ 假矛盾。常见错法：认为前件假时条件句“无意义”或“为假”——数学定义不给“无意义”留位置。
+  \item 两题都为真。第一题：前件假（三角形没有四条边）、后件假（正方形没有五条边），假 $\Rightarrow$ 假为真。第二题：后件真（矩形确有四条边），无论前件真假条件句都真（第一、三行）。常见错法：按日常因果判断说“这话不通所以不成立”，或纠结前件真假未知——条件句只看真值组合。
+  \item 要点：把条件句读成\textbf{承诺}，为假 = 食言。“如果明天下雨我就带伞”只在一种情况下算食言：天下雨了，而你没带伞（前件真、后件假）。不下雨时，无论你带没带伞，承诺都没有被违背——没人能指着你说“你食言了”。所以前件为假的两行只能算真。常见错法：只会背真值表，说不出“食言/违背承诺”这层直觉。（本题的解释框架为讲义作者补充，字幕未明说。）
+\end{enumerate}
+
+\textbf{第 2 讲}
+\begin{enumerate}
+  \item 真值表：T、F、F、T；为真的是（T,\,T）与（F,\,F），即两真值\textbf{相同}的两种组合。理由：$\varphi \Rightarrow \psi$ 只在（T,\,F）行失败，$\psi \Rightarrow \varphi$ 只在（F,\,T）行失败；合取要求两个方向都成立，于是恰好排除真值不同的两行。
+  \item $\varphi \Rightarrow \psi$ 为真只要求“$\varphi$ 真时 $\psi$ 必真”，对反方向无约束；$\varphi \Leftrightarrow \psi$ 为真还要求反方向也成立（两真值始终相同）。例：$\varphi$ = “$n$ 是 4 的倍数”，$\psi$ = “$n$ 是偶数”——$\varphi \Rightarrow \psi$ 真，但 $\psi \Rightarrow \varphi$ 假（$n = 2$），故 $\varphi \Leftrightarrow \psi$ 不成立。
+  \item 要点：一个方向管不住“$\psi$ 真而 $\varphi$ 假”的情形。反例沿用第 2 题：只有 $\varphi \Rightarrow \psi$ 时，$n = 2$ 让 $\psi$ 真而 $\varphi$ 假——两句话显然不能互相替换，却“方向单向成立”。加上反方向的合取，才保证两真值永远相同、可以安全替换。
+\end{enumerate}
+
+\textbf{第 3 讲}
+\begin{enumerate}
+  \item 前件是 Keith cycles：看见我骑车 $\Rightarrow$ 天晴。不能反写，因为 only if 表达的是“$\varphi$ 成立强迫 $\psi$ 成立”——天晴是我骑车绕不开的代价；反过来“天晴 $\Rightarrow$ 我骑车”显然为假（晴天我可以不出门）。常见错法：把 only if 当 if，按语序把“太阳”当成前件。
+  \item “$n$ 是 4 的倍数”是“$n$ 是 2 的倍数”的\textbf{充分条件}（4 的倍数必是 2 的倍数），不是必要条件（$n=2$ 是 2 的倍数但不是 4 的倍数）。反过来，“$n$ 是 2 的倍数”是“$n$ 是 4 的倍数”的\textbf{必要条件}（是 4 的倍数绕不开是 2 的倍数），不是充分条件。两者都不是充要。
+  \item 要点：下雨 $\Rightarrow$ 地湿，所以“下雨”是“地湿”的充分条件（有它就够），“地湿”是“下雨”的必要条件（下雨了地必然湿，没湿说明没下）。“地湿 only if 下雨”\textbf{不对}——它等于“地湿 $\Rightarrow$ 下雨”，而地湿可以是洒水车造成的。这正好演示 only if 的方向反转。
+\end{enumerate}
+
+\textbf{第 4 讲}
+\begin{enumerate}
+  \item 否定 = 前件 $\land$ 后件的否定：“没有汉堡，但我也不吃热狗”。“如果有汉堡，我就不吃热狗”错在\textbf{换了前件}：原前件是“没有汉堡”这个整体（自带一个否定），否定整个条件句时前件原样保留，被否的只有后件。常见错法根源：把前件里藏着的否定扔掉了。
+  \item 结果：$0 \le x \le 10$（德摩根：$\neg(x<0) \land \neg(x>10)$，即 $x \ge 0$ 且 $x \le 10$）。“负数的否定是正数”错在漏掉 0——0 不是负数也不是正数，否定“$x<0$”得到的是 $x \ge 0$。同理 $\neg(x>10)$ 是 $x \le 10$ 而非 $x < 10$，漏掉 $x = 10$。
+  \item 逆否：“若两矩形面积不同，则不全等”——真（与原命题等价，原命题真它必真）。逆：“若两矩形面积相同，则全等”——假；反例：$2 \times 6$ 与 $3 \times 4$ 的矩形面积都是 12，但边长集合不同，不全等。常见错法：以为逆命题与原命题等价；或把逆否写成“不全等 $\Rightarrow$ 面积不同”（只否定没翻转，那是否命题）。
+  \item 要点：$\varphi \Rightarrow \psi$ 是一句承诺，它的为假（即它的否定为真）只有一种方式——\textbf{当场抓到食言}：前提兑现了（下雨了），承诺的却没兑现（没带伞）。其余情形（没下雨，或带了伞）都抓不到食言，否定就不成立。所以 $\neg(\varphi \Rightarrow \psi)$ 不多不少恰好是 $\varphi \land \neg\psi$。这也是第 1 讲“does not imply 只在第二行成立”的同一件事。
+\end{enumerate}
+
+\vspace{1em}
+\begin{keyconcept}[学完四讲后，你应该能讲给别人听的五句话]
+\begin{enumerate}
+  \item 条件句 $\varphi \Rightarrow \psi$ 是日常“如果”扔掉因果后的真值提纯：仅当“前件真、后件假”时为假；前件为假时恒真，这不是bug，是让条件句永远有定义的设计——飞机控制软件靠它运行。
+  \item 定义是被设计的：把定义域扩展到所有情形、只要求在有意义的情形上与直觉一致，和 $0! = 1$、$a^0 = 1$ 是同一种操作。
+  \item 等价 $\Leftrightarrow$ 就是两个方向的蕴含的合取，真值相同即等价；等价之于逻辑，如同等式之于算术。真值表法只在命题逻辑里有效，一般证等价要靠含义构造证明。
+  \item 充分条件在前件侧、必要条件在后件侧；only if 会把方向反转；iff = if and only if。
+  \item $\neg(\varphi \Rightarrow \psi) \equiv \varphi \land \neg\psi$（否定 = 抓到食言）；逆否 $\neg\psi \Rightarrow \neg\varphi$ 与原命题等价，逆 $\psi \Rightarrow \varphi$ 不保证等价——只有原命题本来就是等价时，逆才保真。
+\end{enumerate}
+\end{keyconcept}
+
+\begin{calcbox}[后续学习指引（本讲义未展开的部分）]
+\begin{itemize}
+  \item 课程评分细则视频中“证明是交流，而不只是确立真值”的观点，以及证明评分的五个维度——留给后续证明写作周。
+  \item Tutorial 3 的 Q1（把报纸标题形式化，八小题）：自然语言 $\rightarrow$ 形式语言本质上有解读空间，Devlin 的态度是“你的答案可与我的不同，能辩护就行”；其中 “but = and”、following 的两种解读、异或 $(D \lor Y) \land \neg(D \land Y)$ 值得回到字幕细做。
+  \item Q10(c)（Q10 系列的下一小问）留作练习：用第 4 讲 4.3 的双向演绎方法自己完成。
+  \item Week 3 起进入证明方法；第 4 讲的逆否等价将是反证法与逆否证法的直接基础。
+\end{itemize}
+\end{calcbox}
+
+\end{document}

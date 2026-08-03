@@ -1,0 +1,565 @@
+\documentclass[UTF8,a4paper,11pt]{ctexart}
+
+% ── Page geometry ──
+\usepackage[margin=2.2cm,top=2.5cm,bottom=2.5cm]{geometry}
+
+% ── Typography & math ──
+\usepackage{fontspec}
+\usepackage{amsmath,amssymb}
+\usepackage{setspace}
+\setstretch{1.25}
+
+% ── Graphics ──
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc,positioning}
+
+% ── Colors ──
+\usepackage{xcolor}
+\definecolor{accent}{HTML}{1a73e8}
+\definecolor{darkgray}{HTML}{333333}
+\definecolor{lightgray}{HTML}{f5f5f5}
+\definecolor{notebg}{HTML}{e8f0fe}
+\definecolor{warnbg}{HTML}{fef7e0}
+\definecolor{calcbg}{HTML}{e6f4ea}
+\definecolor{calcframe}{HTML}{188038}
+
+% ── Links ──
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=accent,urlcolor=accent}
+
+% ── Layout ──
+\usepackage{enumitem}
+\setlist[itemize]{leftmargin=1.8em,itemsep=2pt}
+\setlist[enumerate]{leftmargin=1.8em,itemsep=2pt}
+\usepackage{booktabs}
+\usepackage{tcolorbox}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+
+% ── Header/Footer ──
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{darkgray}{纳瓦尔宝典 · 七讲 · 核心概念讲义}}
+\fancyhead[R]{\small\textcolor{darkgray}{财富的原理与幸福的技能}}
+\fancyfoot[C]{\small\textcolor{darkgray}{\thepage\ / \pageref{LastPage}}}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ── Section styling ──
+\titleformat{\section}
+  {\Large\bfseries\color{accent}}
+  {\thesection}{1em}{}
+\titleformat{\subsection}
+  {\large\bfseries\color{darkgray}}
+  {\thesubsection}{1em}{}
+
+% ── Custom boxes ──
+\newtcolorbox{keyconcept}[1][]{
+  colback=notebg, colframe=accent,
+  fonttitle=\bfseries, boxrule=0.5pt,
+  left=8pt, right=8pt, top=6pt, bottom=6pt, title={#1}}
+\newtcolorbox{exercise}[1][]{
+  colback=warnbg, colframe=orange,
+  fonttitle=\bfseries, boxrule=0.5pt,
+  left=8pt, right=8pt, top=6pt, bottom=6pt, title={#1}}
+\newtcolorbox{calcbox}[1][]{
+  colback=calcbg, colframe=calcframe,
+  fonttitle=\bfseries, boxrule=0.5pt,
+  left=8pt, right=8pt, top=6pt, bottom=6pt, title={#1}}
+
+\newcommand{\daytitle}[2]{%
+  \section*{#1\quad #2}%
+  \addcontentsline{toc}{section}{#1\quad #2}}
+
+\begin{document}
+
+% ═══ 封面 ═══
+\begin{center}
+  \vspace*{2cm}
+  {\Huge\bfseries\color{accent} 纳瓦尔宝典}\\[0.4cm]
+  {\LARGE 七讲 · 核心概念讲义}\\[1.2cm]
+  {\large 财富的原理与幸福的技能：一本“反直觉”书的第一性原理拆解}\\[0.5cm]
+  {\small\textcolor{darkgray}{依据：《纳瓦尔宝典：财富与幸福指南》，埃里克·乔根森 编，赵灿 译，中信出版社 2022}}\\[0.3cm]
+  {\small\textcolor{darkgray}{\today}}
+  \vfill
+  {\small 共 7 讲，每讲约 20–30 分钟（全书约 3 小时）：先读讲解，再合上讲义把概念讲出来，最后做自测。}
+\end{center}
+\newpage
+
+\tableofcontents
+\newpage
+
+% ═══ 使用说明 ═══
+\section*{开始前：这本讲义在做什么}
+\addcontentsline{toc}{section}{开始前：这本讲义在做什么}
+
+《纳瓦尔宝典》不是一本“教你赚钱”的书，尽管它看起来是。它由硅谷投资人纳瓦尔·拉维坎特的推文、播客和访谈汇编而成，回答的是两个更底层的问题：
+
+\begin{enumerate}
+  \item \textbf{财富从哪里来}（第一、二章）：不是靠更努力地工作，而是靠一套可拆解的原理——专长、杠杆、责任、判断力；
+  \item \textbf{幸福从哪里来}（第三至五章）：不是成功之后的奖品，而是一种可以习得的技能——选择、当下、欲望管理、自我救赎。
+\end{enumerate}
+
+这本书的难，不在于概念复杂，而在于它\textbf{反直觉}：几乎每一条都在反驳一个流行观念（“努力就能致富”“成功带来幸福”“欲望是动力”）。所以本讲义的读法是：\textbf{先理解每条主张在反驳什么，再看它的论证逻辑}——只记住结论，等于没读。
+
+\begin{keyconcept}[七讲要带走的三样工具]
+\begin{itemize}
+  \item \textbf{财富方程}：财富 =（专长 $\times$ 责任感）$\times$ 杠杆。出租时间换不来财富，拥有股权才能；代码和媒体是这个时代不需要许可的杠杆。
+  \item \textbf{判断力复利}：智慧 = 知道行为的长期后果。一切回报——财富、关系、知识——都来自复利，而复利只奖励长期游戏。
+  \item \textbf{幸福技能观}：幸福不是被追寻到的，而是被选择的——欲望是“不得到就不快乐”的自我契约，管理的不是世界，是自己的期待。
+\end{itemize}
+\end{keyconcept}
+
+\begin{center}
+\begin{tikzpicture}[>=Stealth,node distance=0.35cm,
+  must/.style={draw,rounded corners=4pt,thick,accent,fill=notebg,minimum height=0.95cm,align=center,font=\small},
+  rec/.style={draw,rounded corners=4pt,thick,darkgray,fill=lightgray,minimum height=0.95cm,align=center,font=\small}]
+  \node[must] (d1) {第 1 讲\\财富定义};
+  \node[must,right=of d1] (d2) {第 2 讲\\专长};
+  \node[must,right=of d2] (d3) {第 3 讲\\杠杆（核心）};
+  \node[rec,right=of d3] (d4) {第 4 讲\\责任与复利};
+  \node[rec,right=of d4] (d5) {第 5 讲\\判断力};
+  \draw[->,thick] (d1) -- (d2);
+  \draw[->,thick] (d2) -- (d3);
+  \draw[->,thick] (d3) -- (d4);
+  \draw[->,thick] (d4) -- (d5);
+  \node[must,below=1.2cm of d2] (d6) {第 6 讲\\幸福技能};
+  \node[rec,right=of d6] (d7) {第 7 讲\\自我救赎与当下};
+  \draw[->,thick] (d6) -- (d7);
+  \draw[->,dashed,accent] (d2) -- (d6) node[midway,left,font=\scriptsize,darkgray]{“做自己”在两线重演};
+\end{tikzpicture}
+\end{center}
+
+\noindent\textbf{轻重缓急}：蓝框为\textbf{必看}（第 1、2、3、6 讲是全书的价值锚点——财富方程与幸福技能都在这里），灰框为\textbf{建议/可选}。时间紧可以先走必看路径：第 1 讲 $\rightarrow$ 第 2 讲 $\rightarrow$ 第 3 讲 $\rightarrow$ 第 6 讲，其余讲次随后补；实线为内容依赖，虚线为主题呼应。
+
+\textbf{每讲的学习流程}（约 20–30 分钟，全书约 3 小时）：
+\begin{enumerate}
+  \item 读当天的讲解，重点看“它反驳了什么”和“论证链条是什么”；
+  \item 合上讲义，把当天的核心概念\textbf{讲给别人听}（或讲给自己听），卡壳的地方就是没懂的地方；
+  \item 做“今日自测”，对照书末的答案。
+\end{enumerate}
+
+\textbf{边界声明}：本讲义覆盖全书两大部分的七个枢纽概念群，重在原理与论证结构；书中大量的阅读清单（纳瓦尔推荐的科学与哲学原著）未展开，列入第 7 讲的后续指引。
+
+\newpage
+
+% ═══ 第 1 讲 ═══
+\daytitle{第 1 讲}{财富的第一性定义：财富 $\neq$ 金钱 $\neq$ 地位}
+\noindent\textbf{优先级}：必看\quad|\quad\textbf{难度}：$\star$\quad|\quad\textbf{用时}：约 20 分钟
+
+\textbf{核心问题}：为什么“努力工作、升职加薪”这条路，在原理上就到不了财务自由？
+
+\subsection*{1.1 先把三个词分开}
+
+日常语言里“有钱”“有地位”“有财富”混用，纳瓦尔的第一步是把它们拆成三个不同的东西：
+
+\begin{keyconcept}[财富、金钱、地位]
+\begin{itemize}
+  \item \textbf{财富}：在你睡觉时仍能为你赚钱的\textbf{资产}——企业股权、代码、媒体内容、出租的房产。
+  \item \textbf{金钱}：转换时间和财富的工具，是社会打给你的“欠条”（信用符号）。
+  \item \textbf{地位}：你在社会等级体系中的位置。
+\end{itemize}
+关键推论：追求财富，而不是金钱或地位。\textbf{地位是零和游戏}（你升一级就有人降一级），财富是正和游戏（可以共同创造）。攻击财富创造者的人，往往只是在玩地位游戏。
+\end{keyconcept}
+
+\subsection*{1.2 出租时间为什么必然失效}
+
+“没有股权，就没有通往财务自由的路径。”论证链只有两步，但缺一不可：
+
+\begin{enumerate}
+  \item 出租时间的收入与投入\textbf{线性绑定}：睡觉时、度假时、退休时，收入为零。你的产出被时间总量封顶。
+  \item 上班的报酬必然\textbf{低于}你创造的价值：雇主支付的必须少于你产出的，差价是企业的利润来源。
+\end{enumerate}
+
+所以财务自由的唯一通道是\textbf{拥有股权}——拥有企业的一部分，让资产在你不工作时继续产出。这不等于人人去创业：“买入股权”同样成立（投资、以股权换报酬）。
+
+\begin{calcbox}[第一性原理：先看收入结构，再谈努力程度]
+纳瓦尔说“赚钱跟工作的努力程度没什么必然联系”——这不是反努力，而是指出努力作用的变量错了。决定上限的是\textbf{收入结构}（时间型还是资产型），努力只决定你在某个结构内的位置。换结构比加杠杆式努力优先：先问“我的收入和时间绑定吗”，再问“我够努力吗”。
+\end{calcbox}
+
+\begin{keyconcept}[风险点：三个常见误读]
+\begin{itemize}
+  \item “股权投资”不等于炒股：这里的股权指\textbf{长期拥有生产资料}（自创企业、早期加入、价值投资），不是交易行为。
+  \item “快速致富教程”不存在：纳瓦尔明确说，有的只是教程提供者想赚你的钱——凡是卖“捷径”的，都在对你用杠杆。
+  \item “赚钱是邪恶的”是地位游戏话术：它是零和玩家对正和玩家的攻击，不是道德结论。
+\end{itemize}
+\end{keyconcept}
+
+\begin{exercise}[今日自测]
+\begin{enumerate}
+  \item 用“睡觉时是否还在赚钱”检验：工资、房租收入、版税、奖金，哪些属于财富，哪些只是金钱？
+  \item 为什么说地位游戏是零和的？举一个你身边的“地位游戏”实例。
+  \item 向一个相信“努力就能致富”的朋友解释：问题出在哪一步？
+\end{enumerate}
+\end{exercise}
+
+\newpage
+
+% ═══ 第 2 讲 ═══
+\daytitle{第 2 讲}{专长：无法被培训的知识}
+\noindent\textbf{优先级}：必看\quad|\quad\textbf{难度}：$\star\star$\quad|\quad\textbf{用时}：约 25 分钟
+
+\textbf{核心问题}：如果学校教不了“赚钱”，那能学的是什么？
+
+\subsection*{2.1 专长的定义与悖论}
+
+纳瓦尔说的\textbf{专长}（specific knowledge）有一个故意的悖论式定义：\textbf{无法通过培训获得的知识}。
+
+\begin{keyconcept}[专长的三条判据]
+\begin{itemize}
+  \item \textbf{不能被教，但能被学}：如果一种技能可以批量培训，那所有被培训者都可以互相替代——可培训 $\Rightarrow$ 可取代 $\Rightarrow$ 无溢价。
+  \item \textbf{来自真正的好奇，而非热门}：追随当下热门行业，你得到的是和所有追热门者相同的技能；追随自己真正的好奇，你到达的是别人到不了的角落。
+  \item \textbf{高度具体、难以言述}：它往往表现为“对你来说像玩一样、对别人来说像工作一样”的事情。
+\end{itemize}
+\end{keyconcept}
+
+纳瓦尔自己的例子：母亲在他少年时说“你会去做生意”——尽管他当时想当天体物理学家。专长常常\textbf{旁观者清}：问问熟悉你的人“你觉得我做什么事时最不像在工作”。
+
+\subsection*{2.2 “成为自己”是唯一的垄断}
+
+\begin{calcbox}[这章最重要的一句话]
+“在‘成为自己’这件事情上，没有人能比得过你。”
+\end{calcbox}
+
+竞争发生在\textbf{可替代性}上：两个人做同一件事，就只能比谁更便宜、谁更拼命。而“成为自己”是没人能进入的赛道——\textbf{只有独辟蹊径，才能避开竞争}。专长经济的逻辑不是“比别人好”，而是“与别人不同到无法比较”。
+
+这也解释了为什么专长要“追随好奇”：好奇心是唯一能让你在别人觉得枯燥的领域里\textbf{长期}深挖的燃料，而长期深挖正是不可复制性的来源。
+
+\begin{keyconcept}[风险点：别把这个读成“别上学了”]
+\begin{itemize}
+  \item 纳瓦尔反驳的是“可批量培训 = 高价值”，不是学习本身——恰恰相反，专长需要大量学习，只是学习路径必须个人化。
+  \item 专长不是“爱好”的同义词：它必须能与社会需求对接（有人愿意为它付钱），纯粹自娱不是专长。
+  \item 热门 $\neq$ 不能选，但选热门的理由不能只是“它热门”。
+\end{itemize}
+\end{keyconcept}
+
+\begin{exercise}[今日自测]
+\begin{enumerate}
+  \item 用三条判据检验“考一个热门证书”：它能构成专长吗？为什么？
+  \item 写下三件“你做起来像玩、别人做起来像工作”的事，它们和哪些社会需求可能对接？
+  \item 向朋友解释：“可培训 $\Rightarrow$ 可取代”这个推理的漏洞可能在哪里？
+\end{enumerate}
+\end{exercise}
+
+\newpage
+% ═══ 第 3 讲 ═══
+\daytitle{第 3 讲}{杠杆：不需要许可的新贵杠杆}
+\noindent\textbf{优先级}：必看（全书核心）\quad|\quad\textbf{难度}：$\star\star$\quad|\quad\textbf{用时}：约 30 分钟
+
+\textbf{核心问题}：同样的专长和努力，为什么产出可以差一万倍？
+
+\subsection*{3.1 三种杠杆，一部杠杆进化史}
+
+杠杆 = 让一份投入的产出成倍放大的工具。纳瓦尔按历史顺序分出三种：
+
+\begin{keyconcept}[三种杠杆]
+\begin{itemize}
+  \item \textbf{劳动力}：让别人替你干活。最古老的杠杆，管理成本最高。
+  \item \textbf{资本}：用钱生钱。20 世纪新贵的主要形式（银行家、投资人）。
+  \item \textbf{代码与媒体}：\textbf{复制边际成本为零的产品}——写一次，卖一万次；录一次，播一百万次。
+\end{itemize}
+前两种\textbf{需要许可}：有人愿意雇你、有人愿意投你，你才能使用。第三种\textbf{不需要任何人的许可}：一台电脑就能开工——这是新一代富翁背后的杠杆，也是普通人历史上第一次触手可及的大规模杠杆。
+\end{keyconcept}
+
+判断一件事有没有杠杆，只需一问：\textbf{产出的第 1000 份，要不要我多花第 1000 份时间？}要，就没有杠杆（咨询、打工）；不要，就有（写书、写软件、做内容）。
+
+\subsection*{3.2 把自己产品化}
+
+纳瓦尔把前几天的概念收进一个公式：
+
+\begin{center}
+\begin{tikzpicture}[>=Stealth,scale=1.0]
+  \node[draw,rounded corners=6pt,thick,accent,fill=notebg,minimum width=3.2cm,minimum height=1.1cm,align=center] (self) at (0,0) {\textbf{自己}\\\small 专长 + 独特性 + 责任感};
+  \node at (2.2,0) {\Large $\times$};
+  \node[draw,rounded corners=6pt,thick,calcframe,fill=calcbg,minimum width=3.2cm,minimum height=1.1cm,align=center] (prod) at (4.4,0) {\textbf{产品化}\\\small 杠杆 + 规模化};
+  \node at (6.6,0) {\Large $=$};
+  \node[draw,rounded corners=6pt,thick,minimum width=3.2cm,minimum height=1.1cm,align=center] (wealth) at (8.8,0) {\textbf{财富}\\\small 睡觉时也在赚钱};
+\end{tikzpicture}
+\end{center}
+
+“自己”提供别人没有的东西（第 2 讲），“产品化”让它不需要你在场也能交付（第 3 讲）。只产品化别人的东西，你可替代；只有自己却不产品化，你被时间封顶。\textbf{两个因子都是乘法关系}：任何一个为零，结果为零。
+
+\subsection*{3.3 用判断力赚钱：杠杆时代的新定价}
+
+杠杆放大的不只是产出，还有\textbf{判断的差价}。纳瓦尔举例：在高度杠杆化的领域，判断准确率 75\% 的人和 85\% 的人，身价可以相差数千万美元——因为同样的资本和代码押在不同的判断上，结果天差地别。
+
+这就是为什么巴菲特“用一年斟酌判断，然后用一天采取行动”：\textbf{在杠杆时代，方向比速度重要}。第 5 讲整个一天，都会展开“判断力”这个主题。
+
+\begin{exercise}[今日自测]
+\begin{enumerate}
+  \item 用“第 1000 份要不要第 1000 份时间”检验：律师、播客主播、面包师、App 开发者，谁有杠杆？
+  \item 一个技能很强但没有作品的资深工程师，缺的是公式里的哪个因子？一个只会复制别人内容的自媒体呢？
+  \item 向朋友解释：为什么代码和媒体被称为“不需要许可的杠杆”？“许可”指什么？
+\end{enumerate}
+\end{exercise}
+
+\newpage
+
+% ═══ 第 4 讲 ═══
+\daytitle{第 4 讲}{责任与长期：复利只奖励长期游戏}
+\noindent\textbf{优先级}：建议\quad|\quad\textbf{难度}：$\star\star$\quad|\quad\textbf{用时}：约 25 分钟
+
+\textbf{核心问题}：为什么“以个人名义承担风险”反而是划算的？为什么要“着眼于长远”？
+
+\subsection*{4.1 责任感：风险是杠杆的入场券}
+
+\textbf{责任感} = 以个人名义承担商业风险——项目失败时，被点名的是你。主流观念说“别出头、别担责”，纳瓦尔的反驳是：
+
+\begin{keyconcept}[责任与回报的对价关系]
+没有责任，就没有股权和杠杆的\textbf{定价权}：愿意把名字押在结果上的人，才能要求结果的分成。同时现代社会的下行风险其实有限——失败不会让你坐牢或饿死，“失败真的没有那么可怕”。责任是双刃剑，但在这个时代，剑的下行一侧远没有传说中锋利。
+\end{keyconcept}
+
+纳瓦尔自己就有反例：早年起诉前公司时他极度愤怒，事后承认“今天会换种方式”——承担责任不等于情绪化对抗，而是冷静地把信用押在判断上。
+
+\subsection*{4.2 复利：一切回报的共同形式}
+
+财富、人际关系、知识，全都服从复利：\textbf{回报来自长期叠加，而非单次交易}。
+
+\begin{itemize}
+  \item 财富：复利是数学事实（这也是物理讲义里自由落体之外，$g$ 之外的另一个“同一个常数两张面孔”——指数增长，见数学讲义第 5 讲）。
+  \item 关系：互信关系合作越久，交易成本越低、合作规模越大——找到值得深交的 1\%，心无旁骛。
+  \item 知识：持续阅读与思考数十年的人，判断力与偶尔学习者不在同一量级。
+\end{itemize}
+
+推论的推论：\textbf{做长线游戏}。短线游戏里人人互相算计（零和）；长线游戏里人人互相成就（正和）——因为大家都知道还会再见。
+
+\subsection*{4.3 运气与耐心：长期主义的两个补丁}
+
+长期主义常被嘲讽为“傻等”，纳瓦尔补了两个机制：
+
+\begin{itemize}
+  \item \textbf{四种运气}：（1）不期而遇的运气；（2）坚持折腾撞来的运气；（3）有准备的人\textbf{善于发现}的运气；（4）塑造独特个性与专长，让运气\textbf{来找你}（深海潜水员成为唯一能打捞宝船的人）。前两种听天由命，后两种可以由你经营——长期深耕就是把运气从前两种推向（3）（4）。
+  \item \textbf{耐心}：成功需要时间，而“一旦开始计算，你就会失去耐心”——天天盯着进度条，正是坚持不下来的原因。
+\end{itemize}
+
+\begin{keyconcept}[风险点：长期主义不是拖延的借口]
+“迅速采取行动，并对结果保持耐心”——对\textbf{行动}要急性子，对\textbf{结果}要慢性子。把顺序搞反（行动拖延、结果焦虑）是最常见的失败模式。
+\end{keyconcept}
+
+\begin{exercise}[今日自测]
+\begin{enumerate}
+  \item 你当前的工作中，“以个人名义担责”与“随大流不署名”的收益差在哪？
+  \item 四种运气里，哪些是可以经营的？给出你把它向前推一格的具体动作。
+  \item 向朋友解释：“一旦开始计算，你就会失去耐心”——这句话和“长期主义”矛盾吗？
+\end{enumerate}
+\end{exercise}
+
+\newpage
+
+% ═══ 第 5 讲 ═══
+\daytitle{第 5 讲}{判断力：智慧是知道行为的长期后果}
+\noindent\textbf{优先级}：建议\quad|\quad\textbf{难度}：$\star\star\star$\quad|\quad\textbf{用时}：约 30 分钟
+
+\textbf{核心问题}：杠杆时代最值钱的判断力，由什么构成？能学吗？
+
+\subsection*{5.1 什么是判断力}
+
+纳瓦尔给的定义极简：\textbf{智慧，就是知道个人行为的长期后果}。判断力就是把这种“长期后果的预见”用在决策上。第 3 讲已经看到它的定价：杠杆时代，判断质量的一点点差距会被放大成身价的巨大差距——\textbf{一个正确的决策可以帮你赢得一切}。
+
+\subsection*{5.2 清晰思考：先清空，再判断}
+
+判断失真的最大来源不是智商，而是\textbf{自我}：面子、身份、习惯、各种“主义”的标签，都会让人看不到现实。
+
+\begin{keyconcept}[清晰思考的三个动作]
+\begin{itemize}
+  \item \textbf{吃透基础，而非背诵概念}：能用三页纸讲清的东西才算真懂（费曼标准——和本系列讲义的方法论同源）；宏观经济学之类“不可证伪”的预测要警惕。
+  \item \textbf{留出空白}：每周至少留一天专门思考，“悠闲的大脑才能产生伟大的创意”。
+  \item \textbf{抛开记忆与身份}：就事论事，极度坦诚；“具体地表扬，泛泛地批评”（巴菲特）。朋友失恋时你看得比他清，是因为\textbf{欲望不遮蔽你的眼睛}。
+\end{itemize}
+\end{keyconcept}
+
+\subsection*{5.3 心智模型：只装经过验证的}
+
+心智模型是判断力的工具箱。纳瓦尔推荐的来源与精选：
+
+\begin{itemize}
+  \item \textbf{来源}：进化论、博弈论、查理·芒格——以及原著经典（先读达尔文再读道金斯，先读亚当·斯密）。
+  \item \textbf{精选}：反推法（成功 = 不犯错）；委托—代理问题（“如果你想完成一件事，就亲自去做”的恺撒逻辑）；可证伪性（塔勒布与黑天鹅）；基础数学。
+  \item \textbf{两条随身规则}：“如果难以抉择，那答案就是否定的”；“迎难而上”——两条路差不多时，选短期更痛苦的那条（痛苦大多是短期的，收益大多是长期的）。
+\end{itemize}
+
+\subsection*{5.4 热爱阅读：判断力的日常维护}
+
+“读书的唯一原因应该是喜欢”——为打卡而读，等于没读。方法上：可以同时读 10–20 本，抓住论点即可放下，\textbf{书不必读完}；基础打牢靠原著经典，而不是伪科学畅销书。
+
+\begin{exercise}[今日自测]
+\begin{enumerate}
+  \item 用“难以抉择，答案就是否定”复盘你最近一个纠结很久的决定。
+  \item “迎难而上”规则的依据是什么？它和“选择简单模式，人生会越来越困难”是不是同一回事？
+  \item 向朋友解释：为什么“自我”是判断力的敌人？举一个你自己的实例。
+\end{enumerate}
+\end{exercise}
+
+\newpage
+% ═══ 第 6 讲 ═══
+\daytitle{第 6 讲}{幸福是一种技能：选择、当下与欲望管理}
+\noindent\textbf{优先级}：必看\quad|\quad\textbf{难度}：$\star\star$\quad|\quad\textbf{用时}：约 25 分钟
+
+\textbf{核心问题}：如果幸福可以习得，它的“练习动作”是什么？
+
+\subsection*{6.1 幸福观的三个转向}
+
+这本书下半部分的开篇就是一连串反直觉声明：
+
+\begin{keyconcept}[幸福不是运气，是技能]
+\begin{itemize}
+  \item \textbf{幸福是一种技能}：与基因无关，可后天习得——它的内容是“消除缺憾感之后的感受”。
+  \item \textbf{幸福是一种选择}：大脑可塑；幸福、爱、激情“不是追寻的事物，而是做出的选择”。
+  \item \textbf{幸福是心境平和，不是快乐}：快乐是刺激的高峰，平和是基线的安稳——追求高峰会带来低谷，经营基线才是技能。
+\end{itemize}
+\end{keyconcept}
+
+\subsection*{6.2 两个敌人：欲望与嫉妒}
+
+\begin{keyconcept}[欲望是主动选择的不开心]
+“欲望就是你跟自己的约定，约定的内容是：不得到我想要的东西，我是不会快乐的。”
+
+欲望不是问题，\textbf{不加选择的欲望}才是问题：等提新车时夜夜刷论坛的人，是自己签下了一份不快乐契约。纳瓦尔的对策不是禁欲，而是\textbf{限额}：“不让自己对生活有一个以上的欲望”——选定一个，全力以赴，其余的放下。
+\end{keyconcept}
+
+嫉妒的破解更漂亮：试着\textbf{100\% 交换}——你愿意用你全部的处境（年龄、健康、家庭、烦恼）换对方全部的人生吗？没有人愿意。既然不愿整体交换，嫉妒别人的某一部分就毫无意义。
+
+\subsection*{6.3 当下与接受}
+
+大脑忙于规划未来或悔恨过去，是“亲手扼杀自己的幸福”——\textbf{思考的间隙即开悟}。面对任何不顺，只有三种选择：\textbf{改变它、接受它、离开它}；最糟的是第四种——什么都不选，坐在那里纠结。而学会接受的终极练习，从坦然面对死亡开始（试试回忆任何一个苏美尔人的名字——没有人类成就“永恒”到值得焦虑）。
+
+\begin{keyconcept}[风险点：成功不等于幸福]
+幸福 = 满足现状，成功 = 对现状不满——两者在定义上就互斥。更要命的是\textbf{享乐适应}：任何外物到手，大脑很快习以为常、快感归零。超级富豪往往极度焦虑，正是因为他们只升级了“成功”，从没练习过“满足”。这不是反对追求，而是提醒：成功交给第 1–5 天的原理，幸福交给第 6–7 天的练习，\textbf{不要用同一个账户记账}。
+\end{keyconcept}
+
+\begin{exercise}[今日自测]
+\begin{enumerate}
+  \item 写下你目前“不得到就不快乐”的三个欲望。如果只允许保留一个，你留哪个？其余两个你打算怎么处理？
+  \item 用“100\% 交换”检验你最近一次嫉妒：结论发生了什么变化？
+  \item 向朋友解释：“幸福是选择”和“假装一切都好”有什么区别？
+\end{enumerate}
+\end{exercise}
+
+\newpage
+
+% ═══ 第 7 讲 ═══
+\daytitle{第 7 讲}{自我救赎与哲学：我们唯一拥有的是当下}
+\noindent\textbf{优先级}：建议（哲学部分可选）\quad|\quad\textbf{难度}：$\star\star\star$\quad|\quad\textbf{用时}：约 30 分钟
+
+\textbf{核心问题}：道理都懂之后，改变从哪开始？这些原理最终立在一个什么样的世界观上？
+
+\subsection*{7.1 自我救赎：救赎靠自己}
+
+第四章开篇列出了外人无法代劳的清单：医生不能让你健康、老师不能让你聪明、教练不能让你平静——\textbf{最终，你必须自己负起责任}。四个可执行的动作：
+
+\begin{itemize}
+  \item \textbf{做自己}：倾听内心微弱的声音——“做自己”这件事上没人能与你竞争（这是第 2 讲专长原理在人生层面的重演）。
+  \item \textbf{关爱自己}：身体健康是第一要务，高于幸福、家庭、工作；“每天坚持才是最重要的，做什么是次要的”；饮食避免糖脂混合。
+  \item \textbf{冥想}：\textbf{思想意识的间歇性禁食}——给狂奔的大脑一个停止进食的窗口。建议每天一小时、坚持 60 天，直到精神“收件箱为零”。
+  \item \textbf{自我塑造}：“最了不起的超能力就是改变自我的能力”；说“打算做”就是拖延，要做就现在；可以\textbf{广而告之}来自律。
+\end{itemize}
+
+\subsection*{7.2 两个方法论：系统与解放}
+
+\begin{keyconcept}[建立系统，而不是设定目标]
+目标制造“达成前的失败感”和“达成后的空虚感”；系统只问“今天的动作做了吗”。史考特·亚当斯的这条原则，正是第 4 讲长期主义的日常执行版。
+\end{keyconcept}
+
+\begin{keyconcept}[四个解脱]
+从\textbf{期待}中解脱（别人不欠你）、从\textbf{愤怒}中解脱（愤怒的人“试图把你的头摁到水下，但同时他也在溺水”）、从\textbf{雇佣关系}中解脱（“一旦品尝到自由的滋味，你就再也不想被别人雇用了”）、从\textbf{不受控制的思考}中解脱（最难的不是做想做的事，而是知道自己想要什么）。
+\end{keyconcept}
+
+\subsection*{7.3 哲学底座：理性佛教与当下}
+
+纳瓦尔的世界观可以压缩成两条：
+
+\begin{itemize}
+  \item \textbf{理性佛教} = 进化论（约束性原则）+ 佛教（内心哲学）：只接受科学、进化论和\textbf{亲自验证过}的理念；拒绝一切不可证伪的说法（前世、脉轮）。“问题越古老，答案存世的时间越长。”生命意义问题上他给出三个层次的答案：意义是私人问题必须自己找；宇宙尺度上生命没有意义（热寂终点）；作为生命系统，我们做的是\textbf{局部熵减}。
+  \item \textbf{我们唯一拥有的是当下}：“除了当下，一切都是不存在的”；“你每时每刻都在死亡和重生”。所以“灵感本易逝，行动应当时”——这条不是鸡汤，是前两部分的执行接口：财富原理和幸福技能，都只能在当下这一格时间里运行。
+\end{itemize}
+
+\begin{exercise}[总检验]
+\begin{enumerate}
+  \item 用“财富 =（专长 $\times$ 责任感）$\times$ 杠杆”给自己做一次体检：三个因子各打几分（1–5）？提升总乘积，先动哪个？
+  \item 写一条你签下的“不得到就不快乐”契约，然后重写它：能不能把“不得到”换成“已经拥有”？
+  \item 用你自己的话向朋友解释：为什么“成功”和“幸福”要用两个账户记账？
+  \item “建立系统，而不是设定目标”——把你当前最大的一个目标改写成一个每日系统。
+  \item 用“1000 个平行宇宙里想在 999 个中富有”解释：纳瓦尔说的运气，哪些部分由你决定？
+  \item 合上本讲义，画出七讲地图：财富定义 → 专长 → 杠杆 → 责任与复利 → 判断力 → 幸福技能 → 自我救赎与当下，标出每天反驳的那个流行观念。
+\end{enumerate}
+\end{exercise}
+
+\newpage
+
+% ═══ 参考答案 ═══
+\section*{参考答案}
+\addcontentsline{toc}{section}{参考答案}
+
+\textbf{第 1 讲}
+\begin{enumerate}
+  \item 财富：房租收入、版税（睡觉时仍在产生）；只是金钱：工资、奖金（停止工作即停止流入）。
+  \item 地位是排名，排名是相对的：有人升就有人降，总和不变（零和）。例：职称名额、班级排名、社交平台的攀比较劲。
+  \item 问题不在努力，在收入结构：出租时间的收入与时间线性绑定且有上限，雇主还必须赚取差价——结构不换，努力只决定你在结构内的位置。
+\end{enumerate}
+
+\textbf{第 2 讲}
+\begin{enumerate}
+  \item 不能。证书可批量培训 $\Rightarrow$ 持证者互相替代 $\Rightarrow$ 无溢价。它能证明下限，但构成不了专长。
+  \item 主观题。检验标准：是否满足“像玩一样”+“有人愿意付钱”两条；找不到需求对接的，先当爱好养着，不算专长。
+  \item 漏洞在于把“可培训”当成全有全无：很多高价值技能是“可培训的基础 + 不可培训的组合与品味”。专长往往诞生于交叉处，而非完全不可教的神秘天赋。
+\end{enumerate}
+
+\textbf{第 3 讲}
+\begin{enumerate}
+  \item 有杠杆：播客主播（录一次播一万次）、App 开发者（复制零成本）；无杠杆：律师、面包师（第 1000 份都要第 1000 份时间）。
+  \item 资深工程师缺“产品化”（没有可复制的交付物）；复制别人内容的自媒体缺“自己”（没有独特性与专长，可被任何人替代）。
+  \item “许可”指他人的同意：劳动力杠杆需要人愿意被你雇，资本杠杆需要人愿意投你；而代码与媒体一台电脑就能开工，不需要任何人点头。
+\end{enumerate}
+
+\textbf{第 4 讲}
+\begin{enumerate}
+  \item 署名担责者获得结果的定价权（分成、股权、信用积累），不担责者只能拿固定报酬——担责是杠杆和股权的入场券。
+  \item 第（2）（3）（4）种可经营：多尝试（折腾）、在有准备的领域保持敏感（发现）、深耕专长让机会来找你（吸引）。具体动作如：每周发布一次作品、进入一个高密度的行业社群。
+  \item 不矛盾。“计算”指天天称量结果，它放大焦虑、消耗耐心；长期主义管的是方向与动作——对行动急性子，对结果慢性子。
+\end{enumerate}
+
+\textbf{第 5 讲}
+\begin{enumerate}
+  \item 主观题。要点：纠结本身往往说明收益差距不大，而成本是确定的——按规则取否定，把精力省给真正清晰的机会。
+  \item 依据：大多数痛苦是短期的，大多数收益是长期的，两条路差不多时选短期更痛苦的，是用短期成本换长期复利。与“选择简单模式，人生会越来越困难”同构。
+  \item 自我让人为面子、身份、立场辩护，从而扭曲对现实的评估（朋友失恋时你更清醒，因为欲望不遮蔽你）。实例要求具体：某次为了“不输掉争论”而拒绝承认证据。
+\end{enumerate}
+
+\textbf{第 6 讲}
+\begin{enumerate}
+  \item 主观题。要点：保留的那一个全力以赴；其余的明确“放下”而不是“拖着”——未选择的欲望依然持续收税。
+  \item 通常结论是：不愿整体交换——嫉妒的只是别人人生的切片，而切片从不单独出售。
+  \item “假装好”是对现实的否认，压抑感受；“幸福作为选择”是先如实接受现实（改变/接受/离开三选一），再决定不把快乐抵押给未发生的事。前者逃避，后者管理期待。
+\end{enumerate}
+
+\textbf{第 7 讲（总检验）}
+\begin{enumerate}
+  \item 主观题。乘法结构的要点：最弱的因子决定总产出上限；多数人的短板是“产品化”（没有可复制的交付物），其次是“责任感”（不敢署名担责）。
+  \item 示例：“不买上这辆车我就不快乐” $\rightarrow$ “我已经拥有通勤的能力、健康的身体和一份能攒下车钱的工作”。重写不是放弃愿望，是把快乐的抵押解除。
+  \item 成功 = 对现状不满（驱动行动），幸福 = 满足现状（基线平和）；用一个账户记账的人，会用成功的逻辑糟蹋幸福（享乐适应），或用幸福的逻辑放弃行动。两个账户：行动走财富方程，满足走欲望限额。
+  \item 示例：目标“今年读 24 本书” $\rightarrow$ 系统“每天通勤和睡前各读 20 分钟，读完即放下”。
+  \item 运气（1）（2）（偶遇、折腾）由天，（3）（4）（发现、吸引）由你：准备、专长、声誉，决定了同样的机会落在你面前时你接不接得住、以及机会是否专程来找你——“999 个宇宙”里决定结果的是后者。
+  \item 地图参考：财富定义（反驳“努力致富”）→ 专长（反驳“热门即价值”）→ 杠杆（反驳“一份时间一份钱”）→ 责任与复利（反驳“别出头”“速成”）→ 判断力（反驳“聪明最重要”，思路清晰才是）→ 幸福技能（反驳“成功带来幸福”）→ 自我救赎与当下（反驳“等条件成熟再开始”）。
+\end{enumerate}
+
+\vspace{1em}
+\begin{keyconcept}[学完七讲后，你应该能讲给别人听的六句话]
+\begin{enumerate}
+  \item 财富是睡觉时也在赚钱的资产；出租时间到不了财务自由，股权才可以。
+  \item 专长无法被培训——能被批量培训的技能必然可替代；“成为自己”是唯一的垄断。
+  \item 杠杆有三种：劳动力、资本、代码与媒体；只有最后一种不需要许可。“把自己产品化” = 自己 $\times$ 产品化。
+  \item 一切回报都是复利，复利只奖励长期游戏；对行动急性子，对结果慢性子。
+  \item 智慧是知道行为的长期后果；思路清晰比聪明更值钱。
+  \item 幸福是技能不是运气：欲望限额、当下账户、100\% 交换；我们唯一拥有的是当下。
+\end{enumerate}
+\end{keyconcept}
+
+\begin{calcbox}[后续学习指引（本讲义未展开的部分）]
+\begin{itemize}
+  \item 纳瓦尔的阅读清单：达尔文《物种起源》、亚当·斯密、塔勒布《黑天鹅》、查理·芒格《穷查理宝典》、马库斯·奥勒留《沉思录》——先读原著，再读解读。
+  \item 冥想的具体操作：无选择觉知、超觉冥想、警觉观察、静坐四种方法的 60 天练习计划（原书第四章）。
+  \item 书中“如何获得运气”的完整四种类型与房地产阶梯案例，值得回到原书细读。
+\end{itemize}
+\end{calcbox}
+
+\end{document}
