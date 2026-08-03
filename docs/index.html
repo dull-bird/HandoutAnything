@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>mooc2handout — MOOC to Handout Pipeline</title>
+<title>HandoutAnything — Local Materials to Handout</title>
 <style>
   :root { --bg: #0d1117; --card: #161b22; --border: #30363d; --text: #e6edf3; --muted: #8b949e; --accent: #58a6ff; --green: #3fb950; --orange: #d29922; --purple: #bc8cff; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -72,13 +72,13 @@
 
   <!-- Hero -->
   <section class="hero">
-    <h1><span>mooc2handout</span></h1>
-    <p>One-click pipeline: download MOOC subtitles &amp; videos, AI-infers keyframes, extracts frames, and scaffolds structured handouts.</p>
+    <h1><span>HandoutAnything</span></h1>
+    <p>Turn any local material — textbooks, PDFs, videos with subtitles, audio, papers, or a mixed corpus — into a structured, first-principles study handout.</p>
     <div class="badges">
-      <span class="badge coursera">Coursera</span>
-      <span class="badge edx">edX (planned)</span>
-      <span class="badge future">FutureLearn (planned)</span>
-      <span class="badge more">more coming...</span>
+      <span class="badge coursera">Books / PDF</span>
+      <span class="badge edx">Video + Subtitles</span>
+      <span class="badge future">Audio / Papers</span>
+      <span class="badge more">Local materials only</span>
     </div>
   </section>
 
@@ -88,64 +88,27 @@
     <div class="steps">
       <div class="step">
         <div class="num">1</div>
-        <div class="icon">&#x1F4E5;</div>
-        <h3>Download</h3>
-        <p>Subtitles (VTT) + 720p video + supplementary PDFs via <code>opencli</code></p>
+        <div class="icon">&#x1F6A6;</div>
+        <h3>Suitability Gate</h3>
+        <p>Red / yellow / green triage — fiction-for-enjoyment is declined with a better alternative</p>
       </div>
       <div class="step">
         <div class="num">2</div>
-        <div class="icon">&#x1F9E0;</div>
-        <h3>AI Keyframes</h3>
-        <p>Semantic analysis of VTT text detects concept shifts, definitions, examples</p>
+        <div class="icon">&#x1F9E9;</div>
+        <h3>Decompose</h3>
+        <p>Concept inventory → reader-gap diff → concept map → hub-concept scoring</p>
       </div>
       <div class="step">
         <div class="num">3</div>
-        <div class="icon">&#x1F4F7;</div>
-        <h3>Extract Frames</h3>
-        <p><code>ffmpeg</code> cuts screenshots at predicted timestamps</p>
+        <div class="icon">&#x270D;&#xFE0F;</div>
+        <h3>Write</h3>
+        <p>First principles + Feynman checks, derivations over memorization, pitfalls for every concept</p>
       </div>
       <div class="step">
         <div class="num">4</div>
         <div class="icon">&#x1F4D6;</div>
-        <h3>Handout</h3>
-        <p>LaTeX scaffold with keyframe images, structured notes, exercises</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Features -->
-  <section class="features">
-    <h2>Features</h2>
-    <div class="feature-grid">
-      <div class="feature">
-        <div class="icon">&#x1F310;</div>
-        <h3>Multi-Platform</h3>
-        <p>Currently supports Coursera with full auto-discovery. edX and FutureLearn adapters planned.</p>
-      </div>
-      <div class="feature">
-        <div class="icon">&#x1F512;</div>
-        <h3>Lock Detection</h3>
-        <p>Automatically detects locked lectures and skips them gracefully.</p>
-      </div>
-      <div class="feature">
-        <div class="icon">&#x1F4C4;</div>
-        <h3>Supplementary Materials</h3>
-        <p>Downloads background reading PDFs, slide decks, and other resources attached to lectures.</p>
-      </div>
-      <div class="feature">
-        <div class="icon">&#x1F916;</div>
-        <h3>AI Keyframe Inference</h3>
-        <p>Bilingual (CN/EN) semantic analysis: concept shifts, definitions, examples, summaries.</p>
-      </div>
-      <div class="feature">
-        <div class="icon">&#x1F3AC;</div>
-        <h3>Video Integration</h3>
-        <p>720p download via yt-dlp, DOM src, or network intercept with HLS fallback.</p>
-      </div>
-      <div class="feature">
-        <div class="icon">&#x26A1;</div>
-        <h3>Zero Password</h3>
-        <p>Uses your logged-in Chrome session. No credentials stored or transmitted.</p>
+        <h3>Verify</h3>
+        <p>12-item checklist: compile clean, no dropped glyphs, page-by-page visual inspection</p>
       </div>
     </div>
   </section>
@@ -223,42 +186,30 @@
     <h2>Get Started</h2>
     <div class="install-grid">
       <div class="install-card">
-        <h3>AI Auto-Configure</h3>
+        <h3>Use with your AI agent</h3>
         <span class="tag auto">Recommended</span>
-        <p>Give your AI agent this prompt. It reads the repo, installs all dependencies, and runs the full pipeline for you.</p>
-        <pre><code>Clone https://github.com/dull-bird/mooc2handout-skill
-and follow the "Quick Start" and "Usage" sections
-in README.md to set up everything from scratch:
-install opencli, install the platform adapter,
-bind Chrome, then download the course at
-&lt;PASTE_URL&gt; with --video --resources,
-infer keyframes, extract frames, and scaffold
-a handout. Do not skip any prerequisite step.</code></pre>
+        <p>HandoutAnything is an agent skill. Give your AI agent this prompt along with a local file or folder:</p>
+        <pre><code>Clone https://github.com/dull-bird/mooc2handout-skill,
+read handout-anything/SKILL.md and
+references/handout-methodology.md, then follow the
+workflow to turn &lt;LOCAL_FILE_OR_FOLDER&gt; into a
+handout: suitability gate and pre-flight checks first,
+show me the unit plan for confirmation before writing,
+then write, compile, and run the full verification
+checklist.</code></pre>
       </div>
       <div class="install-card">
-        <h3>Manual Install</h3>
-        <span class="tag manual">CLI</span>
-        <pre><code># 1. Install opencli
-npm install -g @jackwener/opencli
+        <h3>Course downloads (separate plugins)</h3>
+        <span class="tag manual">opencli</span>
+        <p>Downloading from MOOC platforms is out of scope here — use the dedicated opencli plugins. Their output feeds this repo as local material:</p>
+        <pre><code>opencli plugin install \
+  github:/opencli-plugin-coursera
+opencli plugin install \
+  github:/opencli-plugin-hf-learn
 
-# 2. Install adapter
-mkdir -p ~/.opencli/clis/coursera
-cp skill/download.js ~/.opencli/clis/coursera/
-
-# 3. Download with resources
-opencli coursera download "URL" \
-  --video --resources --locale en
-
-# 4. Infer keyframes
-python3 scripts/vtt_keyframes.py \
-  --vtt-dir ./notes/module-1 \
-  --output keyframes.json
-
-# 5. Extract frames
-python3 scripts/extract_frames.py \
-  --video-dir ./notes/module-1 \
-  --keyframes keyframes.json \
-  --output ./frames/</code></pre>
+opencli coursera download "URL" --out ./notes
+opencli hf-learn read llm-course chapter1/1 \
+  --out chapter1-1.md</code></pre>
       </div>
     </div>
   </section>

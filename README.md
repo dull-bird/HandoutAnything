@@ -1,136 +1,61 @@
-# mooc2handout-skill
+# HandoutAnything
 
-一站式 MOOC → 讲义流水线：下载字幕 → AI 推断关键帧 → 提取画面 → 生成结构化讲义。
+把任何**本地材料**变成一份结构化、第一性原理的学习讲义：教材/书籍 PDF（数字版或扫描件）、本地视频与字幕、音频、Markdown/文本、论文（单篇或主题语料文件夹）。
 
-**本仓库现在包含两个互补的 skill：**
+> 网课平台下载（Coursera 等）不在本仓库范围内，请使用专用插件：
+> [opencli-plugin-coursera](https://github.com/dull-bird/opencli-plugin-coursera) · [opencli-plugin-hf-learn](https://github.com/dull-bird/opencli-plugin-hf-learn)
+> 下载得到的字幕/文本/视频可以作为本仓库的输入材料。
 
-- **mooc2handout**（`skill/`）：MOOC 字幕/视频 → 讲义的自动化流水线（本文档下文，Coursera 专用通道）。
-- **HandoutAnything**（`handout-anything/`）：**本地材料** → 结构化讲义——教材/书籍 PDF（数字版或扫描件）、本地视频与字幕、音频、Markdown/文本、论文（单篇或主题语料）。方法论固化在 [`references/handout-methodology.md`](references/handout-methodology.md)：适用性边界（什么不适合做讲义）、知识量标定（单元容量与学科密度系数）、知识拆解与枢纽概念识别（一通百通判据）、第一性原理 + 费曼讲解原则、练习设计、图示规范与验证清单。
+## 方法论
 
-## 功能
+核心固化在 [`references/handout-methodology.md`](references/handout-methodology.md)：
 
-| 阶段 | 工具 | 说明 |
-|------|------|------|
-| 1. 下载字幕 + 视频 | `skill/mooc.js` + `adapters/` | 多平台支持（Coursera/edX/...），自动检测，补充材料 |
-| 2. AI 推断关键帧 | `scripts/vtt_keyframes.py` | 从 VTT 字幕语义分析，推断最佳课件截图时间戳 |
-| 3. 提取关键帧 | `scripts/extract_frames.py` | ffmpeg 按时间戳从视频中截取画面 |
-| 4. 生成讲义 | `scripts/scaffold_handout.py` + AI | 字幕 + 关键帧 → LaTeX/Markdown 结构化讲义 |
+- **适用性边界**：绿灯（教材/课程/论文）/ 黄灯（虚构作品用于研究、混合语料）/ 红灯（虚构作品欣赏目的等，拒做并建议替代产物）；判断必须显式写出。
+- **知识量标定**：1 学习单元 = 60–90 分钟可消化（1 核心概念 + 3–5 要点 + 1 图/推导 + 2–4 题自测）；按学科分四类密度系数；按来源定策略（书不照章办事，混合语料先建问题树）；一周 7±2 单元。
+- **枢纽概念识别**（一通百通判据）：被依赖度、衍生力、跨域复用、第一性深度。
+- **讲解原则**：第一性原理（定义是被设计的）、费曼检验、推导替代背诵、客观对比、风险点视角。
+- **图示规范**：定量自洽、由构造保证、记号有交代。
+- **验证清单**：12 项交付前检查（编译 0 错误、无缺字形、逐页目检、覆盖检查、边界声明）。
+
+## 使用
+
+本仓库是一个 AI agent skill：把仓库交给支持工具调用的 agent，指向 `handout-anything/SKILL.md`，并给出本地材料路径即可。
+
+```
+阅读 handout-anything/SKILL.md 和 references/handout-methodology.md，
+按照其中的流程把 <本地材料路径> 制作成一份讲义：
+先做适用性判断与起飞前检查，拆出概念清单并与我确认单元规划，
+然后按结构模板写作、编译、逐项执行验证清单。
+```
 
 ## 目录结构
 
 ```
-mooc2handout-skill/
-├── README.md
-├── skill/
-│   ├── SKILL.md              ← mooc2handout skill（全流程自动配置）
-│   ├── mooc.js               ← 通用入口（自动检测平台，分发到对应 adapter）
-│   └── adapters/
-│       └── coursera.js       ← Coursera adapter（字幕/视频/补充材料下载）
-│       └── (edx.js)          ← edX adapter（planned）
+HandoutAnything/
 ├── handout-anything/
-│   └── SKILL.md              ← HandoutAnything skill（本地材料 → 讲义，输入路由 + 流程）
-├── scripts/
-│   ├── vtt_keyframes.py      ← AI 从 VTT 推断关键帧时间戳
-│   ├── extract_frames.py     ← ffmpeg 按时间戳提取画面
-│   └── scaffold_handout.py   ← 从字幕 manifest 生成 LaTeX 讲义骨架
+│   └── SKILL.md                ← agent skill（输入路由 + 四步流程）
 ├── references/
-│   ├── handout-methodology.md ← to-handout 方法论模板（核心）
-│   ├── handout-guidelines.md
-│   ├── research-inserts.md
-│   ├── ai-embodied-intelligence.md
-│   └── illustrations.md
-├── physics-handout/          ← 实例：教材 → 7 天物理讲义（LaTeX + TikZ）
-├── math-handout/             ← 实例：教材 → 9 天数学讲义（人教 A 版）
-└── feynman-technique/        ← 实例：视频转录 → 费曼学习法讲义
+│   ├── handout-methodology.md  ← 方法论模板（核心）
+│   └── ...                     ← 其他参考资料
+├── scripts/
+│   ├── generate_handout.py     ← 字幕类材料 → LaTeX 讲义（manifest + content.json）
+│   ├── vtt_keyframes.py        ← 从字幕语义推断关键帧时间戳
+│   └── extract_frames.py       ← ffmpeg 按时间戳截帧（本地视频配图）
+├── feynman-technique/          ← 实例：视频字幕转录 → 费曼学习法讲义
+├── physics-handout/            ← 实例：教材 PDF → 7 天物理讲义（LaTeX + TikZ）
+├── math-handout/               ← 实例：教材 PDF → 9 天数学讲义（人教 A 版）
+├── docs/                       ← GitHub Pages 站点与 demo PDF
+└── tests/
 ```
 
-## 快速开始
+## 编译环境
 
-### 方式一：手动安装
+讲义用 XeLaTeX 编译（ctexart + tcolorbox + TikZ）。实例目录内的 `texmf/` 自带兼容版宏包，编译时指定查找路径即可：
 
 ```bash
-# 1. 安装 opencli
-npm install -g @jackwener/opencli
-
-# 2. 安装 adapter（按需安装对应平台）
-mkdir -p ~/.opencli/clis/coursera
-cp skill/adapters/coursera.js ~/.opencli/clis/coursera/download.js
-
-# 3. 验证
-opencli coursera download --help
+cd physics-handout
+TEXINPUTS="./texmf//:" xelatex physics-handout.tex && TEXINPUTS="./texmf//:" xelatex physics-handout.tex
 ```
-
-### 方式二：让 AI 自动配置（推荐）
-
-把下面这段提示词发给你的 AI agent（Gemini / Claude / 任何支持工具调用的 agent）：
-
-```
-Clone https://github.com/dull-bird/mooc2handout-skill
-and follow the "Quick Start" and "Usage" sections
-in README.md to set up everything from scratch:
-install opencli, install the platform adapter,
-bind Chrome, then download the course at
-<PASTE_URL> with --video --resources,
-infer keyframes, extract frames, and scaffold
-a handout. Do not skip any prerequisite step.
-```
-
-AI 会自动完成：安装依赖 → 配置 adapter → 绑定 Chrome → 下载字幕/视频/补充材料 → 推断关键帧 → 提取画面 → 生成讲义。
-
-## 使用流程
-
-```bash
-# ① 绑定 Chrome（需已登录 coursera.org）
-opencli browser coursera bind
-
-# ② 下载字幕 + 视频（通用入口，自动检测平台）
-node skill/mooc.js "https://www.coursera.org/learn/COURSE" \
-  --out ./notes --video --resources --locale en
-# 或直接调用平台 adapter：
-opencli coursera download "URL" --out ./notes --video --resources
-
-# ③ AI 推断关键帧时间戳
-python3 scripts/vtt_keyframes.py \
-  --vtt-dir ./notes/module-1 \
-  --output ./notes/module-1/keyframes.json
-
-# ④ 从视频中提取关键帧
-python3 scripts/extract_frames.py \
-  --video-dir ./notes/module-1 \
-  --keyframes ./notes/module-1/keyframes.json \
-  --output ./notes/module-1/frames/
-
-# ⑤ 生成讲义骨架
-python3 scripts/scaffold_handout.py \
-  --subtitle-dir ./notes/module-1 \
-  --course-title "课程名" \
-  --unit-title "单元名" \
-  --lang zh \
-  --output ./handout.tex
-```
-
-`content_en.json` and `supplements_en.json` are preferred for polished output, but the generator can now bootstrap or extend the handout from English subtitles and extracted PDF text when those files are missing or too sparse.
-If your manifest titles are still Chinese, add `lecture_titles` to `content_en.json`; English mode will use that mapping.
-
-## 关键帧推断原理
-
-`vtt_keyframes.py` 分析 VTT 字幕文本，基于以下规则推断关键帧：
-
-1. **概念转折** — "但是"、"然而"、"接下来" 等转折/过渡词
-2. **定义出现** — "所谓"、"是指"、"定义为" 等定义性表述
-3. **示例切换** — "举个例子"、"比如" 等示例引入
-4. **总结回顾** — "总结一下"、"回顾" 等总结性表述
-5. **均匀分布** — 无明显语义转折时，按固定间隔补充关键帧
-
-每个候选时间戳标注原因（concept_shift / definition / example / summary / interval）。
-
-## 依赖
-
-- Node.js ≥ 18
-- opencli
-- Python ≥ 3.8
-- ffmpeg（关键帧提取）
-- Chrome / Chromium（字幕下载）
 
 ## License
 
