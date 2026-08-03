@@ -1,0 +1,30 @@
+[
+  {
+    "title": "为什么你以为懂了，其实没懂",
+    "file": "01-illusion-of-competence.txt"
+  },
+  {
+    "title": "第一步：选定概念，动手写下来",
+    "file": "02-write-it-down.txt"
+  },
+  {
+    "title": "第二步：像给朋友讲解一样解释",
+    "file": "03-explain-to-friend.txt"
+  },
+  {
+    "title": "第三步：识别并填补知识盲区",
+    "file": "04-find-the-gaps.txt"
+  },
+  {
+    "title": "第四步：简化表达，善用类比",
+    "file": "05-simplify-analogize.txt"
+  },
+  {
+    "title": "进阶测试：像五岁小孩一样追问为什么",
+    "file": "06-five-year-old-test.txt"
+  },
+  {
+    "title": "迁移应用、常见错误与落地实践",
+    "file": "07-transfer-and-practice.txt"
+  }
+]

@@ -2,6 +2,11 @@
 
 一站式 MOOC → 讲义流水线：下载字幕 → AI 推断关键帧 → 提取画面 → 生成结构化讲义。
 
+**本仓库现在包含两个互补的 skill：**
+
+- **mooc2handout**（`skill/`）：MOOC 字幕/视频 → 讲义的自动化流水线（本文档下文，Coursera 专用通道）。
+- **HandoutAnything**（`handout-anything/`）：**本地材料** → 结构化讲义——教材/书籍 PDF（数字版或扫描件）、本地视频与字幕、音频、Markdown/文本、论文（单篇或主题语料）。方法论固化在 [`references/handout-methodology.md`](references/handout-methodology.md)：适用性边界（什么不适合做讲义）、知识量标定（单元容量与学科密度系数）、知识拆解与枢纽概念识别（一通百通判据）、第一性原理 + 费曼讲解原则、练习设计、图示规范与验证清单。
+
 ## 功能
 
 | 阶段 | 工具 | 说明 |
@@ -17,20 +22,26 @@
 mooc2handout-skill/
 ├── README.md
 ├── skill/
-│   ├── SKILL.md              ← AI agent skill（全流程自动配置）
+│   ├── SKILL.md              ← mooc2handout skill（全流程自动配置）
 │   ├── mooc.js               ← 通用入口（自动检测平台，分发到对应 adapter）
 │   └── adapters/
 │       └── coursera.js       ← Coursera adapter（字幕/视频/补充材料下载）
 │       └── (edx.js)          ← edX adapter（planned）
+├── handout-anything/
+│   └── SKILL.md              ← HandoutAnything skill（本地材料 → 讲义，输入路由 + 流程）
 ├── scripts/
 │   ├── vtt_keyframes.py      ← AI 从 VTT 推断关键帧时间戳
 │   ├── extract_frames.py     ← ffmpeg 按时间戳提取画面
 │   └── scaffold_handout.py   ← 从字幕 manifest 生成 LaTeX 讲义骨架
-└── references/
-    ├── handout-guidelines.md
-    ├── research-inserts.md
-    ├── ai-embodied-intelligence.md
-    └── illustrations.md
+├── references/
+│   ├── handout-methodology.md ← to-handout 方法论模板（核心）
+│   ├── handout-guidelines.md
+│   ├── research-inserts.md
+│   ├── ai-embodied-intelligence.md
+│   └── illustrations.md
+├── physics-handout/          ← 实例：教材 → 7 天物理讲义（LaTeX + TikZ）
+├── math-handout/             ← 实例：教材 → 9 天数学讲义（人教 A 版）
+└── feynman-technique/        ← 实例：视频转录 → 费曼学习法讲义
 ```
 
 ## 快速开始
