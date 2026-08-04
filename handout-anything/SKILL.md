@@ -49,6 +49,7 @@ allowed-tools: Bash, Read, Write, Edit, Glob, Grep
 - 图示遵守 §5.4 三条规范（定量自洽、由构造保证、记号有交代）。
 - 排版实现：首选 LaTeX（ctexart + tcolorbox + TikZ，风格参照本仓库 examples/physics-handout / examples/math-handout）；纯文本字幕类材料也可用 `scripts/generate_handout.py` 流水线（参照 examples/feynman-technique/）。
 - 讲义中出现代码（示例、命令、终端输出）时，排版遵守 [references/code-blocks.md](references/code-blocks.md)：tcolorbox + listings 的 `codeblock` 环境与 `\code{}` 行内宏，preamble 片段直接粘贴，禁用 minted。
+- 定理/证明/数据/转述观点必须有出处，卷尾给参考文献与分层拓展阅读；排版遵守 [references/citations.md](references/citations.md)：行内 `\src{}` 出处标签 + `reading` 拓展盒 + 卷尾编号文献，禁用 BibTeX。
 
 ## 第 4 步：验证与交付
 
@@ -61,6 +62,7 @@ allowed-tools: Bash, Read, Write, Edit, Glob, Grep
 - 每单元已标优先级与难度，"开始前"页有依赖关系图；
 - 逐页目检（渲染 PNG 抽查全部图页）；
 - 概念清单中【全新】概念每个都有落点；
+- 定理/证明/数据/转述观点均有行内出处，卷尾有编号参考文献与拓展阅读路线（方法论 §5.5）；
 - 收尾"能讲给别人听的 N 句话"与开篇呼应。
 
 ## LaTeX 编译环境

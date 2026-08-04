@@ -44,6 +44,7 @@ def build_handout(
     with_closing_echo: bool = True,
     with_boundary: bool = True,
     with_dependency: bool = True,
+    with_refs: bool = True,
     unit_without_self_test: int | None = None,
 ) -> str:
     lines = ["\\documentclass{ctexart}", "\\begin{document}"]
@@ -63,6 +64,12 @@ def build_handout(
         lines.append("\\begin{keyconcept}[学完后，你应该能讲给别人听的三句话]")
         lines.append("三句话。")
         lines.append("\\end{keyconcept}")
+    if with_refs:
+        lines.append("\\section*{参考文献与拓展阅读}")
+        lines.append("\\subsection*{编号文献}")
+        lines.append("[1] 某某. 《某书》. 出版社, 2024.")
+        lines.append("\\subsection*{拓展阅读路线}")
+        lines.append("想看严谨证明：《某书》第 5 章。")
     lines.append("\\end{document}")
     return "\n".join(lines) + "\n"
 
@@ -114,6 +121,23 @@ class ReviewHandoutTests(unittest.TestCase):
         self.assertIn("边界声明", proc.stdout)
         self.assertIn("依赖", proc.stdout)
         self.assertIn("warnings", proc.stdout)
+
+    def test_missing_references_is_warning(self):
+        proc = self.review(build_handout(with_refs=False))
+        self.assertEqual(proc.returncode, 0, proc.stdout)
+        self.assertIn("0 errors", proc.stdout)
+        self.assertIn("参考文献", proc.stdout)
+        self.assertIn("拓展阅读", proc.stdout)
+
+    def test_extended_reading_synonym_accepted(self):
+        content = build_handout(with_refs=False)
+        content = content.replace(
+            "\\end{document}",
+            "\\section*{参考文献与延伸阅读}\n延伸阅读路线。\n\\end{document}",
+        )
+        proc = self.review(content)
+        self.assertEqual(proc.returncode, 0, proc.stdout)
+        self.assertNotIn("拓展阅读」路线", proc.stdout)
 
     def test_custom_unit_range_allows_short_handout(self):
         with tempfile.TemporaryDirectory() as td:

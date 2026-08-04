@@ -14,6 +14,7 @@ ERROR（存在即退出码 1）：
 
 WARNING（打印但不影响退出码）：
   - 卷首应有 边界声明 与 依赖（单元依赖关系图）
+  - 卷尾应有 参考文献 与 拓展阅读（方法论 §5.5 出处与拓展阅读）
   - 每个单元应有 优先级 / 难度 / 用时 标注
   - 每个单元应提及 易错 或 失效边界
   - 每个单元的 今日自测 题数应在 2–4（按 exercise 环境内 \\item 计数）
@@ -93,6 +94,13 @@ def review(tex_path: Path, min_units: int = 5, max_units: int = 9) -> tuple[list
         warnings.append("卷首缺少「边界声明」（本讲义覆盖/未覆盖什么）")
     if "依赖" not in front_text:
         warnings.append("卷首缺少单元「依赖」关系说明（依赖关系图）")
+
+    # ── WARNING：卷尾出处与拓展阅读（方法论 §5.5）──
+    back_text = "\n".join(back)
+    if back and "参考文献" not in back_text:
+        warnings.append("卷尾缺少「参考文献」章节（出处编号文献，方法论 §5.5）")
+    if back and "拓展阅读" not in back_text and "延伸阅读" not in back_text:
+        warnings.append("卷尾缺少「拓展阅读」路线（分层指引读者深造，方法论 §5.5）")
 
     # ── 逐单元检查 ──
     missing_meta: dict[str, list[int]] = {"优先级": [], "难度": [], "用时": []}
