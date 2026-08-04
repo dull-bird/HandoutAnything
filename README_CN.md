@@ -64,6 +64,7 @@ npx skills add dull-bird/HandoutAnything
 - [`examples/math-handout/`](examples/math-handout/)：教材 PDF → 9 天数学讲义（人教 A 版，三角全覆盖）
 - [`examples/naval-handout/`](examples/naval-handout/)：Naval 思想 → 主题讲义
 - [`examples/mathematical-thinking/`](examples/mathematical-thinking/)：课程字幕 → 数学思维讲义
+- [`examples/calculus-handout/`](examples/calculus-handout/)：大纲 + 开放教材/习题库 → 文科生 7 天微积分讲义
 
 在线 demo 与站点：<https://dull-bird.github.io/mooc2handout-skill/>
 

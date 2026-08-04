@@ -74,6 +74,7 @@ HandoutAnything/
 │   ├── physics-handout/        ← 教材 PDF → 7 天物理讲义（LaTeX + TikZ）
 │   ├── math-handout/           ← 教材 PDF → 9 天数学讲义（人教 A 版）
 │   ├── naval-handout/          ← Naval 思想 → 主题讲义
+│   ├── calculus-handout/       ← 大纲 + 开放资源 → 文科生 7 天微积分讲义
 │   └── mathematical-thinking/  ← 课程字幕 → 数学思维讲义
 ├── docs/                       ← GitHub Pages 站点与 demo PDF
 └── tests/
