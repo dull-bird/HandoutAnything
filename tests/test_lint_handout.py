@@ -82,6 +82,18 @@ class LintTexTests(unittest.TestCase):
         )
         self.assertEqual(proc.returncode, 0, proc.stdout)
 
+    def test_codeblock_env_exempt(self):
+        proc = self.lint(
+            "正文“配对”引号。\n"
+            "\\begin{codeblock}{Python}\n"
+            's = "他说"...  # 还有孤立…\n'
+            "\\end{codeblock}\n"
+            "\\begin{tcblisting}{}\n"
+            'x = "raw"\n'
+            "\\end{tcblisting}\n"
+        )
+        self.assertEqual(proc.returncode, 0, proc.stdout)
+
     def test_comment_lines_exempt(self):
         proc = self.lint(
             "% 注释里\"的引号不算\n"

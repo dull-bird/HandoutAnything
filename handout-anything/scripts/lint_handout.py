@@ -27,13 +27,15 @@ def lint_tex(tex_path: Path) -> list[str]:
     problems: list[str] = []
     lines = tex_path.read_text(encoding="utf-8", errors="replace").splitlines()
     in_verbatim = False
+    # 内容原样排版、不参与正文检查的环境
+    raw_envs = ("verbatim", "lstlisting", "codeblock", "tcblisting", "tcboutputlisting")
     body_lines: list[tuple[int, str]] = []  # (行号, 去注释/去数学模式后的正文)
     for lineno, line in enumerate(lines, 1):
         stripped = line.strip()
-        if stripped.startswith("\\begin{verbatim}") or stripped.startswith("\\begin{lstlisting}"):
+        if any(stripped.startswith(f"\\begin{{{env}}}") for env in raw_envs):
             in_verbatim = True
             continue
-        if stripped.startswith("\\end{verbatim}") or stripped.startswith("\\end{lstlisting}"):
+        if any(stripped.startswith(f"\\end{{{env}}}") for env in raw_envs):
             in_verbatim = False
             continue
         if in_verbatim or stripped.startswith("%"):

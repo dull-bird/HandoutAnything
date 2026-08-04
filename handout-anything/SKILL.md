@@ -48,6 +48,7 @@ allowed-tools: Bash, Read, Write, Edit, Glob, Grep
 - 每单元：核心问题 → 第一性讲解 → 公式/图象/推导 → 易错点与失效边界 → 自测。
 - 图示遵守 §5.4 三条规范（定量自洽、由构造保证、记号有交代）。
 - 排版实现：首选 LaTeX（ctexart + tcolorbox + TikZ，风格参照本仓库 examples/physics-handout / examples/math-handout）；纯文本字幕类材料也可用 `scripts/generate_handout.py` 流水线（参照 examples/feynman-technique/）。
+- 讲义中出现代码（示例、命令、终端输出）时，排版遵守 [references/code-blocks.md](references/code-blocks.md)：tcolorbox + listings 的 `codeblock` 环境与 `\code{}` 行内宏，preamble 片段直接粘贴，禁用 minted。
 
 ## 第 4 步：验证与交付
 
