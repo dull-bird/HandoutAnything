@@ -48,6 +48,7 @@ def build_handout(
     unit_count: int = 5,
     with_opening: bool = True,
     with_answers: bool = True,
+    with_bibliography: bool = True,
     with_closing_echo: bool = True,
     with_boundary: bool = True,
     with_dependency: bool = True,
@@ -70,6 +71,9 @@ def build_handout(
                 with_refs=(n != unit_without_refs),
             )
         )
+    if with_bibliography:
+        lines.append("\\section*{参考文献}")
+        lines.append("书目与文献条目（APA 风格，含 ISBN）。")
     if with_answers:
         lines.append("\\section*{参考答案}")
         lines.append("各讲答案要点。")
@@ -153,6 +157,13 @@ class ReviewHandoutTests(unittest.TestCase):
         self.assertEqual(proc.returncode, 0, proc.stdout)
         self.assertIn("0 errors", proc.stdout)
         self.assertIn("交接说明 md", proc.stdout)
+
+    def test_missing_bibliography_before_answers_is_warning(self):
+        proc = self.review(build_handout(with_bibliography=False))
+        self.assertEqual(proc.returncode, 0, proc.stdout)
+        self.assertIn("0 errors", proc.stdout)
+        self.assertIn("参考文献", proc.stdout)
+        self.assertIn("参考答案之前", proc.stdout)
 
     def test_custom_unit_range_allows_short_handout(self):
         with tempfile.TemporaryDirectory() as td:

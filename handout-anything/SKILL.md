@@ -49,7 +49,7 @@ allowed-tools: Bash, Read, Write, Edit, Glob, Grep
 - 图示遵守 §5.4 三条规范（定量自洽、由构造保证、记号有交代）。
 - 排版实现：首选 LaTeX（ctexart + tcolorbox + TikZ，风格参照本仓库 examples/physics-handout / examples/math-handout）；纯文本字幕类材料也可用 `scripts/generate_handout.py` 流水线（参照 examples/feynman-technique/）。
 - 讲义中出现代码（示例、命令、终端输出）时，排版遵守 [references/code-blocks.md](references/code-blocks.md)：tcolorbox + listings 的 `codeblock` 环境与 `\code{}` 行内宏，preamble 片段直接粘贴，禁用 minted。
-- 定理/证明/数据/转述观点必须有出处，拓展阅读随单元提供（不堆卷尾）；排版遵守 [references/citations.md](references/citations.md)：行内 `\src{}` 出处标签 + 每单元末尾的 `reading` 出处与拓展盒，禁用 BibTeX。
+- 定理/证明/数据/转述观点必须有出处，拓展阅读随单元提供；排版遵守 [references/citations.md](references/citations.md)：行内 `\src{}` 出处标签 + 每单元末尾的 `reading` 出处与拓展盒 + 参考答案之前的卷尾参考文献节（APA 风格、书名中文/论文英文原题、含版次 ISBN），禁用 BibTeX。
 
 ## 第 4 步：验证与交付
 
@@ -62,7 +62,7 @@ allowed-tools: Bash, Read, Write, Edit, Glob, Grep
 - 每单元已标优先级与难度，"开始前"页有依赖关系图；
 - 逐页目检（渲染 PNG 抽查全部图页）；
 - 概念清单中【全新】概念每个都有落点；
-- 定理/证明/数据/转述观点均有行内出处，每单元末尾有"本单元出处与拓展阅读"盒（方法论 §5.5，随单元提供不堆卷尾）；
+- 定理/证明/数据/转述观点均有行内出处，每单元末尾有"本单元出处与拓展阅读"盒；卷尾参考文献节在参考答案之前（方法论 §5.5，APA 风格、书名中文/论文英文原题、版次 ISBN 已查证）；
 - 讲义同目录有交接说明 md（方法论 §5.6）：讲义定位、参考资料全量清单（书目章节号等）、重编译与验证方式、文件清单、下一步；
 - 附件已在讲义目录 `sources/` 并在交接 md 登记（方法论 §5.7，保留本地不推送，不得 `git add -f` 绕过）；
 - 收尾"能讲给别人听的 N 句话"与开篇呼应。

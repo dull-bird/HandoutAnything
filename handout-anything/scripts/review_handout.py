@@ -14,7 +14,8 @@ ERROR（存在即退出码 1）：
 
 WARNING（打印但不影响退出码）：
   - 卷首应有 边界声明 与 依赖（单元依赖关系图）
-  - 每个单元应有 出处/拓展阅读（随单元提供，不堆卷尾，方法论 §5.5）
+  - 每个单元应有 出处/拓展阅读（随单元提供，方法论 §5.5）
+  - 参考答案之前应有 \\section*{参考文献} 卷尾总表（方法论 §5.5）
   - 每个单元应有 优先级 / 难度 / 用时 标注
   - 讲义同目录应有交接说明 md（参考资料清单/重编译方式/文件清单/下一步，方法论 §5.6）
   - 每个单元应提及 易错 或 失效边界
@@ -34,6 +35,7 @@ from pathlib import Path
 
 CORE_Q = "\\textbf{核心问题}"
 ANSWERS_SECTION = "\\section*{参考答案}"
+BIB_SECTION = "\\section*{参考文献}"
 HEADER_LOOKBACK = 8  # 核心问题之前多少行内算单元头部（优先级/难度/用时标注所在）
 
 
@@ -99,6 +101,12 @@ def review(tex_path: Path, min_units: int = 5, max_units: int = 9) -> tuple[list
     # ── WARNING：同目录交接说明 md（方法论 §5.6） ──
     if not any(tex_path.parent.glob("*.md")):
         warnings.append("讲义同目录没有交接说明 md（如 README.md：参考资料清单/重编译方式/文件清单/下一步，方法论 §5.6）")
+
+    # ── WARNING：卷尾参考文献节（参考答案之前，方法论 §5.5） ──
+    answers_line_idx = next((i for i, line in enumerate(lines) if ANSWERS_SECTION in line), None)
+    before_answers = lines[:answers_line_idx] if answers_line_idx is not None else lines
+    if not any(BIB_SECTION in line for line in before_answers):
+        warnings.append("参考答案之前缺少 \\section*{参考文献} 卷尾总表（APA 风格、书名中文/论文英文原题、含版次 ISBN，方法论 §5.5）")
 
     # ── 逐单元检查 ──
     missing_meta: dict[str, list[int]] = {"优先级": [], "难度": [], "用时": []}
