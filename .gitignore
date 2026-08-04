@@ -27,3 +27,6 @@ dist/
 *.log
 *.out
 *.toc
+
+# Handout source attachments（输入材料：原始 PDF/视频/音频等，保留本地不推送，方法论 §5.7）
+sources/

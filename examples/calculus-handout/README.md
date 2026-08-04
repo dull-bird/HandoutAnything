@@ -9,7 +9,7 @@
 
 **输入材料**：
 
-- `calculus-handout.md`——本讲义的原始 Markdown 稿（内容来源）。
+- `calculus-handout.md`——本讲义的原始 Markdown 稿（内容来源）。小型文本原件随讲义提交；大体积附件（原始 PDF/视频等）按约定放 `sources/` 保留本地不推送（方法论 §5.7），本讲义无此类附件。
 
 **主教材**：《普林斯顿微积分读本》（Adrian Banner，人民邮电出版社中译本，修订版）。用到的章节：
 
