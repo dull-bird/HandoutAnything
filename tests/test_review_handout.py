@@ -6,7 +6,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-REVIEW = ROOT / "scripts" / "review_handout.py"
+REVIEW = ROOT / "handout-anything" / "scripts" / "review_handout.py"
 
 
 def run_review(tex_path: Path) -> subprocess.CompletedProcess:

@@ -6,7 +6,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-LINT = ROOT / "scripts" / "lint_handout.py"
+LINT = ROOT / "handout-anything" / "scripts" / "lint_handout.py"
 
 
 def run_lint(*paths: Path) -> subprocess.CompletedProcess:

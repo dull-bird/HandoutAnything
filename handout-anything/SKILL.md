@@ -8,7 +8,9 @@ allowed-tools: Bash, Read, Write, Edit, Glob, Grep
 
 把用户给定的**本地材料**变成一份结构化的讲义。本 skill 只管"本地已有材料 → 讲义"，不负责网课平台下载（Coursera 等请用专用工具）。
 
-**开工前必读** [references/handout-methodology.md](../references/handout-methodology.md)——适用性边界、知识量标定、拆解流程、讲解原则、结构模板、验证清单都在那里定义，本文件只做路由与流程编排。
+**开工前必读** [references/handout-methodology.md](references/handout-methodology.md)——适用性边界、知识量标定、拆解流程、讲解原则、结构模板、验证清单都在那里定义，本文件只做路由与流程编排。
+
+> 本文件中所有相对路径（`references/`、`scripts/`）均相对于本 skill 目录自身——本 skill 是自包含的，单独拷贝/上传整个 `handout-anything/` 目录即可正常工作。
 
 ## 第 0 步：适用性判断（先做，不可跳过）
 
@@ -45,7 +47,7 @@ allowed-tools: Bash, Read, Write, Edit, Glob, Grep
 
 - 每单元：核心问题 → 第一性讲解 → 公式/图象/推导 → 易错点与失效边界 → 自测。
 - 图示遵守 §5.4 三条规范（定量自洽、由构造保证、记号有交代）。
-- 排版实现：首选 LaTeX（ctexart + tcolorbox + TikZ，风格参照本仓库 physics-handout / math-handout）；纯文本字幕类材料也可用 `scripts/generate_handout.py` 流水线（参照 feynman-technique/）。
+- 排版实现：首选 LaTeX（ctexart + tcolorbox + TikZ，风格参照本仓库 examples/physics-handout / examples/math-handout）；纯文本字幕类材料也可用 `scripts/generate_handout.py` 流水线（参照 examples/feynman-technique/）。
 
 ## 第 4 步：验证与交付
 
@@ -70,6 +72,6 @@ allowed-tools: Bash, Read, Write, Edit, Glob, Grep
 
 ## 已有实例（本仓库可直接参考）
 
-- `physics-handout/`：教材 PDF → 7 天物理讲义（LaTeX 手写 + TikZ 矢量图）
-- `math-handout/`：教材 PDF（新版 + 扫描旧版对照）→ 9 天数学讲义
-- `feynman-technique/`：视频字幕转录 → 费曼学习法讲义（generate_handout.py 流水线）
+- `examples/physics-handout/`：教材 PDF → 7 天物理讲义（LaTeX 手写 + TikZ 矢量图）
+- `examples/math-handout/`：教材 PDF（新版 + 扫描旧版对照）→ 9 天数学讲义
+- `examples/feynman-technique/`：视频字幕转录 → 费曼学习法讲义（generate_handout.py 流水线）

@@ -74,7 +74,7 @@ class LanguageModeTests(unittest.TestCase):
             output = data_dir / "out.tex"
             run(
                 [
-                    "scripts/generate_handout.py",
+                    "handout-anything/scripts/generate_handout.py",
                     "--data-dir",
                     str(data_dir),
                     "--course-title",
@@ -135,7 +135,7 @@ class LanguageModeTests(unittest.TestCase):
             output = data_dir / "out.tex"
             run(
                 [
-                    "scripts/generate_handout.py",
+                    "handout-anything/scripts/generate_handout.py",
                     "--data-dir",
                     str(data_dir),
                     "--course-title",
@@ -188,7 +188,7 @@ class LanguageModeTests(unittest.TestCase):
             output = data_dir / "out.tex"
             run(
                 [
-                    "scripts/generate_handout.py",
+                    "handout-anything/scripts/generate_handout.py",
                     "--data-dir",
                     str(data_dir),
                     "--course-title",
@@ -232,7 +232,7 @@ class LanguageModeTests(unittest.TestCase):
             proc = subprocess.run(
                 [
                     sys.executable,
-                    "scripts/generate_handout.py",
+                    "handout-anything/scripts/generate_handout.py",
                     "--data-dir",
                     str(data_dir),
                     "--course-title",
@@ -284,7 +284,7 @@ class LanguageModeTests(unittest.TestCase):
             output = data_dir / "out.tex"
             run(
                 [
-                    "scripts/generate_handout.py",
+                    "handout-anything/scripts/generate_handout.py",
                     "--data-dir",
                     str(data_dir),
                     "--course-title",
@@ -342,7 +342,7 @@ class LanguageModeTests(unittest.TestCase):
             output = data_dir / "out.tex"
             run(
                 [
-                    "scripts/generate_handout.py",
+                    "handout-anything/scripts/generate_handout.py",
                     "--data-dir",
                     str(data_dir),
                     "--course-title",
