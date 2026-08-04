@@ -200,8 +200,8 @@
 为什么文科生绕不开它？因为各学科的“定律”几乎都是函数声明：
 
 \begin{itemize}
-  \item 心理学·韦伯–费希纳定律：主观感受强度是物理刺激的对数函数 $S = k\ln(I/I_0)$（$I_0$ 是刚好能感觉到的最小刺激，叫绝对阈限）；\src{Fechner《心理物理学纲要》1860}
-  \item 心理学·史蒂文斯幂定律：$\psi = kI^{a}$，$a$ 因感觉通道而异（响度约 $0.67$，电击约 $3.5$）；\src{Stevens, Psychophysical Review 1957}
+  \item 心理学·韦伯–费希纳定律：主观感受强度是物理刺激的对数函数 $S = k\ln(I/I_0)$（$I_0$ 是刚好能感觉到的最小刺激，叫绝对阈限）；\src{Fechner 1860}
+  \item 心理学·史蒂文斯幂定律：$\psi = kI^{a}$，$a$ 因感觉通道而异（响度约 $0.67$，电击约 $3.5$）；\src{Stevens 1957}
   \item 经济学·复利：本金 $P$、年利率 $r$、$t$ 年后变成 $A = P(1+r)^{t}$——指数函数；
   \item 人口学：指数增长 $N = N_0 e^{rt}$。
 \end{itemize}
@@ -230,7 +230,7 @@
 三条曲线都经过 $(0,0)$，右端对齐在同一高度——差别全在\textbf{途中}：对数在前半程冲得最猛、后劲衰竭；指数相反。这就是“增长性格”的含义。
 
 \begin{keyconcept}[为什么“感受”是对数的？]
-韦伯定律说：能察觉的最小差别 $\Delta I$ 与当前刺激 $I$ 成比例，即 $\Delta I / I = $ 常数。提 1 kg 重物时多放 10 g 你能察觉；提 10 kg 时要多放 100 g 才察觉——同样的 $\Delta I$，刺激越大越“钝”。把这个比例关系累积起来（第 6 天会说“累积”就是积分），得到的正是对数函数：$S = k\ln(I/I_0)$。\textbf{对数不是数学家发明的记号，是“敏感度随基数递减”这条经验的必然形状。}Bernoulli 在 1738 年用同样的 $u(x)=\log x$ 描述财富的主观价值（边际效用递减）\src{Bernoulli《论赌博的度量》1738}——心理物理学和决策科学共享同一条曲线。
+韦伯定律说：能察觉的最小差别 $\Delta I$ 与当前刺激 $I$ 成比例，即 $\Delta I / I = $ 常数。提 1 kg 重物时多放 10 g 你能察觉；提 10 kg 时要多放 100 g 才察觉——同样的 $\Delta I$，刺激越大越“钝”。把这个比例关系累积起来（第 6 天会说“累积”就是积分），得到的正是对数函数：$S = k\ln(I/I_0)$。\textbf{对数不是数学家发明的记号，是“敏感度随基数递减”这条经验的必然形状。}Bernoulli 在 1738 年用同样的 $u(x)=\log x$ 描述财富的主观价值（边际效用递减）\src{Bernoulli 1738}——心理物理学和决策科学共享同一条曲线。
 \end{keyconcept}
 
 \subsection*{1.3 读图三件套：定义域、单调性、增长性格}
@@ -264,7 +264,7 @@
 \begin{reading}
 \textbf{本单元出处}
 \begin{itemize}
-  \item 函数与图像：《普林斯顿微积分读本》第 1 章；指数与对数函数的图像见第 9 章前半。
+  \item 函数与图像：《普林斯顿微积分读本》\footnote{下文简称为《读本》。全书版本信息（版次/译者/ISBN）见卷尾参考文献。}第 1 章；指数与对数函数的图像见第 9 章前半。
   \item 三种增长性格的学科例子（韦伯–费希纳、幂定律、复利）为讲义改编，原始出处已在正文行内标出。
 \end{itemize}
 \textbf{拓展阅读}
@@ -391,7 +391,7 @@ $h$ 是时间段的宽度。$h$ 越小，割线越贴着曲线旋转；$h\to 0$ 
 割线取 $h=1$（从 $x=1$ 到 $x=2$）：斜率 $=\tfrac{4-1}{2-1}=3$。$h$ 缩小，割线斜率趋于 $2$——这就是 $f'(1)=2$。图是按解析式 $y=3x-2$（割线）与 $y=2x-1$（切线）画的，切线与抛物线只在 $(1,1)$ 相触，你可以拿尺子验证。
 
 \begin{keyconcept}[“边际”就是导数]
-经济学把“多生产一单位，成本增加多少”叫边际成本——那是离散的说法。把产量看成连续变量，边际成本 $=$ 成本函数的\textbf{导数}；边际效用 $=$ 效用函数的导数。Bernoulli 的对数效用 $u(x)=\log x$ 的边际效用是 $u'(x)=1/x$：财富越多，每多一元带来的效用增量越小。你在经济学课背的“边际量递减/递增”，翻译成微积分就是“导数在变小/变大”。\src{曼昆《经济学原理》边际量定义，第 2 章}
+经济学把“多生产一单位，成本增加多少”叫边际成本——那是离散的说法。把产量看成连续变量，边际成本 $=$ 成本函数的\textbf{导数}；边际效用 $=$ 效用函数的导数。Bernoulli 的对数效用 $u(x)=\log x$ 的边际效用是 $u'(x)=1/x$：财富越多，每多一元带来的效用增量越小。你在经济学课背的“边际量递减/递增”，翻译成微积分就是“导数在变小/变大”。\footnote{《经济学原理》指曼昆《经济学原理（第 7 版）：微观经济学分册》（中译本）；版本信息见卷尾参考文献。}\src{《经济学原理》第 2 章}
 \end{keyconcept}
 
 \subsection*{3.2 用定义算一次（就这一次）}
@@ -484,7 +484,7 @@ $e^x$ 那行不是巧合：$e$ 就是被定义为“让指数函数的导数等�
 为什么合理？速度是“叠乘”的：$y$ 随 $u$ 变化的速度，乘上 $u$ 随 $x$ 变化的速度，就是 $y$ 随 $x$ 变化的速度——$\tfrac{dy}{dx}=\tfrac{dy}{du}\cdot\tfrac{du}{dx}$，链式法则正是这句话。\src{《读本》第 6 章 §6.2.5}
 
 \begin{keyconcept}[链式法则实战：遗忘曲线降得有多快？]
-现代常用的遗忘近似 $R(t)=e^{-t/S}$（$S$ 为记忆稳定性；此式出自 Woźniak 等 1995 年，艾宾浩斯 1885 年本人用的是对数型公式，见书末资料注）。外层 $e^{u}$ 的导数是自身，内层 $u=-t/S$ 的导数是 $-1/S$，于是
+现代常用的遗忘近似 $R(t)=e^{-t/S}$（$S$ 为记忆稳定性；此式出自 Woźniak 等 1995 年\src{Woźniak et al. 1995}，艾宾浩斯 1885 年本人用的是对数型公式，见书末资料注）。外层 $e^{u}$ 的导数是自身，内层 $u=-t/S$ 的导数是 $-1/S$，于是
 \[
   R'(t)=e^{-t/S}\cdot\Bigl(-\frac{1}{S}\Bigr)=-\frac{1}{S}R(t).
 \]
@@ -728,7 +728,7 @@ $\int f(x)\,dx$ 问的是：哪个函数求导等于 $f(x)$？答案叫\textbf{�
 
 极限是语言（第 2 天），导数与积分是两种操作（第 3、6 天），基本定理是焊接点（今天）。
 
-\subsection*{7.2 概率就是面积：通往统计的桥}\src{密度与面积即概率：《普林斯顿概率论读本》连续型分布章节}
+\subsection*{7.2 概率就是面积：通往统计的桥}\footnote{《概率论读本》指米勒《普林斯顿概率论读本》（中译本）；版本信息见卷尾参考文献。}\src{《概率论读本》第 8 章 §8.2}
 
 正态分布的密度曲线 $\varphi(x)=\tfrac{1}{\sqrt{2\pi}}e^{-x^2/2}$（标准形式）下方，整个面积是 $1$；某区间的\textbf{面积}就是取值落在该区间的\textbf{概率}：
 
@@ -773,7 +773,7 @@ $\int f(x)\,dx$ 问的是：哪个函数求导等于 $f(x)$？答案叫\textbf{�
 \textbf{本单元出处}
 \begin{itemize}
   \item 微积分基本定理（两个方向）：《普林斯顿微积分读本》第 17 章。
-  \item “概率 $=$ 密度曲线下面积”与 68–95–99.7 经验法则：任何一本概率论教材的正态分布章节，如《普林斯顿概率论读本》。
+  \item “概率 $=$ 密度曲线下面积”与 68–95–99.7 经验法则：任何一本概率论教材的正态分布章节，如《概率论读本》第 8 章。
 \end{itemize}
 \textbf{拓展阅读}
 \begin{itemize}
@@ -788,7 +788,7 @@ $\int f(x)\,dx$ 问的是：哪个函数求导等于 $f(x)$？答案叫\textbf{�
 \section*{参考文献}
 \addcontentsline{toc}{section}{参考文献}
 
-本节按专业引用规范（APA 格式改写）汇总本讲义用到的全部书目与文献：书名用中文（附原文名便于检索），论文保留原始英文标题。各单元的行内出处与“本单元出处与拓展阅读”盒负责指到章节号，本节负责给全版本信息。
+本节按专业引用规范（APA 格式改写）汇总本讲义用到的全部书目与文献：书名用中文（附原文名便于检索），论文保留原始英文标题。行内出处约定：论文写“作者姓 + 年份”（如 Stevens 1957），书写书名或简写 + 章节号（如《读本》第 9 章 §9.1），简写全称由首次出现处的脚注给出。各单元的行内出处与“本单元出处与拓展阅读”盒负责指到章节号，本节负责给全版本信息。
 
 \textbf{书目}
 \begin{itemize}[label={}, leftmargin=2em, itemindent=-2em, itemsep=3pt]
@@ -803,8 +803,9 @@ $\int f(x)\,dx$ 问的是：哪个函数求导等于 $f(x)$？答案叫\textbf{�
 \textbf{期刊论文与历史文献（保留原始标题，便于检索）}
 \begin{itemize}[label={}, leftmargin=2em, itemindent=-2em, itemsep=3pt]
   \item Stevens, S. S. (1957). On the psychophysical law. \emph{Psychological Review}, 64(3), 153--181.（史蒂文斯幂定律的出处）
-  \item Murre, J. M. J., \& Dros, J. (2015). Replication and analysis of Ebbinghaus' forgetting curve. \emph{PLOS ONE}, 10(7), e0130644.（艾宾浩斯遗忘曲线的当代复现与分析）
+  \item Murre, J. M. J., \& Dros, J. (2015). Replication and analysis of Ebbinghaus' forgetting curve. \emph{PLOS ONE}, 10(7), e0120644.（艾宾浩斯遗忘曲线的当代复现与分析）
   \item Bernoulli, D. (1738). Specimen theoriae novae de mensura sortis. \emph{Commentarii Academiae Scientiarum Imperialis Petropolitanae}, 5, 175--192.（对数效用与边际效用递减的出处；英译：Exposition of a new theory on the measurement of risk. \emph{Econometrica}, 22(1), 23--36，1954）
+  \item Woźniak, P. A., Gorzelańczyk, E. J., \& Murakowski, J. A. (1995). Two components of long-term memory. \emph{Acta Neurobiologiae Experimentalis}, 55(4), 301--305.（第 4 天遗忘曲线现代近似 $R(t)=e^{-t/S}$ 的出处）
 \end{itemize}
 
 其余配套资源（3Blue1Brown 视频、Paul's Online Math Notes、宋浩视频课等）不属正文引用，逐天映射见卷尾“资料注与后续学习指引”。

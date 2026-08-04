@@ -49,7 +49,7 @@ allowed-tools: Bash, Read, Write, Edit, Glob, Grep
 - 图示遵守 §5.4 三条规范（定量自洽、由构造保证、记号有交代）。
 - 排版实现：首选 LaTeX（ctexart + tcolorbox + TikZ，风格参照本仓库 examples/physics-handout / examples/math-handout）；纯文本字幕类材料也可用 `scripts/generate_handout.py` 流水线（参照 examples/feynman-technique/）。
 - 讲义中出现代码（示例、命令、终端输出）时，排版遵守 [references/code-blocks.md](references/code-blocks.md)：tcolorbox + listings 的 `codeblock` 环境与 `\code{}` 行内宏，preamble 片段直接粘贴，禁用 minted。
-- 定理/证明/数据/转述观点必须有出处，拓展阅读随单元提供；排版遵守 [references/citations.md](references/citations.md)：行内 `\src{}` 出处标签 + 每单元末尾的 `reading` 出处与拓展盒 + 参考答案之前的卷尾参考文献节（APA 风格、书名中文/论文英文原题、含版次 ISBN），禁用 BibTeX。
+- 定理/证明/数据/转述观点必须有出处，拓展阅读随单元提供；排版遵守 [references/citations.md](references/citations.md)：行内 `\src{}` 出处标签（论文写姓+年份，书写书名/简写+章节号，简写首次出现加脚注给全称、全 PDF 只一次） + 每单元末尾的 `reading` 出处与拓展盒 + 参考答案之前的卷尾参考文献节（APA 风格、书名中文/论文英文原题、含版次 ISBN），禁用 BibTeX。
 
 ## 第 4 步：验证与交付
 
