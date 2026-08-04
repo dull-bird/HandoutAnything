@@ -18,7 +18,7 @@ def run_review(tex_path: Path) -> subprocess.CompletedProcess:
     )
 
 
-def build_unit(n: int, with_self_test: bool = True) -> str:
+def build_unit(n: int, with_self_test: bool = True, with_refs: bool = True) -> str:
     parts = [
         f"\\daytitle{{第 {n} 讲}}{{标题 {n}}}",
         "\\noindent\\textbf{优先级}：必看\\quad|\\quad\\textbf{难度}：$\\star$\\quad|\\quad\\textbf{用时}：约 20 分钟",
@@ -34,6 +34,13 @@ def build_unit(n: int, with_self_test: bool = True) -> str:
             "\\end{enumerate}",
             "\\end{exercise}",
         ]
+    if with_refs:
+        parts += [
+            "\\begin{reading}",
+            "\\textbf{本单元出处}：本单元内容为讲义原创讲解。",
+            "\\textbf{拓展阅读}：《某书》第 2 章。",
+            "\\end{reading}",
+        ]
     return "\n".join(parts)
 
 
@@ -44,8 +51,8 @@ def build_handout(
     with_closing_echo: bool = True,
     with_boundary: bool = True,
     with_dependency: bool = True,
-    with_refs: bool = True,
     unit_without_self_test: int | None = None,
+    unit_without_refs: int | None = None,
 ) -> str:
     lines = ["\\documentclass{ctexart}", "\\begin{document}"]
     if with_opening:
@@ -56,7 +63,13 @@ def build_handout(
     if with_dependency:
         lines.append("依赖：第 2 讲依赖第 1 讲。")
     for n in range(1, unit_count + 1):
-        lines.append(build_unit(n, with_self_test=(n != unit_without_self_test)))
+        lines.append(
+            build_unit(
+                n,
+                with_self_test=(n != unit_without_self_test),
+                with_refs=(n != unit_without_refs),
+            )
+        )
     if with_answers:
         lines.append("\\section*{参考答案}")
         lines.append("各讲答案要点。")
@@ -64,12 +77,6 @@ def build_handout(
         lines.append("\\begin{keyconcept}[学完后，你应该能讲给别人听的三句话]")
         lines.append("三句话。")
         lines.append("\\end{keyconcept}")
-    if with_refs:
-        lines.append("\\section*{参考文献与拓展阅读}")
-        lines.append("\\subsection*{编号文献}")
-        lines.append("[1] 某某. 《某书》. 出版社, 2024.")
-        lines.append("\\subsection*{拓展阅读路线}")
-        lines.append("想看严谨证明：《某书》第 5 章。")
     lines.append("\\end{document}")
     return "\n".join(lines) + "\n"
 
@@ -122,22 +129,22 @@ class ReviewHandoutTests(unittest.TestCase):
         self.assertIn("依赖", proc.stdout)
         self.assertIn("warnings", proc.stdout)
 
-    def test_missing_references_is_warning(self):
-        proc = self.review(build_handout(with_refs=False))
+    def test_missing_unit_refs_is_warning(self):
+        proc = self.review(build_handout(unit_without_refs=3))
         self.assertEqual(proc.returncode, 0, proc.stdout)
         self.assertIn("0 errors", proc.stdout)
-        self.assertIn("参考文献", proc.stdout)
-        self.assertIn("拓展阅读", proc.stdout)
+        self.assertIn("出处与拓展阅读", proc.stdout)
+        self.assertIn("3", proc.stdout)
 
-    def test_extended_reading_synonym_accepted(self):
-        content = build_handout(with_refs=False)
+    def test_inline_src_tag_satisfies_unit_refs(self):
+        content = build_handout(unit_without_refs=2)
         content = content.replace(
-            "\\end{document}",
-            "\\section*{参考文献与延伸阅读}\n延伸阅读路线。\n\\end{document}",
+            "\\textbf{核心问题}：第 2 讲解决什么困惑？",
+            "\\textbf{核心问题}：第 2 讲解决什么困惑？\n定理出处：\\src{《某书》 §2.1}",
         )
         proc = self.review(content)
         self.assertEqual(proc.returncode, 0, proc.stdout)
-        self.assertNotIn("拓展阅读」路线", proc.stdout)
+        self.assertNotIn("出处与拓展阅读", proc.stdout)
 
     def test_custom_unit_range_allows_short_handout(self):
         with tempfile.TemporaryDirectory() as td:

@@ -14,7 +14,7 @@ ERROR（存在即退出码 1）：
 
 WARNING（打印但不影响退出码）：
   - 卷首应有 边界声明 与 依赖（单元依赖关系图）
-  - 卷尾应有 参考文献 与 拓展阅读（方法论 §5.5 出处与拓展阅读）
+  - 每个单元应有 出处/拓展阅读（随单元提供，不堆卷尾，方法论 §5.5）
   - 每个单元应有 优先级 / 难度 / 用时 标注
   - 每个单元应提及 易错 或 失效边界
   - 每个单元的 今日自测 题数应在 2–4（按 exercise 环境内 \\item 计数）
@@ -95,16 +95,10 @@ def review(tex_path: Path, min_units: int = 5, max_units: int = 9) -> tuple[list
     if "依赖" not in front_text:
         warnings.append("卷首缺少单元「依赖」关系说明（依赖关系图）")
 
-    # ── WARNING：卷尾出处与拓展阅读（方法论 §5.5）──
-    back_text = "\n".join(back)
-    if back and "参考文献" not in back_text:
-        warnings.append("卷尾缺少「参考文献」章节（出处编号文献，方法论 §5.5）")
-    if back and "拓展阅读" not in back_text and "延伸阅读" not in back_text:
-        warnings.append("卷尾缺少「拓展阅读」路线（分层指引读者深造，方法论 §5.5）")
-
     # ── 逐单元检查 ──
     missing_meta: dict[str, list[int]] = {"优先级": [], "难度": [], "用时": []}
     missing_pitfall: list[int] = []
+    missing_refs: list[int] = []
     bad_time_format: list[int] = []
     for n, (core_lineno, block) in enumerate(units, 1):
         header_start = max(0, core_lineno - 1 - HEADER_LOOKBACK)
@@ -126,6 +120,9 @@ def review(tex_path: Path, min_units: int = 5, max_units: int = 9) -> tuple[list
         # WARNING：易错 / 失效边界
         if "易错" not in block_text and "失效边界" not in block_text:
             missing_pitfall.append(n)
+        # WARNING：出处与拓展阅读随单元提供（方法论 §5.5）
+        if not any(marker in block_text for marker in ("出处", "参考文献", "拓展阅读", "延伸阅读")):
+            missing_refs.append(n)
         # WARNING：自测题数 2–4
         for count in self_test_item_counts(block):
             if not (2 <= count <= 4):
@@ -138,6 +135,8 @@ def review(tex_path: Path, min_units: int = 5, max_units: int = 9) -> tuple[list
         warnings.append(f"「用时」未按「约 N 分钟」格式标注的单元：{', '.join(map(str, bad_time_format))}")
     if missing_pitfall:
         warnings.append(f"未提及「易错」或「失效边界」的单元：{', '.join(map(str, missing_pitfall))}")
+    if missing_refs:
+        warnings.append(f"缺少「出处与拓展阅读」（行内出处或 reading 盒）的单元：{', '.join(map(str, missing_refs))}（出处随单元提供，不堆卷尾，方法论 §5.5）")
 
     return errors, warnings
 
