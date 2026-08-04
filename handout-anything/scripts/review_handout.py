@@ -16,6 +16,7 @@ WARNING（打印但不影响退出码）：
   - 卷首应有 边界声明 与 依赖（单元依赖关系图）
   - 每个单元应有 出处/拓展阅读（随单元提供，不堆卷尾，方法论 §5.5）
   - 每个单元应有 优先级 / 难度 / 用时 标注
+  - 讲义同目录应有交接说明 md（参考资料清单/重编译方式/文件清单/下一步，方法论 §5.6）
   - 每个单元应提及 易错 或 失效边界
   - 每个单元的 今日自测 题数应在 2–4（按 exercise 环境内 \\item 计数）
   - 每个单元的 用时 应形如"约 N 分钟"
@@ -94,6 +95,10 @@ def review(tex_path: Path, min_units: int = 5, max_units: int = 9) -> tuple[list
         warnings.append("卷首缺少「边界声明」（本讲义覆盖/未覆盖什么）")
     if "依赖" not in front_text:
         warnings.append("卷首缺少单元「依赖」关系说明（依赖关系图）")
+
+    # ── WARNING：同目录交接说明 md（方法论 §5.6） ──
+    if not any(tex_path.parent.glob("*.md")):
+        warnings.append("讲义同目录没有交接说明 md（如 README.md：参考资料清单/重编译方式/文件清单/下一步，方法论 §5.6）")
 
     # ── 逐单元检查 ──
     missing_meta: dict[str, list[int]] = {"优先级": [], "难度": [], "用时": []}

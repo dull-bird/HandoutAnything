@@ -82,10 +82,12 @@ def build_handout(
 
 
 class ReviewHandoutTests(unittest.TestCase):
-    def review(self, content: str) -> subprocess.CompletedProcess:
+    def review(self, content: str, with_handover_md: bool = True) -> subprocess.CompletedProcess:
         with tempfile.TemporaryDirectory() as td:
             tex = Path(td) / "handout.tex"
             tex.write_text(content, encoding="utf-8")
+            if with_handover_md:
+                (Path(td) / "README.md").write_text("交接说明：参考资料清单与重编译方式。", encoding="utf-8")
             return run_review(tex)
 
     def test_minimal_handout_passes(self):
@@ -146,10 +148,17 @@ class ReviewHandoutTests(unittest.TestCase):
         self.assertEqual(proc.returncode, 0, proc.stdout)
         self.assertNotIn("出处与拓展阅读", proc.stdout)
 
+    def test_missing_handover_md_is_warning(self):
+        proc = self.review(build_handout(), with_handover_md=False)
+        self.assertEqual(proc.returncode, 0, proc.stdout)
+        self.assertIn("0 errors", proc.stdout)
+        self.assertIn("交接说明 md", proc.stdout)
+
     def test_custom_unit_range_allows_short_handout(self):
         with tempfile.TemporaryDirectory() as td:
             tex = Path(td) / "handout.tex"
             tex.write_text(build_handout(unit_count=4), encoding="utf-8")
+            (Path(td) / "README.md").write_text("交接说明。", encoding="utf-8")
             proc = subprocess.run(
                 [sys.executable, str(REVIEW), str(tex), "--min-units", "2", "--max-units", "4"],
                 cwd=ROOT,
@@ -163,6 +172,7 @@ class ReviewHandoutTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             tex = Path(td) / "handout.tex"
             tex.write_text(build_handout(unit_count=5), encoding="utf-8")
+            (Path(td) / "README.md").write_text("交接说明。", encoding="utf-8")
             proc = subprocess.run(
                 [sys.executable, str(REVIEW), str(tex), "--min-units", "2", "--max-units", "4"],
                 cwd=ROOT,
