@@ -60,6 +60,14 @@ allowed-tools: Bash, Read, Write, Edit, Glob, Grep
 - 概念清单中【全新】概念每个都有落点；
 - 收尾"能讲给别人听的 N 句话"与开篇呼应。
 
+## LaTeX 编译环境
+
+本仓库讲义统一用 `xelatex` 编译（ctexart + tcolorbox + TikZ）。用户机器没有 LaTeX 环境时按以下指引：
+
+- **Windows（推荐 MiKTeX）**：初始安装仅约 300–500 MB。安装时选 "Install missing packages on-the-fly = Yes"，首次编译会自动联网补齐 ctex、xecjk、tcolorbox 等全部依赖（第一次编译较慢属正常）；建议将包仓库源切到国内镜像（MiKTeX Console → Packages → Change package repository）。中文字体用 Windows 自带宋体/黑体即可，无需另装。
+- **Windows 备选**：磁盘充裕可装 TeX Live 完整版（约 8 GB），一劳永逸。不推荐 TeX Live basic——xelatex 与中文宏包都需手动 `tlmgr install` 补齐，包清单易随讲义依赖演进而腐坏。
+- **本机（Linux）**：已有 xelatex/latexmk；各讲义目录下的本地 `texmf/` 用于补齐系统缺的宏包（如 tcolorbox）。
+
 ## 已有实例（本仓库可直接参考）
 
 - `physics-handout/`：教材 PDF → 7 天物理讲义（LaTeX 手写 + TikZ 矢量图）
